@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "808141670120",
+    "project_id": "cargocontrol-d5ef8",
+    "storage_bucket": "cargocontrol-d5ef8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808141670120:android:6d6a9c4cb2924203b12b5d",
+        "android_client_info": {
+          "package_name": "com.example.cargocontrol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808141670120-kma591ora1538779sulrn3v235irdsnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAK7ye_RbicvDNy2qQdmtPOJWBQhxyxm2U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808141670120-kma591ora1538779sulrn3v235irdsnp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
