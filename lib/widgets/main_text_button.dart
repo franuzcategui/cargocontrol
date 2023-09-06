@@ -1,3 +1,4 @@
+import 'package:cargocontrol/widgets/loading_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/constants.dart' as constants;
 
@@ -17,7 +18,9 @@ class MainTextButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: OutlinedButton(
-        onPressed: () {},
+        onPressed: () {
+          LoadingSheet.show(context);
+        },
         style: buttonStyle == ButtonThemeStyle.primary
             ? constants.ButtonStyles.buttonStyle1
             : constants.ButtonStyles.buttonStyle2,

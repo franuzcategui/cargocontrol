@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         colorScheme: constants.kColorScheme,
         textTheme: GoogleFonts.robotoTextTheme(ThemeData().textTheme),
       ),
-      home: const MainNavBar(),
+      home: const LoginScreen(),
     );
   }
 }
