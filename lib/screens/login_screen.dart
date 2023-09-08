@@ -1,4 +1,5 @@
 import 'package:cargocontrol/screens/forgot_password_screen.dart';
+import 'package:cargocontrol/sign_in/components/email_text_field.dart';
 import 'package:cargocontrol/widgets/login_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/constants.dart' as constants;
@@ -43,10 +44,11 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(
                 height: 40,
               ),
-              const LoginTextField(hintText: 'correo electrónico'),
-              const LoginTextField(
+              const EmailTextField(),
+              LoginTextField(
                 hintText: 'contraseña',
                 hideText: true,
+                onChanged: (_) {},
               ),
               TextButton(
                 child: const Text(

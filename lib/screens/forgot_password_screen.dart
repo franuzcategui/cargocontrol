@@ -1,3 +1,4 @@
+import 'package:cargocontrol/sign_in/components/email_text_field.dart';
 import 'package:cargocontrol/widgets/login_text_field.dart';
 import 'package:cargocontrol/widgets/main_text_button.dart';
 import 'package:flutter/material.dart';
@@ -51,8 +52,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  const LoginTextField(
-                      hintText: 'Ingresar correo electrónico registrado'),
+                  const EmailTextField(),
                   const SizedBox(
                     height: 10,
                   )
