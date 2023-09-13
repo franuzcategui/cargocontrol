@@ -60,11 +60,15 @@ class ForgotPasswordScreen extends StatelessWidget {
           ),
 
           //Log in buttons
-          const MainTextButton(
+          MainTextButton(
             text: 'ENVIAR CORREO ELECTRÓNICO',
+            onTap: () {},
           ),
-          const MainTextButton(
-              text: 'REGRESAR', buttonStyle: ButtonThemeStyle.secondary),
+          MainTextButton(
+            text: 'REGRESAR',
+            buttonStyle: ButtonThemeStyle.secondary,
+            onTap: () {},
+          ),
         ],
       ),
     );

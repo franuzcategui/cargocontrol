@@ -7,26 +7,24 @@ class LoginTextField extends StatelessWidget {
   final Function(String) onChanged;
   final String? errorText;
 
-  const LoginTextField(
-      {super.key,
-      required this.hintText,
-      this.hideText = false,
-      required this.onChanged,
-      this.errorText});
+  const LoginTextField({
+    super.key,
+    required this.hintText,
+    this.hideText = false,
+    required this.onChanged,
+    this.errorText,
+  });
 
   //late FocusNode myFocusNode;
 
   @override
   Widget build(BuildContext context) {
-    FocusNode myFocusNode = FocusNode();
-    print(myFocusNode.hasFocus);
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextField(
-            focusNode: myFocusNode,
             onChanged: onChanged,
             obscureText: hideText,
             style: const constants.TextStyles().bodyText1,
@@ -35,12 +33,15 @@ class LoginTextField extends StatelessWidget {
               label: Text(hintText),
               hintText: hintText,
               hintStyle: const constants.TextStyles().bodyHintText1,
+              //errorText: errorText,
             ),
           ),
-          if (errorText != null && myFocusNode.hasFocus)
+          if (errorText != null)
             Text(
               errorText!,
-              style: const constants.TextStyles(color: Colors.red).bodyText1,
+              style: constants.TextStyles(
+                      color: Theme.of(context).colorScheme.error)
+                  .bodyText1,
             ),
         ],
       ),

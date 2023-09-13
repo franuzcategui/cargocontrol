@@ -20,7 +20,7 @@ class FormScreen extends StatelessWidget {
         Expanded(
           child: ListView(
             //itemExtent: 4,
-            children: const [
+            children: [
               InfoDescription(),
               CargoFormTextField(hideText: false, hintText: 'hintText'),
               CargoChoiceChips(
@@ -33,7 +33,10 @@ class FormScreen extends StatelessWidget {
               CargoFormTextField(hideText: false, hintText: 'hintText'),
               CargoFormTextField(hideText: false, hintText: 'hintText'),
               CargoDropdownButton(),
-              MainTextButton(text: 'CONTINUAR'),
+              MainTextButton(
+                text: 'CONTINUAR',
+                onTap: () {},
+              ),
             ],
           ),
         ),

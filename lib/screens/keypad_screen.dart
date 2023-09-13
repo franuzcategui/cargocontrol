@@ -99,7 +99,10 @@ class _KeyPadScreenState extends State<KeyPadScreen> {
               keyPadTextFieldController.text = '';
             },
           ),
-          const MainTextButton(text: 'CONTINUAR'),
+          MainTextButton(
+            text: 'CONTINUAR',
+            onTap: () {},
+          ),
           SizedBox(
             height: MediaQuery.of(context).padding.bottom,
           ),

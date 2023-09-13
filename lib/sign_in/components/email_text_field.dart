@@ -10,7 +10,8 @@ class EmailTextField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signInState = ref.watch(signInprovider);
-    final bool showError = signInState.email.isNotValid;
+    final bool showError =
+        signInState.email.isNotValid && !signInState.email.isPure;
     final signInController = ref.read(signInprovider.notifier);
 
     return LoginTextField(

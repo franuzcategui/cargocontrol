@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 import '../widgets/detector_view.dart';
-import 'package:cargocontrol/painters/text_detector_painter.dart';
+import 'package:cargocontrol/widgets/painters/text_detector_painter.dart';
 
 class TextDetectorScreen extends StatefulWidget {
   const TextDetectorScreen({super.key});

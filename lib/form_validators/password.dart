@@ -2,18 +2,13 @@ import 'package:formz/formz.dart';
 
 enum PasswordValidationError { empty, invalid }
 
-const String _kPasswordPattern =
-    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-
 class Password extends FormzInput<String, PasswordValidationError> {
   const Password.pure() : super.pure('');
   const Password.dirty([String value = '']) : super.dirty(value);
 
-  static final _regex = RegExp(_kPasswordPattern);
-
   @override
   PasswordValidationError? validator(String value) {
-    if (_regex.hasMatch(value)) {
+    if (value.length > 5) {
       return null;
     }
     if (value.isEmpty) {
@@ -23,7 +18,7 @@ class Password extends FormzInput<String, PasswordValidationError> {
     }
   }
 
-  static String? showEmailErrorMessage(PasswordValidationError? error) {
+  static String? showPasswordErrorMessage(PasswordValidationError? error) {
     if (error == PasswordValidationError.empty) {
       return 'Contraseña vacia';
     } else if (error == PasswordValidationError.invalid) {

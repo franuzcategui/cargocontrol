@@ -1,13 +1,20 @@
-import 'package:cargocontrol/screens/forgot_password_screen.dart';
+import 'package:cargocontrol/sign_in/forgot_password_screen.dart';
 import 'package:cargocontrol/sign_in/components/email_text_field.dart';
+import 'package:cargocontrol/sign_in/components/password_text_field.dart';
+import 'package:cargocontrol/sign_in/components/signin_button.dart';
 import 'package:cargocontrol/widgets/login_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/constants.dart' as constants;
 import 'package:cargocontrol/widgets/main_text_button.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,11 +52,7 @@ class LoginScreen extends StatelessWidget {
                 height: 40,
               ),
               const EmailTextField(),
-              LoginTextField(
-                hintText: 'contraseña',
-                hideText: true,
-                onChanged: (_) {},
-              ),
+              const PasswordTextField(),
               TextButton(
                 child: const Text(
                   'Se me olvidó la contraseña',
@@ -73,11 +76,11 @@ class LoginScreen extends StatelessWidget {
           ),
 
           //Log in buttons
-          const MainTextButton(
-            text: 'INICIAR SESIÓN',
-          ),
-          const MainTextButton(
-              text: 'REGISTRARME', buttonStyle: ButtonThemeStyle.secondary),
+          SignInButton(),
+          MainTextButton(
+              onTap: () {},
+              text: 'REGISTRARME',
+              buttonStyle: ButtonThemeStyle.secondary),
         ],
       ),
     );

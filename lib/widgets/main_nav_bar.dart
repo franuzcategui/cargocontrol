@@ -1,18 +1,20 @@
+import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/screens/choferes_screen.dart';
 import 'package:cargocontrol/screens/dashboard_screen.dart';
 import 'package:cargocontrol/screens/viajes_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/constants.dart' as constants;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MainNavBar extends StatefulWidget {
+class MainNavBar extends ConsumerStatefulWidget {
   const MainNavBar({super.key});
 
   @override
-  State<MainNavBar> createState() => _MainNavBarState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _MainNavBarState();
 }
 
-class _MainNavBarState extends State<MainNavBar> {
+class _MainNavBarState extends ConsumerState<MainNavBar> {
   int _currentIndex = 0;
 
   final List<Widget> screens = [
@@ -23,11 +25,14 @@ class _MainNavBarState extends State<MainNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    //final authController = context.read(authProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                //authController.onSignOut();
+              },
               child: const Text(
                 'Cerrar sesión',
                 style: TextStyle(

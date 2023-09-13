@@ -1,5 +1,7 @@
+import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
+import 'package:cargocontrol/authentication/controller/authentication_state.dart';
 import 'package:cargocontrol/firebase_options.dart';
-import 'package:cargocontrol/screens/login_screen.dart';
+import 'package:cargocontrol/sign_in/login_screen.dart';
 import 'package:cargocontrol/widgets/main_nav_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -9,18 +11,31 @@ import 'constants.dart' as constants;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(ProviderScope(child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authenticationState = ref.watch(authProvider);
+
+    Widget getHome() {
+      if (authenticationState.status == AuthenticationStatus.authenticated) {
+        return const MainNavBar();
+      } else if (authenticationState.status ==
+          AuthenticationStatus.unauthenticated) {
+        return const LoginScreen();
+      } else {
+        return const LoginScreen();
+      }
+    }
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData().copyWith(
@@ -28,7 +43,7 @@ class MyApp extends StatelessWidget {
         colorScheme: constants.kColorScheme,
         textTheme: GoogleFonts.robotoTextTheme(ThemeData().textTheme),
       ),
-      home: const LoginScreen(),
+      home: getHome(),
     );
   }
 }
