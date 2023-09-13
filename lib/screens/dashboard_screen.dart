@@ -1,16 +1,20 @@
+import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/widgets/cargo_bar_chart.dart';
 import 'package:cargocontrol/widgets/dashboard_mini_card.dart';
 import 'package:cargocontrol/widgets/progress_indicator_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/constants.dart' as constants;
 import 'package:cargocontrol/widgets/dashboard_button_modal.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    //TODO: crear userType ref para cambiar titulo dependiendo del usuario
+    final authController = ref.read(authProvider.notifier);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
