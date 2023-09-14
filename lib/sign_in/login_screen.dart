@@ -1,22 +1,31 @@
-import 'package:cargocontrol/sign_in/forgot_password_screen.dart';
+import 'package:cargocontrol/sign_in/components/signin_button.dart';
+import 'package:cargocontrol/sign_in/controller/signin_controller.dart';
+import 'package:cargocontrol/sign_in/controller/signin_state.dart';
+import 'package:cargocontrol/forgot_password/forgot_password_screen.dart';
 import 'package:cargocontrol/sign_in/components/email_text_field.dart';
 import 'package:cargocontrol/sign_in/components/password_text_field.dart';
-import 'package:cargocontrol/sign_in/components/signin_button.dart';
-import 'package:cargocontrol/widgets/login_text_field.dart';
+import 'package:cargocontrol/widgets/loading_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/constants.dart' as constants;
 import 'package:cargocontrol/widgets/main_text_button.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:formz/formz.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<SignInState>(signInprovider, (previous, current) {
+      if (current.status.isInProgress) {
+        LoadingSheet.show(context);
+      } else if (current.status.isFailure) {
+        Navigator.of(context).pop();
+        ErrorDialog.show(context, "${current.errorMessage}");
+      } else if (current.status.isSuccess) {
+        Navigator.of(context).pop();
+      }
+    });
     return Scaffold(
       backgroundColor: constants.kMainBackroundColor,
       body: Column(
@@ -76,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
 
           //Log in buttons
-          SignInButton(),
+          const SignInButton(),
           MainTextButton(
               onTap: () {},
               text: 'REGISTRARME',

@@ -46,7 +46,7 @@ class DashboardScreen extends ConsumerWidget {
               style: const constants.TextStyles().titleText1,
             ),
           ),
-          Container(
+          SizedBox(
             height: 0.2 * MediaQuery.of(context).size.height,
             width: 0.9 * MediaQuery.of(context).size.width,
             child: Stack(
@@ -55,7 +55,7 @@ class DashboardScreen extends ConsumerWidget {
                 Positioned(
                   left: 0.04 * MediaQuery.of(context).size.width,
                   bottom: 0.06 * MediaQuery.of(context).size.height,
-                  child: CargoBarChart(),
+                  child: const CargoBarChart(),
                 ),
               ],
             ),

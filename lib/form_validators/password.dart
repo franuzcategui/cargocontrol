@@ -22,7 +22,7 @@ class Password extends FormzInput<String, PasswordValidationError> {
     if (error == PasswordValidationError.empty) {
       return 'Contraseña vacia';
     } else if (error == PasswordValidationError.invalid) {
-      return 'Contraseña debe ser de al menos 8 caracteres, con un caracter en Mayúscula, un caracter en minúscula, un número y un caracter especial';
+      return 'Contraseña debe ser de al menos 4 caracteres';
     } else {
       return null;
     }

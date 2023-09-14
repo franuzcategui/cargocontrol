@@ -25,16 +25,16 @@ class _MainNavBarState extends ConsumerState<MainNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    //final authController = context.read(authProvider.notifier);
+    final authController = ref.read(authProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
           TextButton(
               onPressed: () {
-                //authController.onSignOut();
+                authController.onSignOut();
               },
-              child: const Text(
-                'Cerrar sesión',
+              child: Text(
+                'Cerrar Sesión',
                 style: TextStyle(
                   color: constants.kMainColor,
                   fontWeight: FontWeight.bold,

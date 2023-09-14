@@ -244,23 +244,23 @@ class DecorationStyles {
     ),
   );
 
-  static InputDecoration searchBarDecoration1 = InputDecoration(
+  static InputDecoration searchBarDecoration1 = const InputDecoration(
     suffixIcon: Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         FaIcon(
           FontAwesomeIcons.magnifyingGlass,
           size: 20,
         ),
       ],
     ),
-    enabledBorder: const OutlineInputBorder(
+    enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(25.0)),
       borderSide: BorderSide(
         color: kOutlineTextFieldColor,
       ),
     ),
-    focusedBorder: const OutlineInputBorder(
+    focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(25.0)),
       borderSide: BorderSide(
         color: kMainColor,
@@ -268,7 +268,7 @@ class DecorationStyles {
     ),
   );
 
-  static InputDecoration keyPadTextFieldDecoration1 = InputDecoration(
+  static InputDecoration keyPadTextFieldDecoration1 = const InputDecoration(
     prefixText: 'C - ',
   );
 }

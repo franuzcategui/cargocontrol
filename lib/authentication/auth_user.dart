@@ -17,6 +17,5 @@ class AuthUser extends Equatable {
   bool get isEmpty => this == AuthUser.empty;
 
   @override
-  // TODO: implement props
   List<Object?> get props => [email, id, userType, emailVerified];
 }

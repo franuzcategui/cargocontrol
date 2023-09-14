@@ -19,36 +19,31 @@ class SignInControllerNotifier extends StateNotifier<SignInState> {
     final email = Email.dirty(value);
 
     state = state.copyWith(
-      email: email,
-      status: Formz.validate([email, state.password])
-          ? FormzSubmissionStatus.success
-          : FormzSubmissionStatus.failure,
-    );
+        email: email, isValid: Formz.validate([email, state.password]));
   }
 
   void onPasswordChange(String value) {
     final password = Password.dirty(value);
 
     state = state.copyWith(
-      password: password,
-      status: Formz.validate([state.email, password])
-          ? FormzSubmissionStatus.success
-          : FormzSubmissionStatus.failure,
-    );
+        password: password, isValid: Formz.validate([state.email, password]));
   }
 
   void signInWithEmailAndPassword() async {
-    if (!state.status.isSuccess) return;
-    print('llegie');
+    if (!state.isValid) return;
     state = state.copyWith(status: FormzSubmissionStatus.inProgress);
     try {
       await _authenticationRepository.signInWithEmailAndPassword(
           email: state.email.value, password: state.password.value);
       state = state.copyWith(status: FormzSubmissionStatus.success);
     } on SignInWithEmailAndPasswordFailure catch (e) {
-      print(e.code);
       state = state.copyWith(
           status: FormzSubmissionStatus.failure, errorMessage: e.code);
+      state = state.copyWith(
+        email: Email.pure(),
+        password: Password.pure(),
+        status: FormzSubmissionStatus.initial,
+      );
     }
   }
 }
