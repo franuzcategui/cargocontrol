@@ -11,6 +11,11 @@ class ForgotPasswordFailure implements Exception {
   const ForgotPasswordFailure(this.code);
 }
 
+class SignUpFailure implements Exception {
+  final String code;
+  const SignUpFailure(this.code);
+}
+
 class SignOutFailure implements Exception {}
 
 class AuthenticationRepository {
@@ -37,6 +42,19 @@ class AuthenticationRepository {
           email: email, password: password);
     } on FirebaseAuthException catch (e) {
       throw SignInWithEmailAndPasswordFailure(e.code);
+    }
+  }
+
+  Future<void> signUp(
+      {required String email,
+      required String password,
+      required String userType}) async {
+    try {
+      await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) => value.user?.updateDisplayName(userType));
+    } on FirebaseAuthException catch (e) {
+      throw SignUpFailure(e.code);
     }
   }
 

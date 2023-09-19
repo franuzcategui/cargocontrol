@@ -2,80 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:cargocontrol/constants.dart' as constants;
 
 class CargoDropdownButton extends StatelessWidget {
-  const CargoDropdownButton({super.key});
+  final List<String> items;
+  final String label;
+
+  const CargoDropdownButton(this.items, this.label, {super.key});
 
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
+    final List<DropdownMenuEntry<String>> entries =
+        <DropdownMenuEntry<String>>[];
+    for (final String values in items) {
+      entries.add(DropdownMenuEntry(value: values, label: values));
+    }
+
     return Padding(
       padding: EdgeInsets.fromLTRB(deviceWidth / 20, 0, deviceWidth / 20, 15),
-      child: Container(
-        //padding: const EdgeInsets.all(25),
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: constants.kOutlineTextFieldColor,
+      child: DropdownMenu(
+        // width: double.infinity,
+        inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+              labelStyle: const constants.TextStyles().bodyText1,
+              enabledBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                borderSide: BorderSide(
+                  color: constants.kOutlineTextFieldColor,
+                ),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                borderSide: BorderSide(
+                  color: constants.kMainColor,
+                ),
+              ),
             ),
-            bottom: BorderSide(
-              color: constants.kOutlineTextFieldColor,
-            ),
-            left: BorderSide(
-              color: constants.kOutlineTextFieldColor,
-            ),
-            right: BorderSide(
-              color: constants.kOutlineTextFieldColor,
-            ),
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          //color: constants.kOutlineTextFieldColor,
+        //width: deviceWidth,
+        label: Text(
+          label,
+          style: const constants.TextStyles().bodyText1,
         ),
-        child: DropdownButton(
-            value: 'hello',
-            underline: SizedBox(),
-            isExpanded: true,
-            items: <DropdownMenuItem>[
-              DropdownMenuItem(
-                value: 'hello',
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 25, right: 25),
-                  child: Text(
-                    'hello',
-                    style: const constants.TextStyles().bodyText1,
-                  ),
-                ),
-              ),
-              DropdownMenuItem(
-                value: 'tokyo',
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 25, right: 25),
-                  child: Text(
-                    'hello',
-                    style: const constants.TextStyles().bodyText1,
-                  ),
-                ),
-              ),
-              DropdownMenuItem(
-                value: 'tokyo',
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 25, right: 25),
-                  child: Text(
-                    'hello',
-                    style: const constants.TextStyles().bodyText1,
-                  ),
-                ),
-              ),
-              DropdownMenuItem(
-                value: 'tokyo',
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 25, right: 25),
-                  child: Text(
-                    'hello',
-                    style: const constants.TextStyles().bodyText1,
-                  ),
-                ),
-              ),
-            ],
-            onChanged: (value) {}),
+        hintText: 'Opciones',
+        initialSelection: entries[0],
+        dropdownMenuEntries: entries,
       ),
     );
   }

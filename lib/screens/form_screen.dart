@@ -32,7 +32,7 @@ class FormScreen extends StatelessWidget {
               CargoFormTextField(hideText: false, hintText: 'hintText'),
               CargoFormTextField(hideText: false, hintText: 'hintText'),
               CargoFormTextField(hideText: false, hintText: 'hintText'),
-              CargoDropdownButton(),
+              CargoDropdownButton(['hello', 'today', 'tomorrow'], 'epale'),
               MainTextButton(
                 text: 'CONTINUAR',
                 onTap: () {},

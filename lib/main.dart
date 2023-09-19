@@ -1,7 +1,7 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/authentication/controller/authentication_state.dart';
 import 'package:cargocontrol/firebase_options.dart';
-import 'package:cargocontrol/sign_in/login_screen.dart';
+import 'package:cargocontrol/sign_in/components/login_screen.dart';
 import 'package:cargocontrol/widgets/main_nav_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
