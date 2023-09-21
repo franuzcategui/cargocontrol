@@ -32,7 +32,7 @@ class LoadingSheet extends StatelessWidget {
 
 class ErrorDialog extends StatelessWidget {
   final String error;
-  const ErrorDialog._(this.error, {super.key});
+  const ErrorDialog._(this.error);
 
   static Future<void> show(
     BuildContext context,

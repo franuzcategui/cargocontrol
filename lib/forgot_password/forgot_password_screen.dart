@@ -2,7 +2,6 @@ import 'package:cargocontrol/forgot_password/components/forgot_password_button.d
 import 'package:cargocontrol/forgot_password/components/forgot_password_text_field.dart';
 import 'package:cargocontrol/forgot_password/controller/forgot_password_controller.dart';
 import 'package:cargocontrol/forgot_password/controller/forgot_password_state.dart';
-import 'package:cargocontrol/sign_in/components/email_text_field.dart';
 import 'package:cargocontrol/widgets/loading_sheet.dart';
 import 'package:cargocontrol/widgets/main_text_button.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +75,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
           ),
 
           //Log in buttons
-          ForgotPasswordButton(),
+          const ForgotPasswordButton(),
           MainTextButton(
             text: 'REGRESAR',
             buttonStyle: ButtonThemeStyle.secondary,

@@ -2,7 +2,6 @@ import 'package:cargocontrol/authentication/authentication_repository.dart';
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/forgot_password/controller/forgot_password_state.dart';
 import 'package:cargocontrol/form_validators/email.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 
@@ -30,7 +29,7 @@ class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
       state = state.copyWith(
           status: FormzSubmissionStatus.failure, errorMessage: e.code);
       state = state.copyWith(
-          status: FormzSubmissionStatus.initial, email: Email.pure());
+          status: FormzSubmissionStatus.initial, email: const Email.pure());
     }
   }
 }

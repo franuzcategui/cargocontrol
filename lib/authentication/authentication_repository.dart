@@ -1,5 +1,6 @@
 import 'package:cargocontrol/authentication/auth_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class SignInWithEmailAndPasswordFailure implements Exception {
   final String code;
@@ -20,6 +21,7 @@ class SignOutFailure implements Exception {}
 
 class AuthenticationRepository {
   final _firebaseAuth = FirebaseAuth.instance;
+  FirebaseDatabase database = FirebaseDatabase.instance;
 
   Stream<AuthUser> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
@@ -41,7 +43,7 @@ class AuthenticationRepository {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      throw SignInWithEmailAndPasswordFailure(e.code);
+      throw SignInWithEmailAndPasswordFailure(e.message ?? e.code);
     }
   }
 
@@ -50,11 +52,16 @@ class AuthenticationRepository {
       required String password,
       required String userType}) async {
     try {
-      await _firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => value.user?.updateDisplayName(userType));
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      await userCredential.user?.updateDisplayName(userType);
+      DatabaseReference ref = database.ref('users');
+      await ref.set({
+        "email": email,
+        "userType": userType,
+      });
     } on FirebaseAuthException catch (e) {
-      throw SignUpFailure(e.code);
+      throw SignUpFailure(e.message ?? e.code);
     }
   }
 
@@ -62,14 +69,14 @@ class AuthenticationRepository {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      throw ForgotPasswordFailure(e.code);
+      throw ForgotPasswordFailure(e.message ?? e.code);
     }
   }
 
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       throw SignOutFailure();
     }
   }

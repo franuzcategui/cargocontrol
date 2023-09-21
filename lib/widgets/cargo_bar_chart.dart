@@ -7,7 +7,7 @@ class CargoBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 0.07 * MediaQuery.of(context).size.height,
       width: 0.8 * MediaQuery.of(context).size.width,
       child: BarChart(

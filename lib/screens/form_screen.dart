@@ -21,18 +21,24 @@ class FormScreen extends StatelessWidget {
           child: ListView(
             //itemExtent: 4,
             children: [
-              InfoDescription(),
-              CargoFormTextField(hideText: false, hintText: 'hintText'),
-              CargoChoiceChips(
+              const InfoDescription(),
+              const CargoFormTextField(hideText: false, hintText: 'hintText'),
+              const CargoChoiceChips(
                 name: 'Cargo',
-                quantity: 5,
+                categories: ['1', '2', '3', '4', '5'],
               ),
-              CargoFormTextField(hideText: false, hintText: 'hintText'),
-              CargoFormTextField(hideText: false, hintText: 'hintText'),
-              CargoFormTextField(hideText: false, hintText: 'hintText'),
-              CargoFormTextField(hideText: false, hintText: 'hintText'),
-              CargoFormTextField(hideText: false, hintText: 'hintText'),
-              CargoDropdownButton(['hello', 'today', 'tomorrow'], 'epale'),
+              const CargoFormTextField(hideText: false, hintText: 'hintText'),
+              const CargoFormTextField(hideText: false, hintText: 'hintText'),
+              const CargoFormTextField(hideText: false, hintText: 'hintText'),
+              const CargoFormTextField(hideText: false, hintText: 'hintText'),
+              const CargoFormTextField(hideText: false, hintText: 'hintText'),
+              CargoDropdownButton(
+                items: const ['prueba1', 'prueba2'],
+                label: 'label',
+                onSelect: (value) {
+                  print(value);
+                },
+              ),
               MainTextButton(
                 text: 'CONTINUAR',
                 onTap: () {},

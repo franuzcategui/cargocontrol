@@ -1,9 +1,9 @@
-import 'package:cargocontrol/sign_in/components/signin_button.dart';
-import 'package:cargocontrol/sign_in/controller/signin_controller.dart';
-import 'package:cargocontrol/sign_in/controller/signin_state.dart';
-import 'package:cargocontrol/forgot_password/components/forgot_password_screen.dart';
-import 'package:cargocontrol/sign_in/components/email_text_field.dart';
-import 'package:cargocontrol/sign_in/components/password_text_field.dart';
+import 'package:cargocontrol/sign_up/components/email_text_field.dart';
+import 'package:cargocontrol/sign_up/components/password_text_field.dart';
+import 'package:cargocontrol/sign_up/components/sign_up_button.dart';
+import 'package:cargocontrol/sign_up/components/user_type_dropdown.dart';
+import 'package:cargocontrol/sign_up/controller/sign_up_controller.dart';
+import 'package:cargocontrol/sign_up/controller/sign_up_state.dart';
 import 'package:cargocontrol/widgets/loading_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/constants.dart' as constants;
@@ -16,7 +16,7 @@ class SignUpScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<SignInState>(signInprovider, (previous, current) {
+    ref.listen<SignUpState>(signUpProvider, (previous, current) {
       if (current.status.isInProgress) {
         LoadingSheet.show(context);
       } else if (current.status.isFailure) {
@@ -24,9 +24,11 @@ class SignUpScreen extends ConsumerWidget {
         ErrorDialog.show(context, "${current.errorMessage}");
       } else if (current.status.isSuccess) {
         Navigator.of(context).pop();
+        ErrorDialog.show(context, "Has registrado al usuario exitosamente");
       }
     });
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: constants.kMainBackroundColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +45,7 @@ class SignUpScreen extends ConsumerWidget {
               Row(
                 children: [
                   Text(
-                    'Bienvenido',
+                    'Registro de usuario',
                     style: const constants.TextStyles().headlineText1,
                   ),
                   const SizedBox(
@@ -60,24 +62,9 @@ class SignUpScreen extends ConsumerWidget {
               const SizedBox(
                 height: 40,
               ),
+              const UserTypeDropdown(),
               const EmailTextField(),
               const PasswordTextField(),
-              TextButton(
-                child: const Text(
-                  'Se me olvidó la contraseña',
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: constants.kMainColor),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ForgotPasswordScreen()),
-                  );
-                },
-              ),
               const SizedBox(
                 height: 70,
               )
@@ -85,10 +72,12 @@ class SignUpScreen extends ConsumerWidget {
           ),
 
           //Log in buttons
-          const SignInButton(),
+          const SignUpButton(),
           MainTextButton(
-              onTap: () {},
-              text: 'REGISTRARME',
+              onTap: () {
+                Navigator.pop(context);
+              },
+              text: 'REGRESAR',
               buttonStyle: ButtonThemeStyle.secondary),
         ],
       ),

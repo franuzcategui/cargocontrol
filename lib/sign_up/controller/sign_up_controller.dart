@@ -56,7 +56,7 @@ class SignUpControllerNotifier extends StateNotifier<SignUpState> {
     if (!state.isValid) return;
     state = state.copyWith(status: FormzSubmissionStatus.inProgress);
     try {
-      _authenticationRepository.signUp(
+      await _authenticationRepository.signUp(
           email: state.email.value,
           password: state.password.value,
           userType: state.userType.value.name);

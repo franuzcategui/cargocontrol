@@ -1,13 +1,12 @@
 import 'package:cargocontrol/sign_in/components/signin_button.dart';
 import 'package:cargocontrol/sign_in/controller/signin_controller.dart';
 import 'package:cargocontrol/sign_in/controller/signin_state.dart';
-import 'package:cargocontrol/forgot_password/components/forgot_password_screen.dart';
+import 'package:cargocontrol/forgot_password/forgot_password_screen.dart';
 import 'package:cargocontrol/sign_in/components/email_text_field.dart';
 import 'package:cargocontrol/sign_in/components/password_text_field.dart';
 import 'package:cargocontrol/widgets/loading_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/constants.dart' as constants;
-import 'package:cargocontrol/widgets/main_text_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 
@@ -86,10 +85,6 @@ class LoginScreen extends ConsumerWidget {
 
           //Log in buttons
           const SignInButton(),
-          MainTextButton(
-              onTap: () {},
-              text: 'REGISTRARME',
-              buttonStyle: ButtonThemeStyle.secondary),
         ],
       ),
     );

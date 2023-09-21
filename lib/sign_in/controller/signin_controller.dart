@@ -40,8 +40,8 @@ class SignInControllerNotifier extends StateNotifier<SignInState> {
       state = state.copyWith(
           status: FormzSubmissionStatus.failure, errorMessage: e.code);
       state = state.copyWith(
-        email: Email.pure(),
-        password: Password.pure(),
+        email: const Email.pure(),
+        password: const Password.pure(),
         status: FormzSubmissionStatus.initial,
       );
     }
