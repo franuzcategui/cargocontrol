@@ -2,7 +2,7 @@ import 'package:cargocontrol/authentication/controller/authentication_controller
 import 'package:cargocontrol/authentication/controller/authentication_state.dart';
 import 'package:cargocontrol/firebase_options.dart';
 import 'package:cargocontrol/sign_in/components/login_screen.dart';
-import 'package:cargocontrol/widgets/main_nav_bar.dart';
+import 'package:cargocontrol/dashboard/components/main_nav_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +14,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ProviderScope(child: const MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
