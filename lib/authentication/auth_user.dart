@@ -1,3 +1,4 @@
+import 'package:cargocontrol/utils/form_validators/user_type.dart';
 import 'package:equatable/equatable.dart';
 
 class AuthUser extends Equatable {

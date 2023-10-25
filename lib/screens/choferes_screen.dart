@@ -1,6 +1,6 @@
-import 'package:cargocontrol/widgets/choferes_card.dart';
+import 'package:cargocontrol/common_widgets/choferes_card.dart';
 import 'package:flutter/material.dart';
-import 'package:cargocontrol/constants.dart' as constants;
+import 'package:cargocontrol/utils/constants.dart' as constants;
 
 class ChoferesScreen extends StatelessWidget {
   const ChoferesScreen({super.key});

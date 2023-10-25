@@ -1,21 +1,33 @@
-import 'package:cargocontrol/widgets/main_text_button.dart';
+import 'dart:io';
+
+import 'package:cargocontrol/common_widgets/main_text_button.dart';
 import 'package:cargocontrol/screens/text_detector_view.dart';
-import 'package:cargocontrol/widgets/title_header.dart';
+import 'package:cargocontrol/common_widgets/title_header.dart';
 import 'package:flutter/material.dart';
-import 'package:cargocontrol/constants.dart' as constants;
+import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:numeric_keyboard/numeric_keyboard.dart';
 
 class KeyPadScreen extends StatefulWidget {
-  const KeyPadScreen({super.key});
+  final bool showCamera;
+  final String title;
+  final String subtitle;
+  final void Function(String) onTextChanged;
+  final void Function() onButtonTapped;
+  const KeyPadScreen(
+      {required this.title,
+      required this.subtitle,
+      required this.showCamera,
+      required this.onTextChanged,
+      required this.onButtonTapped,
+      super.key});
 
   @override
   State<KeyPadScreen> createState() => _KeyPadScreenState();
 }
 
 class _KeyPadScreenState extends State<KeyPadScreen> {
-  //String stringInput = '';
   TextEditingController keyPadTextFieldController = TextEditingController();
 
   @override
@@ -32,7 +44,10 @@ class _KeyPadScreenState extends State<KeyPadScreen> {
 
   @override
   Widget build(BuildContext context) {
+    widget.onTextChanged(keyPadTextFieldController.text);
     double deviceWidth = MediaQuery.of(context).size.width;
+    bool showCamera =
+        widget.showCamera && (Platform.isIOS || Platform.isAndroid);
 
     return Scaffold(
       appBar: AppBar(),
@@ -40,9 +55,9 @@ class _KeyPadScreenState extends State<KeyPadScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const TitleHeader(
-            title: 'Número de placa',
-            subtitle: 'Indique el número de placa del camión saliente',
+          TitleHeader(
+            title: widget.title,
+            subtitle: widget.subtitle,
           ),
           const SizedBox(
             height: 70,
@@ -62,27 +77,30 @@ class _KeyPadScreenState extends State<KeyPadScreen> {
               controller: keyPadTextFieldController,
               decoration: constants.DecorationStyles.keyPadTextFieldDecoration1
                   .copyWith(
-                suffixIcon: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const TextDetectorScreen()),
-                        );
-                        setState(() {
-                          keyPadTextFieldController.text = result;
-                        });
-                      },
-                      icon: const FaIcon(
-                        FontAwesomeIcons.camera,
-                        size: 20,
-                      ),
-                    )
-                  ],
-                ),
+                suffixIcon: showCamera
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const TextDetectorScreen()),
+                              );
+                              setState(() {
+                                keyPadTextFieldController.text = result;
+                              });
+                            },
+                            icon: const FaIcon(
+                              FontAwesomeIcons.camera,
+                              size: 20,
+                            ),
+                          )
+                        ],
+                      )
+                    : null,
               ),
             ),
           ),
@@ -101,7 +119,7 @@ class _KeyPadScreenState extends State<KeyPadScreen> {
           ),
           MainTextButton(
             text: 'CONTINUAR',
-            onTap: () {},
+            onTap: widget.onButtonTapped,
           ),
           SizedBox(
             height: MediaQuery.of(context).padding.bottom,

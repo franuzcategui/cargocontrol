@@ -1,13 +1,13 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/authentication/controller/authentication_state.dart';
 import 'package:cargocontrol/firebase_options.dart';
-import 'package:cargocontrol/sign_in/components/login_screen.dart';
-import 'package:cargocontrol/dashboard/components/main_nav_bar.dart';
+import 'package:cargocontrol/features/sign_in/components/login_screen.dart';
+import 'package:cargocontrol/features/dashboard/components/main_nav_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'constants.dart' as constants;
+import 'utils/constants.dart' as constants;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
