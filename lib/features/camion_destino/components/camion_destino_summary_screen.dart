@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:cargocontrol/common_widgets/info_description.dart';
 import 'package:cargocontrol/common_widgets/main_text_button.dart';
 import 'package:cargocontrol/common_widgets/title_header.dart';
-import 'package:cargocontrol/features/dashboard/components/dashboard_screen.dart';
+import 'package:cargocontrol/features/camion_saliendo/components/bodega_field.dart';
+import 'package:cargocontrol/features/camion_saliendo/components/camion_saliendo_summary_screen.dart';
+import 'package:cargocontrol/features/camion_saliendo/components/peso_bruto_form_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:cargocontrol/dummy_data/data.dart';
 
-class SummmaryScreen extends StatelessWidget {
-  const SummmaryScreen({super.key});
+class CamionDestinoSummaryScreen extends StatelessWidget {
+  const CamionDestinoSummaryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +21,15 @@ class SummmaryScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const TitleHeader(
-            logo: true,
+            title: 'Confirme camion entrando',
+            subtitle:
+                'Presione confirmar si la información del camión entrando es correcta',
           ),
-          InfoDescription(jsonObject: map, title: 'Información preliminar'),
-          InfoDescription(jsonObject: map, title: 'Información preliminar'),
+          Column(
+            children: [
+              InfoDescription(jsonObject: map, title: 'Información preliminar'),
+            ],
+          ),
           const Spacer(),
           MainTextButton(
             text: "CONTINUAR",

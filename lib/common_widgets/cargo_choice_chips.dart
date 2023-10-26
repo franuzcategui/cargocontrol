@@ -9,9 +9,13 @@ import 'package:cargocontrol/utils/constants.dart' as constants;
 
 class CargoChoiceChips extends StatefulWidget {
   final String name;
+  final void Function(String) onChange;
   final List<String> categories;
   const CargoChoiceChips(
-      {super.key, required this.name, required this.categories});
+      {super.key,
+      required this.name,
+      required this.categories,
+      required this.onChange});
 
   @override
   State<CargoChoiceChips> createState() => _CargoChoiceChipsState();
@@ -53,6 +57,7 @@ class _CargoChoiceChipsState extends State<CargoChoiceChips> {
         onSelected: (selected) {
           setState(() {
             _selectedIndex = selected ? index : 0;
+            widget.onChange(widget.categories[_selectedIndex]);
           });
         },
       ),

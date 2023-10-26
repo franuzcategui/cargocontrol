@@ -34,9 +34,12 @@ class FormScreen extends StatelessWidget {
                 hintText: 'hintText',
                 onChanged: (hello) {},
               ),
-              const CargoChoiceChips(
+              CargoChoiceChips(
                 name: 'Cargo',
                 categories: ['1', '2', '3', '4', '5'],
+                onChange: (hello) {
+                  print(hello);
+                },
               ),
               CargoFormTextField(
                 hideText: false,

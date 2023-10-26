@@ -1,18 +1,16 @@
 import 'dart:convert';
 
 import 'package:cargocontrol/common_widgets/info_description.dart';
-import 'package:cargocontrol/features/camion_entrando/components/chofer_form_text_field.dart';
-import 'package:cargocontrol/features/camion_entrando/components/peso_tara_form_text_field.dart';
-import 'package:cargocontrol/features/camion_entrando/components/placa_form_text_field.dart';
-import 'package:cargocontrol/features/camion_entrando/components/summary_screen.dart';
 import 'package:cargocontrol/common_widgets/main_text_button.dart';
 import 'package:cargocontrol/common_widgets/title_header.dart';
+import 'package:cargocontrol/features/camion_saliendo/components/bodega_field.dart';
+import 'package:cargocontrol/features/camion_saliendo/components/camion_saliendo_summary_screen.dart';
+import 'package:cargocontrol/features/camion_saliendo/components/peso_bruto_form_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:cargocontrol/dummy_data/data.dart';
 
-class InfoCamionScreen extends StatelessWidget {
-  const InfoCamionScreen({super.key});
+class CamionSaliendoScreen extends StatelessWidget {
+  const CamionSaliendoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +28,8 @@ class InfoCamionScreen extends StatelessWidget {
           Column(
             children: [
               InfoDescription(jsonObject: map, title: 'Información preliminar'),
-              PlacaFormTextField(),
-              ChoferFormTextField(),
-              PesoTaraFormTextField(),
+              BodegaField(),
+              PesoBrutoFormTextField(),
             ],
           ),
           const Spacer(),
@@ -41,7 +38,7 @@ class InfoCamionScreen extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const SummmaryScreen(),
+                builder: (context) => const CamionSaliendoSummaryScreen(),
               ),
             ),
           ),
