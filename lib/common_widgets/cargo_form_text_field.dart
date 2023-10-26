@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cargocontrol/screens/text_detector_view.dart';
+import 'package:cargocontrol/common_widgets/text_detector_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

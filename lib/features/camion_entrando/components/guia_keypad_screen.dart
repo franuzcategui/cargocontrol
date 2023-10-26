@@ -1,5 +1,5 @@
-import 'package:cargocontrol/features/camion_entrando/components/info_camion_screen.dart';
-import 'package:cargocontrol/screens/keypad_screen.dart';
+import 'package:cargocontrol/features/camion_entrando/components/camion_entrando_screen.dart';
+import 'package:cargocontrol/common_widgets/keypad_screen.dart';
 import 'package:flutter/material.dart';
 
 class GuiaKeyPadScreen extends StatelessWidget {
@@ -16,7 +16,7 @@ class GuiaKeyPadScreen extends StatelessWidget {
         },
         onButtonTapped: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => InfoCamionScreen()));
+              MaterialPageRoute(builder: (context) => CamionEntrandoScreen()));
         });
   }
 }
