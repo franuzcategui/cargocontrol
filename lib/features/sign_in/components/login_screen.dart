@@ -1,7 +1,7 @@
 import 'package:cargocontrol/features/sign_in/components/signin_button.dart';
 import 'package:cargocontrol/features/sign_in/controller/signin_controller.dart';
 import 'package:cargocontrol/features/sign_in/controller/signin_state.dart';
-import 'package:cargocontrol/features/forgot_password/forgot_password_screen.dart';
+import 'package:cargocontrol/features/forgot_password/components/forgot_password_screen.dart';
 import 'package:cargocontrol/features/sign_in/components/email_text_field.dart';
 import 'package:cargocontrol/features/sign_in/components/password_text_field.dart';
 import 'package:cargocontrol/common_widgets/loading_sheet.dart';

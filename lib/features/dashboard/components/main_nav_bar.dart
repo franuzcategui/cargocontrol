@@ -1,6 +1,6 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/authentication/controller/authentication_state.dart';
-import 'package:cargocontrol/screens/choferes_screen.dart';
+import 'package:cargocontrol/features/choferes/components/choferes_screen.dart';
 import 'package:cargocontrol/features/dashboard/components/dashboard_screen.dart';
 import 'package:cargocontrol/screens/viajes_screen.dart';
 import 'package:flutter/material.dart';

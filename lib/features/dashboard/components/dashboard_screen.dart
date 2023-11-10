@@ -1,6 +1,6 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/common_widgets/cargo_bar_chart.dart';
-import 'package:cargocontrol/common_widgets/dashboard_mini_card.dart';
+import 'package:cargocontrol/features/dashboard/components/dashboard_mini_card.dart';
 import 'package:cargocontrol/common_widgets/progress_indicator_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

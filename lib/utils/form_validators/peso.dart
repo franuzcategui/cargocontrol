@@ -8,12 +8,33 @@ class Peso extends FormzInput<String, PesoValidationError> {
 
   @override
   PesoValidationError? validator(String value) {
-    int? intValue = int.tryParse(value);
-    if (intValue == null) {
+    double? doubleValue = double.tryParse(value);
+    if (doubleValue == null) {
       return PesoValidationError.notNumber;
     }
-    if (intValue < 0) {
+    if (doubleValue < 0) {
       return PesoValidationError.invalid;
+    } else {
+      return null;
+    }
+  }
+
+  double? toDouble() {
+    double? doubleValue = double.tryParse(value);
+    if (doubleValue != null) {
+      return doubleValue;
+    } else {
+      return null;
+    }
+  }
+
+  static String? showPesoErrorMessage(PesoValidationError? error) {
+    if (error == PesoValidationError.empty) {
+      return 'Campo vacio';
+    } else if (error == PesoValidationError.invalid) {
+      return 'Peso invalido';
+    } else if (error == PesoValidationError.notNumber) {
+      return 'Peso debe ser un número';
     } else {
       return null;
     }

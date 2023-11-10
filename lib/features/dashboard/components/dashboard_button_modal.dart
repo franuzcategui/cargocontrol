@@ -8,7 +8,7 @@ import 'package:cargocontrol/utils/form_validators/user_type.dart';
 import 'package:cargocontrol/screens/form_screen.dart';
 import 'package:cargocontrol/common_widgets/keypad_screen.dart';
 import 'package:cargocontrol/features/sign_up/components/sign_up_screen.dart';
-import 'package:cargocontrol/common_widgets/dashboard_modal_button.dart';
+import 'package:cargocontrol/features/dashboard/components/dashboard_modal_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

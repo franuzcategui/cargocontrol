@@ -19,7 +19,7 @@ class Placa extends FormzInput<String, PlacaValidationError> {
     }
   }
 
-  static String? showPlacaErrorMessage(PlacaValidationError error) {
+  static String? showPlacaErrorMessage(PlacaValidationError? error) {
     if (error == PlacaValidationError.empty) {
       return "Placa vacía";
     }

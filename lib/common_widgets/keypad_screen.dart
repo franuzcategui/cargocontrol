@@ -32,7 +32,7 @@ class _KeyPadScreenState extends State<KeyPadScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    keyPadTextFieldController.addListener(_onTextChange);
     super.initState();
   }
 
@@ -42,9 +42,13 @@ class _KeyPadScreenState extends State<KeyPadScreen> {
     super.dispose();
   }
 
+  void _onTextChange() {
+    final text = keyPadTextFieldController.text;
+    widget.onTextChanged(text);
+  }
+
   @override
   Widget build(BuildContext context) {
-    widget.onTextChanged(keyPadTextFieldController.text);
     double deviceWidth = MediaQuery.of(context).size.width;
     bool showCamera =
         widget.showCamera && (Platform.isIOS || Platform.isAndroid);
