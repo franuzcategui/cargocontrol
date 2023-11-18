@@ -14,8 +14,12 @@ class ChoferesRepository {
       DatabaseReference ref = FirebaseDatabase.instance.ref();
       final initialQuery =
           ref.child('chofer').orderByKey().limitToFirst(pageSize);
+      print(lastDoc ?? ' not null');
       final query =
-          lastDoc != null ? initialQuery.startAfter(lastDoc) : initialQuery;
+          //lastDoc != null ? initialQuery.startAfter() : initialQuery;
+          lastDoc != null
+              ? initialQuery.startAfter(lastDoc, key: lastDoc.key)
+              : initialQuery;
 
       final snapshots = await query.get();
       if (snapshots.value == null) return (List<ChoferInfo>.empty(), null);
@@ -30,19 +34,24 @@ class ChoferesRepository {
 
   Stream<(List<ChoferInfo>, DataSnapshot?)> listenToChoferesList(
       {required int pageSize, DataSnapshot? lastDoc}) {
-    DatabaseReference ref = FirebaseDatabase.instance.ref();
-    final initialQuery =
-        ref.child('chofer').orderByKey().limitToFirst(pageSize);
-    final query =
-        lastDoc != null ? initialQuery.startAfter(lastDoc) : initialQuery;
-    return query.onValue.map((event) {
-      final snapshots = event.snapshot;
-      if (snapshots.value == null) return (List<ChoferInfo>.empty(), null);
-      final result =
-          snapshots.children.map((e) => ChoferInfo.fromJson(e.value!)).toList();
-      final users = result.whereType<ChoferInfo>().toList();
-      return (users, snapshots.children.last);
-    });
+    try {
+      DatabaseReference ref = FirebaseDatabase.instance.ref();
+      final initialQuery = ref.child('chofer').orderByKey();
+
+      // final query =
+      //     lastDoc != null ? initialQuery.startAt(lastDoc.key) : initialQuery;
+      return initialQuery.onValue.map((event) {
+        final snapshots = event.snapshot;
+        if (snapshots.value == null) return (List<ChoferInfo>.empty(), null);
+        final result = snapshots.children
+            .map((e) => ChoferInfo.fromJson(e.value!))
+            .toList();
+        final users = result.whereType<ChoferInfo>().toList();
+        return (users, snapshots.children.last);
+      });
+    } on FirebaseException catch (e) {
+      throw AddChoferFormFailure(e.message ?? e.code);
+    }
   }
 
   Future<void> addChofer({

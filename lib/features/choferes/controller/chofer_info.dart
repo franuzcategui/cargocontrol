@@ -18,9 +18,7 @@ class ChoferInfo {
       required this.deficitPromedio});
 
   factory ChoferInfo.fromJson(Object json) {
-    print(json.runtimeType);
     Map<String, dynamic> jsonDecoded = Map<String, dynamic>.from(json as Map);
-    print("Json $jsonDecoded");
     return ChoferInfo(
       id: jsonDecoded['Id'].toString(),
       nombre: jsonDecoded['CamioneroID'].toString(),
