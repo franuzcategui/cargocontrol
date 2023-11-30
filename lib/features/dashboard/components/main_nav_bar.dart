@@ -54,9 +54,6 @@ class _MainNavBarState extends ConsumerState<MainNavBar> {
                 });
               },
               iconSize: 22,
-              unselectedItemColor: constants.kSecondaryMainColor,
-              selectedItemColor: constants.kMainColor,
-              backgroundColor: constants.kMainBackroundColor,
               currentIndex: _currentIndex,
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(

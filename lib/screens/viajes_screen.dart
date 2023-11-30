@@ -14,7 +14,8 @@ class ViajesScreen extends StatelessWidget {
             centerTitle: false,
             title:
                 Text('Viajes', style: const constants.TextStyles().titleText3),
-            bottom: const TabBar(tabs: [
+            bottom: const TabBar(
+            tabs: [
               Tab(text: 'Todos'),
               Tab(text: 'En camino'),
               Tab(text: 'Completados'),
