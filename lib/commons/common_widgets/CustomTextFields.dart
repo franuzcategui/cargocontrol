@@ -42,31 +42,18 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: getSemiBoldStyle(
-              fontSize: MyFonts.size18,
-              color: Theme.of(context).colorScheme.primary),
-        ),
-        Container(
-          constraints: texfieldHeight != null
-              ? BoxConstraints(minHeight: texfieldHeight!)
-              : BoxConstraints(minHeight: 62.h),
-          margin: EdgeInsets.only(bottom: 5.h, top: 10.h),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(25.r),
-          ),
-          child: TextFormField(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: Column(
+        children: [
+          TextFormField(
             validator: validatorFn,
             obscureText: obscure,
             controller: controller,
             keyboardType: inputType,
-            style: getMediumStyle(fontSize: MyFonts.size16, color: context.textColor),
+            style: getMediumStyle(fontSize: MyFonts.size12, color: context.textColor),
             decoration: InputDecoration(
+              label: Text(label,),
               contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
               prefixIcon: leadingIcon,
               errorStyle: getRegularStyle(
@@ -75,8 +62,8 @@ class CustomTextField extends StatelessWidget {
               suffixIcon: tailingIcon,
               hintText: hintText,
               hintStyle: getMediumStyle(
-                  fontSize: MyFonts.size16,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer),
+                  fontSize: MyFonts.size12,
+                  color: context.textFieldColor),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25.r),
                 borderSide: BorderSide(
@@ -86,7 +73,7 @@ class CustomTextField extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25.r),
                 borderSide: BorderSide(
-                  color: context.textFieldColor
+                  color: context.mainColor
                 )
               ),
               border: OutlineInputBorder(
@@ -111,8 +98,8 @@ class CustomTextField extends StatelessWidget {
             onFieldSubmitted: onFieldSubmitted,
             onChanged: onChanged,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

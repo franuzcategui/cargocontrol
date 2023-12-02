@@ -1,13 +1,14 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/authentication/controller/authentication_state.dart';
 import 'package:cargocontrol/firebase_options.dart';
-import 'package:cargocontrol/features/sign_in/components/login_screen.dart';
+import 'package:cargocontrol/features/auth/views/login_screen.dart';
 import 'package:cargocontrol/features/dashboard/components/main_nav_bar.dart';
 import 'package:cargocontrol/utils/constants/app_constants.dart';
 import 'package:cargocontrol/utils/thems/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'commons/common_imports/common_libs.dart';
+import 'features/admin/main_menu/views/ad_main_menu_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,7 @@ class MyApp extends ConsumerWidget {
 
     Widget getHome() {
       if (authenticationState.status == AuthenticationStatus.authenticated) {
-        return const MainNavBar();
+        return const AdMainMenuScreen();
       } else if (authenticationState.status ==
           AuthenticationStatus.unauthenticated) {
         return const LoginScreen();
