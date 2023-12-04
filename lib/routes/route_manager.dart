@@ -1,3 +1,4 @@
+import 'package:cargocontrol/features/admin/create_vessel/views/create_vessel_screen.dart';
 import 'package:cargocontrol/features/admin/main_menu/views/ad_main_menu_screen.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'navigation.dart';
 class AppRoutes {
   // Admin Section
   static const String adminMainMenuScreen = '/adminMainMenuScreen';
+  static const String adminCreateVesselScreen = '/adminCreateVesselScreen';
 
 
 
@@ -21,6 +23,8 @@ class AppRoutes {
       // Admin Screens
       case adminMainMenuScreen:
         return _buildRoute(const AdMainMenuScreen());
+      case adminCreateVesselScreen:
+        return _buildRoute(const CreateVesselScreen());
 
 
 

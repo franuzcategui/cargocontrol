@@ -3,6 +3,7 @@ import 'package:cargocontrol/authentication/controller/authentication_state.dart
 import 'package:cargocontrol/firebase_options.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
 import 'package:cargocontrol/features/dashboard/components/main_nav_bar.dart';
+import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/app_constants.dart';
 import 'package:cargocontrol/utils/thems/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -57,7 +58,7 @@ class MyApp extends ConsumerWidget {
           title: 'Cargo-App',
           theme: lightThemeData(context),
           themeMode: ThemeMode.light,
-          // onGenerateRoute: AppRoutes.onGenerateRoute,
+          onGenerateRoute: AppRoutes.onGenerateRoute,
           home: getHome(),
         );
       },

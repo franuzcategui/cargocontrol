@@ -4,6 +4,7 @@ import 'package:cargocontrol/features/camion_destino/components/placa_destino_ke
 import 'package:cargocontrol/features/camion_entrando/components/guia_keypad_screen.dart';
 import 'package:cargocontrol/features/camion_saliendo/components/camion_saliendo_screen.dart';
 import 'package:cargocontrol/features/camion_saliendo/components/placa_saliendo_keypad_screen.dart';
+import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/form_validators/user_type.dart';
 import 'package:cargocontrol/screens/form_screen.dart';
 import 'package:cargocontrol/common_widgets/keypad_screen.dart';
@@ -23,9 +24,18 @@ class AdFloadtingActionSheet extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         DashboardModalButton(
-          title1: 'Crear',
-          title2: 'usuario',
-          subtitle: 'Crear usuario en sístema',
+          title1: 'Registro de',
+          title2: 'nuevo buque',
+          subtitle: 'Registro de buque a puerto',
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, AppRoutes.adminCreateVesselScreen);
+          },
+        ),
+        DashboardModalButton(
+          title1: 'Registro de',
+          title2: 'industria ',
+          subtitle: 'Registro de guia de industria',
           onTap: () {
             Navigator.push(
               context,
@@ -34,13 +44,24 @@ class AdFloadtingActionSheet extends ConsumerWidget {
           },
         ),
         DashboardModalButton(
-          title1: 'Crear',
-          title2: 'usuario',
-          subtitle: 'Crear usuario en sístema',
+          title1: 'Registro de',
+          title2: 'nuevo usuario',
+          subtitle: 'Registro de buque a puerto',
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const SignUpScreen()),
+            );
+          },
+        ),
+        DashboardModalButton(
+          title1: 'Descargar',
+          title2: 'reporte',
+          subtitle: 'Descargar reporte general',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FormScreen()),
             );
           },
         ),

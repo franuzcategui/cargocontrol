@@ -10,7 +10,7 @@ TextStyle _getTextStyle(
   FontWeight fontWeight,
   Color color,
 ) {
-  return GoogleFonts.poppins(
+  return GoogleFonts.roboto(
     color: color,
     fontSize: fontSize.sp,
     fontWeight: fontWeight,

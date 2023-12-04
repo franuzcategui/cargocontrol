@@ -3,7 +3,11 @@ const String imagesPath = 'assets/images';
 
 
 class AppAssets{
-  static const String arrowRight = '$imagesPath/arrow-right.png';
-  static const String arrowBack = '$imagesPath/arrow-round-back.png';
+  // Icons Paths
+  static const String arrowRight = '$iconPath/arrow-right.png';
+  static const String arrowBack = '$iconPath/arrowback.png';
+
+
+  // Images Paths
   static const String arrowRoundBack = '$imagesPath/arrow-round-back.png';
 }

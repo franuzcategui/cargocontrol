@@ -6,7 +6,7 @@ import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:cargocontrol/utils/thems/styles_manager.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final Function(String) onChanged;
@@ -19,6 +19,8 @@ class CustomTextField extends StatelessWidget {
   final Widget? tailingIcon;
   final String? leadingIconPath;
   final double? texfieldHeight;
+  final VoidCallback? onTap;
+  final bool? readOnly;
   final String label;
   final bool showLabel;
 
@@ -37,9 +39,34 @@ class CustomTextField extends StatelessWidget {
     this.leadingIconPath,
     this.texfieldHeight,
     required this.label,
-    this.showLabel = true,
+    this.showLabel = true, this.onTap, this.readOnly,
   }) : super(key: key);
 
+  @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  FocusNode _focusNode = FocusNode();
+
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _requestFocus(){
+    setState(() {
+      FocusScope.of(context).requestFocus(_focusNode);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -47,20 +74,24 @@ class CustomTextField extends StatelessWidget {
       child: Column(
         children: [
           TextFormField(
-            validator: validatorFn,
-            obscureText: obscure,
-            controller: controller,
-            keyboardType: inputType,
+            focusNode: _focusNode,
+            onTap: widget.onTap?? _requestFocus,
+            readOnly: widget.readOnly?? false,
+            validator: widget.validatorFn,
+            obscureText: widget.obscure,
+            controller: widget.controller,
+            keyboardType: widget.inputType,
             style: getMediumStyle(fontSize: MyFonts.size12, color: context.textColor),
             decoration: InputDecoration(
-              label: Text(label,),
+              label: Text(widget.label, style: getRegularStyle(color: _focusNode.hasFocus?
+              context.mainColor : context.secondaryTextColor, fontSize: MyFonts.size12),),
               contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
-              prefixIcon: leadingIcon,
+              prefixIcon: widget.leadingIcon,
               errorStyle: getRegularStyle(
                   fontSize: MyFonts.size10,
                   color: Theme.of(context).colorScheme.error),
-              suffixIcon: tailingIcon,
-              hintText: hintText,
+              suffixIcon: widget.tailingIcon,
+              hintText: widget.hintText,
               hintStyle: getMediumStyle(
                   fontSize: MyFonts.size12,
                   color: context.textFieldColor),
@@ -95,8 +126,8 @@ class CustomTextField extends StatelessWidget {
                 )
               ),
             ),
-            onFieldSubmitted: onFieldSubmitted,
-            onChanged: onChanged,
+            onFieldSubmitted: widget.onFieldSubmitted,
+            onChanged: widget.onChanged,
           ),
         ],
       ),

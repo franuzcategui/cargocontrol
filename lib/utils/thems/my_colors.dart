@@ -16,5 +16,6 @@ class MyColors {
   static const kTertiaryMainColor = Color.fromRGBO(32, 202, 254, 1);
   static const kQuaternaryMainColor = Color.fromRGBO(255, 222, 47, 1);
   static const Color kSecondaryTextColor = Color(0xFFA4A4A4);
+  static const Color kText3Color = Color(0xFF4C495B);
 
 }

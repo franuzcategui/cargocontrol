@@ -29,7 +29,7 @@ ThemeData lightThemeData(BuildContext context) {
       onSecondary: MyColors.kQuaternaryMainColor,
       error: MyColors.red,
       onSurface: MyColors.black,
-
+      background: MyColors.kText3Color
     ),
 
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
