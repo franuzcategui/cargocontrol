@@ -1,5 +1,6 @@
 const String iconPath = 'assets/icons';
 const String imagesPath = 'assets/images';
+const String logosPath = 'assets/images/logos';
 
 
 class AppAssets{
@@ -10,5 +11,5 @@ class AppAssets{
 
 
   // Images Paths
-  static const String arrowRoundBack = '$imagesPath/arrow-round-back.png';
+  static const String logo = '$logosPath/logo.png';
 }

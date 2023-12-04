@@ -54,7 +54,7 @@ class _CreateVesselCompleteDataScreenState extends State<CreateVesselCompleteDat
                   SizedBox(height: 26.h,),
                   CustomButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, AppRoutes.adminCreateVesselBodegaInfoScreen);
+                        Navigator.pushNamed(context, AppRoutes.registrationSuccessFullScreen);
                       },
                       buttonText: "CONTINUAR"
                   ),

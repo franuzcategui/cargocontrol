@@ -37,10 +37,8 @@ class AdFloadtingActionSheet extends ConsumerWidget {
           title2: 'industria ',
           subtitle: 'Registro de guia de industria',
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SignUpScreen()),
-            );
+            Navigator.pop(context);
+            Navigator.pushNamed(context, AppRoutes.adminCreateIndustryScreen);
           },
         ),
         DashboardModalButton(

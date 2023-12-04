@@ -1,5 +1,7 @@
+import 'package:cargocontrol/features/admin/create_industry/views/create_industry_screen.dart';
 import 'package:cargocontrol/features/admin/create_vessel/views/create_vessel_complete_data_screen.dart';
 import 'package:cargocontrol/features/admin/create_vessel/views/create_vessel_screen.dart';
+import 'package:cargocontrol/features/admin/create_vessel/views/registration_successfull_screen.dart';
 import 'package:cargocontrol/features/admin/main_menu/views/ad_main_menu_screen.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,9 @@ class AppRoutes {
   static const String adminCreateVesselScreen = '/adminCreateVesselScreen';
   static const String adminCreateVesselBodegaInfoScreen = '/adminCreateVesselBodegaInfoScreen';
   static const String adminCreateVesselCompleteDataScreen = '/adminCreateVesselCompleteDataScreen';
+  static const String registrationSuccessFullScreen = '/registrationSuccessFullScreen';
+
+  static const String adminCreateIndustryScreen = '/adminCreateIndustryScreen';
 
 
 
@@ -33,7 +38,11 @@ class AppRoutes {
         return _buildRoute(const CreateVesselBodegaInfoScreen());
       case adminCreateVesselCompleteDataScreen:
         return _buildRoute(const CreateVesselCompleteDataScreen());
+      case registrationSuccessFullScreen:
+        return _buildRoute(const RegistrationSuccessFullScreen());
 
+      case adminCreateIndustryScreen:
+        return _buildRoute(const CreateIndustryScreen());
 
 
 
