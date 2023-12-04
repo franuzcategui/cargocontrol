@@ -11,4 +11,5 @@ extension ThemeColors on BuildContext {
   Color get textFieldColor => Theme.of(this).colorScheme.onPrimary;
   Color get secondaryTextColor => Theme.of(this).colorScheme.onPrimaryContainer;
   Color get text3Color => Theme.of(this).colorScheme.background;
+  Color get brandColor => Theme.of(this).colorScheme.onBackground;
 }

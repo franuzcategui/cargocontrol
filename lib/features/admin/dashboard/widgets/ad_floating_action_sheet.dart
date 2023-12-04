@@ -46,10 +46,8 @@ class AdFloadtingActionSheet extends ConsumerWidget {
           title2: 'nuevo usuario',
           subtitle: 'Registro de buque a puerto',
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SignUpScreen()),
-            );
+            Navigator.pop(context);
+            Navigator.pushNamed(context, AppRoutes.adminRegisterUserScreen);
           },
         ),
         DashboardModalButton(
