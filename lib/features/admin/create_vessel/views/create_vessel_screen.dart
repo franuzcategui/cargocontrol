@@ -1,6 +1,7 @@
 import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 
 import '../../../../common_widgets/title_header.dart';
@@ -95,7 +96,9 @@ class _CreateVesselScreenState extends State<CreateVesselScreen> {
                    ),
                    SizedBox(height: 45.h,),
                    CustomButton(
-                       onPressed: (){},
+                       onPressed: (){
+                         Navigator.pushNamed(context, AppRoutes.adminCreateVesselBodegaInfoScreen);
+                       },
                        buttonText: "CONTINUAR"
                    ),
                  ],
@@ -107,3 +110,4 @@ class _CreateVesselScreenState extends State<CreateVesselScreen> {
     );
   }
 }
+

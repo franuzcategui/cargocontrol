@@ -56,11 +56,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
     _focusNode = FocusNode();
   }
 
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _focusNode.dispose();
+  //   super.dispose();
+  // }
 
   void _requestFocus(){
     setState(() {
