@@ -22,6 +22,7 @@ class ChoferesListController extends StreamNotifier<List<ChoferInfo>> {
     yield* choferStream ?? const Stream.empty();
   }
 
+
   Future<void> fetchMore() async {
     if (state.isLoading || !hasMore || lastDoc == null) return;
 
@@ -37,6 +38,8 @@ class ChoferesListController extends StreamNotifier<List<ChoferInfo>> {
     //   print(chofer.nombre);
     // }
   }
+
+
 
   //create method that concatinates the current state stream with the new stream fetched in _listentoChoferesList
 
