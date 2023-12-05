@@ -1,8 +1,11 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/common_widgets/cargo_bar_chart.dart';
+import 'package:cargocontrol/commons/common_imports/common_libs.dart';
+import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/dashboard/widgets/ad_dashboard_mini_card.dart';
 import 'package:cargocontrol/features/dashboard/components/dashboard_mini_card.dart';
 import 'package:cargocontrol/common_widgets/progress_indicator_card.dart';
+import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +21,7 @@ class AdDashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authenticationState = ref.watch(authProvider);
-    final String userType =
+    final String  userType =
         authenticationState.user.userType.toString().split('.').last;
 
     return Scaffold(
@@ -29,25 +32,25 @@ class AdDashboardScreen extends ConsumerWidget {
             padding: const EdgeInsets.only(left: 15),
             child: Text(
               'Bienvenido',
-              style: const constants.TextStyles().auxTitleText1,
+              style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size18),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Text(
               userType,
-              style: const constants.TextStyles().titleText1,
+              style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
             ),
           ),
           SizedBox(
-            height: 0.2 * MediaQuery.of(context).size.height,
-            width: 0.9 * MediaQuery.of(context).size.width,
+            height: (0.2 * MediaQuery.of(context).size.height).h,
+            width: (0.9 * MediaQuery.of(context).size.width).w,
             child: Stack(
               children: [
                 Image.asset(constants.Images.ship),
                 Positioned(
-                  left: 0.04 * MediaQuery.of(context).size.width,
-                  bottom: 0.06 * MediaQuery.of(context).size.height,
+                  left: (0.04 * MediaQuery.of(context).size.width).w,
+                  bottom: (0.02 * MediaQuery.of(context).size.height).h,
                   child: const CargoBarChart(),
                 ),
               ],

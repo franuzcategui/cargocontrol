@@ -18,6 +18,9 @@ class AdDashboardMiniCard extends StatelessWidget {
       child: Container(
         decoration: constants.DecorationStyles.shadow2,
         padding: EdgeInsets.all(16.sp),
+        constraints: BoxConstraints(
+          minWidth: 147.w
+        ),
         height: 100.h,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
