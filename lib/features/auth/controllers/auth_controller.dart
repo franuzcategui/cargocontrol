@@ -120,11 +120,11 @@ class AuthController extends StateNotifier<bool> {
       showSnackBar(context, l.message);
     }, (r) async {
       UserModel userModel = await getCurrentUserInfo();
-      userModel.accountType.name == AccountTypeEnum.admin.name
+      userModel.accountType.name == AccountTypeEnum.administrador.name
           ? Navigator.pushNamedAndRemoveUntil(
           context, AppRoutes.dashboardScreen, (route) => false)
           : userModel.accountType.name ==
-          AccountTypeEnum.company.name
+          AccountTypeEnum.industria.name
           ? Navigator.pushNamedAndRemoveUntil(context,
           AppRoutes.dashboardScreen, (route) => false)
           : Navigator.pushNamedAndRemoveUntil(context,

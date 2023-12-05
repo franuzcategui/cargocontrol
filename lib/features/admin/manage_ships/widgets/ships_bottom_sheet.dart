@@ -1,4 +1,7 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
+import 'package:cargocontrol/commons/common_imports/common_libs.dart';
+import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
+import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/camion_descarga/components/placa_descarga_keypad.dart';
 import 'package:cargocontrol/features/camion_destino/components/placa_destino_keypad.dart';
 import 'package:cargocontrol/features/camion_entrando/components/guia_keypad_screen.dart';
@@ -13,8 +16,8 @@ import 'package:cargocontrol/features/dashboard/components/dashboard_modal_butto
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AdFloadtingActionSheet extends ConsumerWidget {
-  const AdFloadtingActionSheet({
+class ShipsBottomSheet extends ConsumerWidget {
+  const ShipsBottomSheet({
     super.key,
   });
 
@@ -23,43 +26,17 @@ class AdFloadtingActionSheet extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        DashboardModalButton(
-          title1: 'Registro de',
-          title2: 'nuevo buque',
-          subtitle: 'Registro de buque a puerto',
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, AppRoutes.adminCreateVesselScreen);
-          },
+        CustomButton(
+            onPressed: (){},
+            buttonText: 'DESCARGA DE BUQUE CULMINADA'
         ),
-        DashboardModalButton(
-          title1: 'Registro de',
-          title2: 'industria ',
-          subtitle: 'Registro de guia de industria',
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, AppRoutes.adminCreateIndustryScreen);
-          },
-        ),
-        DashboardModalButton(
-          title1: 'Registro de',
-          title2: 'nuevo usuario',
-          subtitle: 'Registro de buque a puerto',
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, AppRoutes.adminRegisterUserScreen);
-          },
-        ),
-        DashboardModalButton(
-          title1: 'Administrar',
-          title2: ' buques',
-          subtitle: 'Descargar reporte de descarga',
-          onTap: () {
-            Navigator.pushNamed(context, AppRoutes.adManageShipsScreen);
-          },
+        CustomButton(
+            onPressed: (){},
+            buttonText: 'REGRESAR',
+          backColor: context.secondaryMainColor,
         ),
         SizedBox(
-          height: MediaQuery.of(context).padding.bottom,
+          height: 22.h,
         ),
       ],
     );

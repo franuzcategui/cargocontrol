@@ -47,6 +47,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
       onTap: _requestFocus,
       style: getMediumStyle(fontSize: MyFonts.size12, color: context.textColor),
       decoration: InputDecoration(
+        fillColor: context.textFieldColor,
         label: Text(widget.labelText, style: getRegularStyle(color: _focusNode.hasFocus?
         context.mainColor : context.secondaryTextColor, fontSize: MyFonts.size12),),
         contentPadding: EdgeInsets.symmetric(horizontal: 20.w),

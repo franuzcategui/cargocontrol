@@ -6,7 +6,9 @@ import '../../../../utils/constants/font_manager.dart';
 class CustomTile extends StatelessWidget {
   final String title;
   final String subText;
-  const CustomTile({Key? key, required this.title, required this.subText}) : super(key: key);
+  final bool hasWarning;
+  final bool isGoodSign;
+  const CustomTile({Key? key, required this.title, required this.subText, this.hasWarning = false, this.isGoodSign= false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,10 @@ class CustomTile extends StatelessWidget {
             fontSize: MyFonts.size12,
           ),),
           Text(subText, style: getRegularStyle(
-            color: context.textColor,
+            color:
+            hasWarning ? context.errorColor:
+            isGoodSign ? context.brandColor:
+            context.textColor,
             fontSize: MyFonts.size12,
           ),
             textAlign: TextAlign.end,

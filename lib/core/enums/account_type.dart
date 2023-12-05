@@ -1,6 +1,6 @@
 enum AccountTypeEnum{
-  admin('admin'),
-  company('company'),
+  administrador('administrador'),
+  industria('industria'),
   coordinator('coordinator');
 
 
@@ -13,10 +13,10 @@ enum AccountTypeEnum{
 extension ConvertAccountType on String{
   AccountTypeEnum toAccountTypeEnum(){
     switch(this){
-      case 'admin':
-        return AccountTypeEnum.admin;
-      case 'company':
-        return AccountTypeEnum.company;
+      case 'administrador':
+        return AccountTypeEnum.administrador;
+      case 'industria':
+        return AccountTypeEnum.industria;
       case 'coordinator':
         return AccountTypeEnum.coordinator;
       default:

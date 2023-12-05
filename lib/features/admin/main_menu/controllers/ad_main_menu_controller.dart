@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../screens/viajes_screen.dart';
 import '../../../choferes/components/choferes_screen.dart';
-import '../../../dashboard/components/dashboard_screen.dart';
 import '../../dashboard/views/ad_dashboard_screen.dart';
+import '../../viajes/views/ad_viajes_screen.dart';
 
 final adMainMenuProvider = ChangeNotifierProvider((ref) => MainMenuController());
 
@@ -12,7 +11,7 @@ class MainMenuController extends ChangeNotifier {
 
   final List<Widget> _screens = [
     const AdDashboardScreen(),
-    const ViajesScreen(),
+    const AdViajesScreen(),
     const ChoferesScreen(),
   ];
   List<Widget> get screens => _screens;

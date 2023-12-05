@@ -6,11 +6,14 @@ import 'package:cargocontrol/features/admin/create_vessel/views/create_vessel_sc
 import 'package:cargocontrol/features/admin/create_vessel/views/registration_successfull_screen.dart';
 import 'package:cargocontrol/features/admin/main_menu/views/ad_main_menu_screen.dart';
 import 'package:cargocontrol/features/admin/register_user/views/register_user_screen.dart';
+import 'package:cargocontrol/features/admin/viajes/views/ad_viages_edit_screen.dart';
+import 'package:cargocontrol/features/admin/viajes/views/ad_viajes_details_screen.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../features/admin/create_industry/widgets/industries_for_all_data.dart';
 import '../features/admin/create_vessel/views/create_vessle_bodega_info_screen.dart';
+import '../features/admin/manage_ships/views/manage_ships_screen.dart';
 import '../features/dashboard/components/dashboard_screen.dart';
 import 'navigation.dart';
 
@@ -27,6 +30,11 @@ class AppRoutes {
   static const String adminCreateIndustryCompleteDataScreen = '/adminCreateIndustryCompleteDataScreen';
 
   static const String adminRegisterUserScreen = '/adminRegisterUserScreen';
+
+  static const String adminViajesDetailsScreen = '/adminViajesDetailsScreen';
+  static const String adminViajesEditScreen = '/adminViajesEditScreen';
+
+  static const String adManageShipsScreen = '/adManageShipsScreen';
 
 
 
@@ -58,6 +66,14 @@ class AppRoutes {
 
       case adminRegisterUserScreen:
         return _buildRoute(const RegisterUserScreen());
+
+      case adminViajesDetailsScreen:
+        return _buildRoute(const AdViajesDetailsScreen());
+      case adminViajesEditScreen:
+        return _buildRoute(const AdViajesEditScreen());
+
+      case adManageShipsScreen:
+        return _buildRoute(const AdManageShipsScreen());
 
 
 
