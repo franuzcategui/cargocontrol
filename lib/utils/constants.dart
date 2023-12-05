@@ -1,3 +1,4 @@
+import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -218,7 +219,7 @@ class DecorationStyles {
       color: kMainBackroundColor,
       border: Border.all(
         color: kMainColor,
-        width: 2,
+        width: 1.w,
       ),
       borderRadius: BorderRadius.circular(25),
       boxShadow: const [

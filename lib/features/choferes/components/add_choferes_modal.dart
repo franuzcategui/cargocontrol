@@ -1,5 +1,8 @@
 import 'package:cargocontrol/common_widgets/loading_sheet.dart';
 import 'package:cargocontrol/common_widgets/title_header.dart';
+import 'package:cargocontrol/commons/common_imports/common_libs.dart';
+import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
+import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/features/choferes/components/add_chofer_button.dart';
 import 'package:cargocontrol/features/choferes/components/chofer_text_field.dart';
 import 'package:cargocontrol/features/choferes/components/id_text_field.dart';
@@ -10,21 +13,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
-class AddChoferesModal extends ConsumerWidget {
+class AddChoferesModal extends StatefulWidget {
   const AddChoferesModal({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<ChoferesState>(choferesProvider, (previous, current) {
-      if (current.status.isInProgress) {
-        LoadingSheet.show(context);
-      } else if (current.status.isFailure) {
-        ErrorDialog.show(context, "${current.errorMessage}");
-      } else if (current.status.isSuccess) {
-        Navigator.pop(context);
-        ErrorDialog.show(context, "El chofer se ha registrado exitosamente");
-      }
-    });
+  State<AddChoferesModal> createState() => _AddChoferesModalState();
+}
+
+class _AddChoferesModalState extends State<AddChoferesModal> {
+
+  final nameCtr = TextEditingController();
+  final identificationCtr = TextEditingController();
+
+  @override
+  void dispose() {
+
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -32,12 +40,39 @@ class AddChoferesModal extends ConsumerWidget {
           title: 'Agregar nuevo chofer',
           subtitle: 'Registrar a nuevo chofer',
         ),
-        ChoferTextField(),
-        IdTextField(),
-        AddChoferButton(),
-        SizedBox(
-          height: MediaQuery.of(context).padding.bottom,
-        ),
+        SizedBox(height: 20.h,),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            children: [
+              CustomTextField(
+                  controller: nameCtr,
+                  hintText: '',
+                  onChanged: (val){},
+                  onFieldSubmitted: (val){},
+                  obscure: false,
+                  label: 'Nombre de chofer'
+              ),
+              CustomTextField(
+                  controller: identificationCtr,
+                  hintText: '',
+                  onChanged: (val){},
+                  onFieldSubmitted: (val){},
+                  obscure: false,
+                  label: 'Identificación',
+                inputType: TextInputType.number,
+              ),
+              CustomButton(
+                  onPressed: (){},
+                  buttonText: 'REGISTRAR'
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).padding.bottom,
+              ),
+            ],
+          ),
+        )
+
       ],
     );
   }

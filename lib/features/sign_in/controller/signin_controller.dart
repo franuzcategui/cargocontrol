@@ -6,8 +6,7 @@ import 'package:cargocontrol/utils/form_validators/password.dart';
 import 'package:cargocontrol/features/sign_in/controller/signin_state.dart';
 import 'package:formz/formz.dart';
 
-final signInprovider =
-    StateNotifierProvider.autoDispose<SignInControllerNotifier, SignInState>(
+final signInprovider = StateNotifierProvider.autoDispose<SignInControllerNotifier, SignInState>(
         (ref) => SignInControllerNotifier(ref.watch(authRepoProvider)));
 
 class SignInControllerNotifier extends StateNotifier<SignInState> {

@@ -1,5 +1,7 @@
+import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TitleHeader extends StatelessWidget {
   final String? title;
@@ -13,7 +15,7 @@ class TitleHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         logo
-            ? Image.asset(constants.Images.logo)
+            ? Image.asset(constants.Images.logo, height: 78.h, width: 290.w,)
             : Column(
                 children: [
                   Text(title!, style: const constants.TextStyles().titleText3),
@@ -27,32 +29,30 @@ class TitleHeader extends StatelessWidget {
                   ),
                 ],
               ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: Divider(
-                  thickness: 4,
-                  color: constants.kMainColor,
-                ),
+        SizedBox(height: 10.h,),
+        Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Divider(
+                thickness: 4.w,
+                color: context.mainColor,
               ),
-              Expanded(
-                flex: 2,
-                child: Divider(
-                  thickness: 4,
-                  color: constants.kTertiaryMainColor,
-                ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Divider(
+                thickness: 4.w,
+                color: context.tertiaryMainColor,
               ),
-              Expanded(
-                child: Divider(
-                  thickness: 4,
-                  color: constants.kQuaternaryMainColor,
-                ),
+            ),
+            Expanded(
+              child: Divider(
+                thickness: 4.w,
+                color: context.quaternaryMainColor,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );

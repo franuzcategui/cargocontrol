@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum ButtonThemeStyle { primary, secondary }
 
@@ -16,8 +17,8 @@ class MainTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+    return Container(
+      height:  55.h,
       child: OutlinedButton(
         onPressed: onTap,
         style: buttonStyle == ButtonThemeStyle.primary

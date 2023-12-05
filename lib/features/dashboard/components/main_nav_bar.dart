@@ -1,5 +1,4 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
-import 'package:cargocontrol/authentication/controller/authentication_state.dart';
 import 'package:cargocontrol/features/choferes/components/choferes_screen.dart';
 import 'package:cargocontrol/features/dashboard/components/dashboard_screen.dart';
 import 'package:cargocontrol/screens/viajes_screen.dart';
@@ -54,9 +53,6 @@ class _MainNavBarState extends ConsumerState<MainNavBar> {
                 });
               },
               iconSize: 22,
-              unselectedItemColor: constants.kSecondaryMainColor,
-              selectedItemColor: constants.kMainColor,
-              backgroundColor: constants.kMainBackroundColor,
               currentIndex: _currentIndex,
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
