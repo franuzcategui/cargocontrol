@@ -1,7 +1,7 @@
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 
-import '../../../../commons/common_imports/common_libs.dart';
-import '../../../../utils/constants/font_manager.dart';
+import '../common_imports/common_libs.dart';
+import '../../utils/constants/font_manager.dart';
 
 class WineCellerWidget extends StatefulWidget {
   final Function(int val) seletedWines;

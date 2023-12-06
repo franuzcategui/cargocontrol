@@ -3,6 +3,8 @@ import 'package:cargocontrol/features/dashboard/components/dashboard_modal_butto
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../camion_destino/components/placa_destino_keypad.dart';
+
 class CoFloadtingActionSheet extends ConsumerWidget {
   const CoFloadtingActionSheet({
     super.key,
@@ -28,7 +30,8 @@ class CoFloadtingActionSheet extends ConsumerWidget {
           subtitle: 'Registrar camión entrando a la romana con carga',
           onTap: () {
             Navigator.pop(context);
-            // Navigator.pushNamed(context, AppRoutes.adminCreateIndustryScreen);
+            Navigator.pushNamed(context, AppRoutes.registerTruckLeavingScreen);
+            // Navigator.push(context, MaterialPageRoute(builder: (_)=> PlacaDestinoKeypadScreen()));
           },
         ),
         SizedBox(
