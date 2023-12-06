@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class MyColors {
   //common colors
+  static const Color transparentColor = Colors.transparent;
   static const Color white = Colors.white;
   static const Color black = Colors.black;
   static const Color red = Color(0xFFFF0000);
