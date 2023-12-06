@@ -25,61 +25,92 @@ class CoDashboardScreen extends ConsumerWidget {
     final String  userType = authenticationState.user.userType.toString().split('.').last;
 
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Text(
-              'Bienvenido',
-              style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size18),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Text(
+                'Bienvenido',
+                style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size18),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Text(
-              userType,
-              style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Text(
+                userType,
+                style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+              ),
             ),
-          ),
-          SizedBox(
-            height: (0.2 * MediaQuery.of(context).size.height).h,
-            width: (0.9 * MediaQuery.of(context).size.width).w,
-            child: Stack(
-              children: [
-                Image.asset(constants.Images.ship),
-                Positioned(
-                  left: (0.04 * MediaQuery.of(context).size.width).w,
-                  bottom: (0.02 * MediaQuery.of(context).size.height).h,
-                  child: const CargoBarChart(),
-                ),
-              ],
+            SizedBox(
+              height: (0.2 * MediaQuery.of(context).size.height).h,
+              width: (0.9 * MediaQuery.of(context).size.width).w,
+              child: Stack(
+                children: [
+                  Image.asset(constants.Images.ship),
+                  Positioned(
+                    left: (0.04 * MediaQuery.of(context).size.width).w,
+                    bottom: (0.02 * MediaQuery.of(context).size.height).h,
+                    child: const CargoBarChart(),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 116,
-            child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: const <ProgressIndicatorCard>[
-                  ProgressIndicatorCard(),
-                  ProgressIndicatorCard(),
-                ]),
-          ),
-          SizedBox(
-            height: 116,
-            child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: const <ProgressIndicatorCard>[
-                  ProgressIndicatorCard(),
-                  ProgressIndicatorCard(),
-                ]),
-          ),
-          const Row(
-              children:  [
-                CoDashboardMiniCard(title: 'Descarga total', value: "0"),
-                CoDashboardMiniCard(title: 'Viajes en camino', value: "0"),
-              ]),
-        ],
+            SizedBox(
+              height: 116,
+              child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: const <ProgressIndicatorCard>[
+                    ProgressIndicatorCard(),
+                    ProgressIndicatorCard(),
+                  ]),
+            ),
+            SizedBox(
+              height: 116,
+              child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: const <ProgressIndicatorCard>[
+                    ProgressIndicatorCard(),
+                    ProgressIndicatorCard(),
+                  ]),
+            ),
+            SizedBox(
+              height: 116.h,
+              child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children:  const [
+                    CoDashboardMiniCard(
+                        title: 'Registros',
+                        subTitle: ' entrando',
+                        isGood: true,
+                        value: "0"),
+                    CoDashboardMiniCard(
+                        title: 'Registros',
+                        subTitle: ' saliendo',
+                        isBad: true,
+                        value: "0"),
+                    CoDashboardMiniCard(
+                        title: 'Camiones ',
+                        subTitle: 'en patio',
+                        value: "0"),
+                  ]),
+            ),
+            SizedBox(height: 36.h,),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Registros recientes', style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size18),),
+                  Text('Ver todos', style: getExtraBoldStyle(color: context.mainColor, fontSize: MyFonts.size12),)
+                ],
+              ),
+            ),
+            SizedBox(height: 100.h,)
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

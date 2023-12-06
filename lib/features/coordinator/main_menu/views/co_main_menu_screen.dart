@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../authentication/controller/authentication_controller.dart';
 import '../controllers/co_main_menu_controller.dart';
 
 class CoMainMenuScreen extends ConsumerStatefulWidget {
@@ -23,7 +24,7 @@ class _CoMainMenuScreenState extends ConsumerState<CoMainMenuScreen> {
         actions: <Widget>[
           TextButton(
               onPressed: () {
-                // authController.onSignOut();
+                // ref.read(authProvider.notifier).onSignOut();
               },
               child: const Text(
                 'Cerrar Sesión',

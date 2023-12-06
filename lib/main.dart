@@ -1,5 +1,6 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/authentication/controller/authentication_state.dart';
+import 'package:cargocontrol/features/coordinator/main_menu/views/co_main_menu_screen.dart';
 import 'package:cargocontrol/firebase_options.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
 import 'package:cargocontrol/features/dashboard/components/main_nav_bar.dart';
@@ -29,7 +30,7 @@ class MyApp extends ConsumerWidget {
 
     Widget getHome() {
       if (authenticationState.status == AuthenticationStatus.authenticated) {
-        return const AdMainMenuScreen();
+        return const CoMainMenuScreen();
       } else if (authenticationState.status ==
           AuthenticationStatus.unauthenticated) {
         return const LoginScreen();

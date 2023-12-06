@@ -14,38 +14,21 @@ class CoFloadtingActionSheet extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         DashboardModalButton(
-          title1: 'Registro de',
-          title2: 'nuevo buque',
-          subtitle: 'Registro de buque a puerto',
+          title1: 'Registrar camión',
+          title2: 'entrando',
+          subtitle: 'Registrar camión entrando a la romana sin carga',
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, AppRoutes.adminCreateVesselScreen);
+            Navigator.pushNamed(context, AppRoutes.registerTruckEnteringScreen);
           },
         ),
         DashboardModalButton(
-          title1: 'Registro de',
-          title2: 'industria ',
-          subtitle: 'Registro de guia de industria',
+          title1: 'Registrar camión',
+          title2: 'saliendo ',
+          subtitle: 'Registrar camión entrando a la romana con carga',
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, AppRoutes.adminCreateIndustryScreen);
-          },
-        ),
-        DashboardModalButton(
-          title1: 'Registro de',
-          title2: 'nuevo usuario',
-          subtitle: 'Registro de buque a puerto',
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, AppRoutes.adminRegisterUserScreen);
-          },
-        ),
-        DashboardModalButton(
-          title1: 'Administrar',
-          title2: ' buques',
-          subtitle: 'Descargar reporte de descarga',
-          onTap: () {
-            Navigator.pushNamed(context, AppRoutes.adManageShipsScreen);
+            // Navigator.pushNamed(context, AppRoutes.adminCreateIndustryScreen);
           },
         ),
         SizedBox(

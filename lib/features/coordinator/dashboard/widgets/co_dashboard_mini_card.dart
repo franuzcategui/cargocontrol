@@ -6,9 +6,12 @@ import 'package:cargocontrol/utils/constants.dart' as constants;
 
 class CoDashboardMiniCard extends StatelessWidget {
   final String title;
+  final String subTitle;
+  final bool isGood;
+  final bool isBad;
   final String value;
   const CoDashboardMiniCard({
-    super.key, required this.title, required this.value,
+    super.key, required this.title, required this.value, required this.subTitle, this.isGood= false, required, this.isBad = false,
   });
 
   @override
@@ -19,16 +22,28 @@ class CoDashboardMiniCard extends StatelessWidget {
         decoration: constants.DecorationStyles.shadow2,
         padding: EdgeInsets.all(16.sp),
         constraints: BoxConstraints(
-          minWidth: 147.w
+          minWidth: 147.w,
         ),
         height: 100.h,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
+            Row(
+              children: [
+                Text(
+                  title,
+                  style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
+                ),
+                Text(
+                  subTitle,
+                  style: getBoldStyle(color:
+                  isGood? context.brandColor :
+                  isBad? context.errorColor :
+                  context.textColor
+                      , fontSize: MyFonts.size12),
+                ),
+              ],
             ),
 
             Text(

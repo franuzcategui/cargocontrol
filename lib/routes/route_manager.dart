@@ -9,6 +9,9 @@ import 'package:cargocontrol/features/admin/register_user/views/register_user_sc
 import 'package:cargocontrol/features/admin/viajes/views/ad_viages_edit_screen.dart';
 import 'package:cargocontrol/features/admin/viajes/views/ad_viajes_details_screen.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
+import 'package:cargocontrol/features/coordinator/main_menu/views/co_main_menu_screen.dart';
+import 'package:cargocontrol/features/coordinator/register_truck_movement/views/co_truck_info_screen.dart';
+import 'package:cargocontrol/features/coordinator/register_truck_movement/views/register_truck_entering_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../features/admin/create_industry/widgets/industries_for_all_data.dart';
@@ -36,6 +39,10 @@ class AppRoutes {
 
   static const String adManageShipsScreen = '/adManageShipsScreen';
 
+  // Coordinator Section
+  static const String coMainMenuScreen = '/coMainMenuScreen';
+  static const String registerTruckEnteringScreen = '/registerTruckEnteringScreen';
+  static const String coTruckInfoScreen = '/coTruckInfoScreen';
 
 
 
@@ -74,6 +81,15 @@ class AppRoutes {
 
       case adManageShipsScreen:
         return _buildRoute(const AdManageShipsScreen());
+
+    // Coordinator Screens
+      case coMainMenuScreen:
+        return _buildRoute(const CoMainMenuScreen());
+      case registerTruckEnteringScreen:
+        return _buildRoute(const RegisterTruckEnteringScreen());
+      case coTruckInfoScreen:
+        return _buildRoute(const CoTruckInfoScreen());
+
 
 
 
