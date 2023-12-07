@@ -1,3 +1,4 @@
+import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
@@ -23,7 +24,7 @@ class _AdMainMenuScreenState extends ConsumerState<AdMainMenuScreen> {
         actions: <Widget>[
           TextButton(
               onPressed: () {
-                // authController.onSignOut();
+                ref.read(authProvider.notifier).onSignOut();
               },
               child: const Text(
                 'Cerrar Sesión',

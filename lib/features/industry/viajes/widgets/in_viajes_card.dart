@@ -14,7 +14,7 @@ class InViajesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, AppRoutes.adminViajesDetailsScreen);
+        Navigator.pushNamed(context, AppRoutes.inViajesDetailsScreen);
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),

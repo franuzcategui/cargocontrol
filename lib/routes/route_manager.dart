@@ -27,12 +27,14 @@ import '../features/coordinator/register_truck_movement/views/register_truck_lea
 import '../features/dashboard/components/dashboard_screen.dart';
 import '../features/industry/dashboard/views/in_dashboard_screen.dart';
 import '../features/industry/main_menu/views/in_main_menu_screen.dart';
+import '../features/industry/manage_report/views/in_all_reports_screen.dart';
 import '../features/industry/register_truck_movements/views/in_registration_success_screen.dart';
 import '../features/industry/register_truck_movements/views/in_truck_arrival_info_sccreen.dart';
 import '../features/industry/register_truck_movements/views/in_truck_arrivel_registration_screen.dart';
 import '../features/industry/register_truck_movements/views/in_truck_leaving_brief_screen.dart';
 import '../features/industry/register_truck_movements/views/in_truck_leaving_info_screen.dart';
 import '../features/industry/register_truck_movements/views/in_truck_leaving_registery_screen.dart';
+import '../features/industry/viajes/views/in_viajes_details_screen.dart';
 import 'navigation.dart';
 
 class AppRoutes {
@@ -75,6 +77,8 @@ class AppRoutes {
   static const String inTruckLeavingInfoScreen = '/inTruckLeavingInfoScreen';
   static const String inTruckLeavingBriefScreen = '/inTruckLeavingBriefScreen';
   static const String inRegistrationSuccessFullScreen = '/inRegistrationSuccessFullScreen';
+  static const String inViajesDetailsScreen = '/inViajesDetailsScreen';
+  static const String inAllReportsScreen = '/inAllReportsScreen';
 
 
 
@@ -151,6 +155,10 @@ class AppRoutes {
         return _buildRoute(const InTruckLeavingBriefScreen());
       case inRegistrationSuccessFullScreen:
         return _buildRoute(const InRegistrationSuccessFullScreen());
+      case inViajesDetailsScreen:
+        return _buildRoute(const InViajesDetailsScreen());
+      case inAllReportsScreen:
+        return _buildRoute(const InAllReportsScreen());
 
 
 

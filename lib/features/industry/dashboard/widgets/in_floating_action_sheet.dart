@@ -39,8 +39,7 @@ class InFloadtingActionSheet extends ConsumerWidget {
           subtitle: 'Descargar reporte de descarga',
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, AppRoutes.registerTruckLeavingScreen);
-            // Navigator.push(context, MaterialPageRoute(builder: (_)=> PlacaDestinoKeypadScreen()));
+            Navigator.pushNamed(context, AppRoutes.inAllReportsScreen);
           },
         ),
         SizedBox(
