@@ -7,6 +7,7 @@ import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:cargocontrol/utils/thems/my_colors.dart';
 
+import '../../../../common_widgets/text_detector_view.dart';
 import '../../../../commons/common_functions/bottom_sheet_component.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_header.dart';
@@ -94,7 +95,17 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                         label: 'Placa',
                       inputType: TextInputType.number,
                       tailingIcon: InkWell(
-                          onTap: (){},
+                          onTap: ()async{
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                  const TextDetectorScreen()),
+                            );
+                            setState(() {
+                              scanCtr.text = result;
+                            });
+                          },
                           splashColor: MyColors.transparentColor,
                           focusColor:  MyColors.transparentColor,
                           highlightColor:  MyColors.transparentColor,
@@ -131,15 +142,6 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                           ),
                           isDismissible: true,
                         );
-                        // showModalBottomSheet(
-                        //     backgroundColor: Colors.transparent,
-                        //     elevation: 0,
-                        //     context: context,
-                        //     builder: (context) => CoSelectChoferScreen(
-                        //       selectChofer: (String name){
-                        //
-                        //       },
-                        //     ));
                       },
                     ),
 

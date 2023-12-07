@@ -9,6 +9,7 @@ import 'package:cargocontrol/features/admin/register_user/views/register_user_sc
 import 'package:cargocontrol/features/admin/viajes/views/ad_viages_edit_screen.dart';
 import 'package:cargocontrol/features/admin/viajes/views/ad_viajes_details_screen.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
+import 'package:cargocontrol/features/coordinator/dashboard/views/co_all_recenties_screen.dart';
 import 'package:cargocontrol/features/coordinator/main_menu/views/co_main_menu_screen.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/views/co_truck_info_screen.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/views/co_truck_leaving_brief_screen.dart';
@@ -54,6 +55,7 @@ class AppRoutes {
   static const String coRegistrationSuccessFullScreen = '/coRegistrationSuccessFullScreen';
   static const String registerTruckLeavingScreen = '/registerTruckLeavingScreen';
   static const String coTruckLeavingInformationScreen = '/coTruckLeavingInformationScreen';
+  static const String coAllRecentiesScreen = '/coAllRecentiesScreen';
 
 
 
@@ -110,6 +112,8 @@ class AppRoutes {
         return _buildRoute(const RegisterTruckLeavingScreen());
       case coTruckLeavingInformationScreen:
         return _buildRoute(const CoTruckLeavingInformationScreen());
+      case coAllRecentiesScreen:
+        return _buildRoute(const CoAllRecentiesScreen());
 
 
 

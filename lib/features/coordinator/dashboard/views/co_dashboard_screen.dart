@@ -5,6 +5,7 @@ import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/dashboard/widgets/ad_dashboard_mini_card.dart';
 import 'package:cargocontrol/features/dashboard/components/dashboard_mini_card.dart';
 import 'package:cargocontrol/common_widgets/progress_indicator_card.dart';
+import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +16,7 @@ import 'package:cargocontrol/features/dashboard/components/dashboard_button_moda
 
 import '../widgets/co_dashboard_mini_card.dart';
 import '../widgets/co_floating_action_sheet.dart';
+import '../widgets/co_recent_record_card.dart';
 
 class CoDashboardScreen extends ConsumerWidget {
   const CoDashboardScreen({super.key});
@@ -100,11 +102,37 @@ class CoDashboardScreen extends ConsumerWidget {
             SizedBox(height: 36.h,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Registros recientes', style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size18),),
-                  Text('Ver todos', style: getExtraBoldStyle(color: context.mainColor, fontSize: MyFonts.size12),)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Registros recientes', style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size18),),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, AppRoutes.coAllRecentiesScreen);
+                        },
+                          child: Text('Ver todos', style: getExtraBoldStyle(color: context.mainColor, fontSize: MyFonts.size12),))
+                    ],
+                  ),
+                  SizedBox(height: 28.h,),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 3,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: (){
+
+                        },
+                        child: CoRecentRecordCard(
+                          isEntered: index %2 ==0 ? true : false,
+                          isLeaving:  index %2 !=0 ? true : false,
+                        ),
+                      );
+                    },
+                  )
                 ],
               ),
             ),
