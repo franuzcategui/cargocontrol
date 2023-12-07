@@ -10,7 +10,8 @@ import 'package:cargocontrol/utils/thems/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'commons/common_imports/common_libs.dart';
-import 'features/admin/main_menu/views/ad_main_menu_screen.dart';
+import 'features/industry/main_menu/views/in_main_menu_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +31,7 @@ class MyApp extends ConsumerWidget {
 
     Widget getHome() {
       if (authenticationState.status == AuthenticationStatus.authenticated) {
-        return const CoMainMenuScreen();
+        return const InMainMenuScreen();
       } else if (authenticationState.status ==
           AuthenticationStatus.unauthenticated) {
         return const LoginScreen();

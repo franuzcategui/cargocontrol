@@ -25,6 +25,14 @@ import '../features/coordinator/register_truck_movement/views/co_registration_su
 import '../features/coordinator/register_truck_movement/views/co_truck_leaving_information_screen.dart';
 import '../features/coordinator/register_truck_movement/views/register_truck_leaving_screen.dart';
 import '../features/dashboard/components/dashboard_screen.dart';
+import '../features/industry/dashboard/views/in_dashboard_screen.dart';
+import '../features/industry/main_menu/views/in_main_menu_screen.dart';
+import '../features/industry/register_truck_movements/views/in_registration_success_screen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_arrival_info_sccreen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_arrivel_registration_screen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_leaving_brief_screen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_leaving_info_screen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_leaving_registery_screen.dart';
 import 'navigation.dart';
 
 class AppRoutes {
@@ -56,6 +64,17 @@ class AppRoutes {
   static const String registerTruckLeavingScreen = '/registerTruckLeavingScreen';
   static const String coTruckLeavingInformationScreen = '/coTruckLeavingInformationScreen';
   static const String coAllRecentiesScreen = '/coAllRecentiesScreen';
+
+
+  // Industria Section
+  static const String inDashboardScreen = '/inDashboardScreen';
+  static const String inMainMenuScreen = '/inMainMenuScreen';
+  static const String inRegisterTruckArrivalScreen = '/inRegisterTruckArrivalScreen';
+  static const String inTruckArrivalInfoScreen = '/inTruckArrivalInfoScreen';
+  static const String inRegisterTruckLeavingScreen = '/inRegisterTruckLeavingScreen';
+  static const String inTruckLeavingInfoScreen = '/inTruckLeavingInfoScreen';
+  static const String inTruckLeavingBriefScreen = '/inTruckLeavingBriefScreen';
+  static const String inRegistrationSuccessFullScreen = '/inRegistrationSuccessFullScreen';
 
 
 
@@ -115,6 +134,23 @@ class AppRoutes {
       case coAllRecentiesScreen:
         return _buildRoute(const CoAllRecentiesScreen());
 
+      // Industria Section
+      case inDashboardScreen:
+        return _buildRoute(const InDashboardScreen());
+      case inMainMenuScreen:
+        return _buildRoute(const InMainMenuScreen());
+      case inRegisterTruckArrivalScreen:
+        return _buildRoute(const InRegisterTruckArrivalScreen());
+      case inTruckArrivalInfoScreen:
+        return _buildRoute(const InTruckArrivalInfoScreen());
+      case inRegisterTruckLeavingScreen:
+        return _buildRoute(const InRegisterTruckLeavingScreen());
+      case inTruckLeavingInfoScreen:
+        return _buildRoute(const InTruckLeavingInfoScreen());
+      case inTruckLeavingBriefScreen:
+        return _buildRoute(const InTruckLeavingBriefScreen());
+      case inRegistrationSuccessFullScreen:
+        return _buildRoute(const InRegistrationSuccessFullScreen());
 
 
 
