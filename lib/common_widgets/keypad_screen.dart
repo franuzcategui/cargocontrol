@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cargocontrol/common_widgets/main_text_button.dart';
-import 'package:cargocontrol/common_widgets/text_detector_view.dart';
+import 'package:cargocontrol/commons/common_widgets/text_detector_view.dart';
 import 'package:cargocontrol/common_widgets/title_header.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;

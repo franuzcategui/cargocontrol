@@ -6,7 +6,7 @@ import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:numeric_keyboard/numeric_keyboard.dart';
-import '../../../../common_widgets/text_detector_view.dart';
+import '../../../../commons/common_widgets/text_detector_view.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';

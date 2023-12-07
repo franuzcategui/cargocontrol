@@ -7,7 +7,7 @@ import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:cargocontrol/utils/thems/my_colors.dart';
 
-import '../../../../common_widgets/text_detector_view.dart';
+import '../../../../commons/common_widgets/text_detector_view.dart';
 import '../../../../commons/common_functions/bottom_sheet_component.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_header.dart';
