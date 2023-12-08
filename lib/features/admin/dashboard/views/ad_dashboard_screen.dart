@@ -3,16 +3,16 @@ import 'package:cargocontrol/common_widgets/cargo_bar_chart.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/dashboard/widgets/ad_dashboard_mini_card.dart';
-import 'package:cargocontrol/features/dashboard/components/dashboard_mini_card.dart';
 import 'package:cargocontrol/common_widgets/progress_indicator_card.dart';
+import 'package:cargocontrol/features/auth/controllers/auth_notifier_controller.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
-import 'package:cargocontrol/features/dashboard/components/dashboard_button_modal.dart';
 
+import '../../../auth/controllers/auth_controller.dart';
 import '../widgets/ad_floating_action_sheet.dart';
 
 class AdDashboardScreen extends ConsumerWidget {
@@ -20,9 +20,6 @@ class AdDashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authenticationState = ref.watch(authProvider);
-    final String  userType =
-        authenticationState.user.userType.toString().split('.').last;
 
     return Scaffold(
       body: Column(
@@ -37,9 +34,16 @@ class AdDashboardScreen extends ConsumerWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 15),
-            child: Text(
-              userType,
-              style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+            child: Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                final userModel = ref.read(authNotifierCtr).userModel;
+                print(userModel?.uid);
+                return Text(userModel!.accountType.type,
+                  style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+                );
+
+              },
+
             ),
           ),
           SizedBox(

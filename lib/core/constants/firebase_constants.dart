@@ -1,4 +1,5 @@
 class FirebaseConstants {
+  static String userCollection = 'user-collection';
   static String adminCollection = 'admin-collection';
   static String companyCollection = 'company-collection';
   static String coordinatorCollection = 'coordinator-collection';

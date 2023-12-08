@@ -1,12 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cargocontrol/features/auth/controllers/auth_notifier_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../common_widgets/loading_sheet.dart';
 import '../../../commons/common_functions/search_tags_handler.dart';
 import '../../../commons/common_widgets/show_toast.dart';
 import '../../../core/enums/account_type.dart';
+import '../../../core/services/database_service.dart';
 import '../../../models/auth_models/user_model.dart';
 import '../../../routes/route_manager.dart';
 import '../data/auth_apis/auth_apis.dart';
@@ -63,16 +66,20 @@ class AuthController extends StateNotifier<bool> {
   Future<void> registerWithEmailAndPassword({
     required String email,
     required String password,
+    String? industryName,
+    String? industryId,
     required AccountTypeEnum accountTypeEnum,
     required BuildContext context,
   }) async {
     state = true;
     final result = await _authApis.registerWithEmailAndPass(
-        email: email, password: password);
-
+        email: email, password: password,
+    );
     result.fold((l) {
       state = false;
       showSnackBar(context, l.message);
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
     }, (r) async {
       final searchTags =
       userSearchTagsHandler(email: email, name: '');
@@ -84,6 +91,8 @@ class AuthController extends StateNotifier<bool> {
           accountType: accountTypeEnum,
           fcmToken: '',
           searchTags: searchTags,
+        industryId: industryId ?? '',
+        industryName: industryName ?? '',
 
       );
       final result2 = await _databaseApis.saveUserInfo(userModel: userModel);
@@ -94,7 +103,6 @@ class AuthController extends StateNotifier<bool> {
         showToast(msg: l.message);
       }, (r) async {
         state = false;
-        // Navigator.pushNamed(context, AppRoutes.signInScreen);
         showToast(msg: 'Account Created Successfully!');
       });
     });
@@ -109,26 +117,32 @@ class AuthController extends StateNotifier<bool> {
   Future<void> loginWithEmailAndPassword({
     required String email,
     required String password,
+    required WidgetRef ref,
     required BuildContext context,
   }) async {
     state = true;
+    LoadingSheet.show(context);
     final result = await _authApis.signInWithEmailAndPass(
         email: email, password: password);
 
     result.fold((l) {
       state = false;
+      Navigator.pop(context);
       showSnackBar(context, l.message);
     }, (r) async {
-      UserModel userModel = await getCurrentUserInfo();
+      await ref.read(authServiceProvider).setAuth(r.uid);
+      UserModel userModel = await getUserInfoByUidFuture(r.uid);
+      await ref.read(authNotifierCtr).setUserModelData(userModel);
+      Navigator.pop(context);
       userModel.accountType.name == AccountTypeEnum.administrador.name
           ? Navigator.pushNamedAndRemoveUntil(
-          context, AppRoutes.dashboardScreen, (route) => false)
+          context, AppRoutes.adminMainMenuScreen, (route) => false)
           : userModel.accountType.name ==
           AccountTypeEnum.industria.name
           ? Navigator.pushNamedAndRemoveUntil(context,
-          AppRoutes.dashboardScreen, (route) => false)
+          AppRoutes.inMainMenuScreen, (route) => false)
           : Navigator.pushNamedAndRemoveUntil(context,
-          AppRoutes.dashboardScreen, (route) => false);
+          AppRoutes.coMainMenuScreen, (route) => false);
       state = false;
     });
   }

@@ -14,4 +14,8 @@ class AuthNotifierController extends ChangeNotifier{
     notifyListeners();
   }
 
+  setFirstTimeModel(UserModel model){
+    _userModel = model;
+  }
+
 }
