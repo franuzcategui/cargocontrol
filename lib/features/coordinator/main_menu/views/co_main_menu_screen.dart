@@ -4,6 +4,7 @@ import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../authentication/controller/authentication_controller.dart';
+import '../../../auth/controllers/auth_controller.dart';
 import '../controllers/co_main_menu_controller.dart';
 
 class CoMainMenuScreen extends ConsumerStatefulWidget {
@@ -22,17 +23,25 @@ class _CoMainMenuScreenState extends ConsumerState<CoMainMenuScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          TextButton(
-              onPressed: () {
-                // ref.read(authProvider.notifier).onSignOut();
-              },
-              child: const Text(
-                'Cerrar Sesión',
-                style: TextStyle(
-                  color: constants.kMainColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ))
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              return TextButton(
+                  onPressed: () {
+                    ref.read(authControllerProvider.notifier).logout(
+                        context: context,
+                        ref: ref
+                    );
+                  },
+                  child: const Text(
+                    'Cerrar Sesión',
+                    style: TextStyle(
+                      color: constants.kMainColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ));
+            },
+
+          )
         ],
       ),
       body: ref.read(coMainMenuProvider).screens[ref.watch(coMainMenuProvider).index],

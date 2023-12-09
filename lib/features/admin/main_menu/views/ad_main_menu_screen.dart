@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../auth/controllers/auth_controller.dart';
 import '../controllers/ad_main_menu_controller.dart';
 
 class AdMainMenuScreen extends ConsumerStatefulWidget {
@@ -22,17 +23,25 @@ class _AdMainMenuScreenState extends ConsumerState<AdMainMenuScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          TextButton(
-              onPressed: () {
-                ref.read(authProvider.notifier).onSignOut();
-              },
-              child: const Text(
-                'Cerrar Sesión',
-                style: TextStyle(
-                  color: constants.kMainColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ))
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              return TextButton(
+                  onPressed: () {
+                    ref.read(authControllerProvider.notifier).logout(
+                      context: context,
+                      ref: ref
+                    );
+                  },
+                  child: const Text(
+                    'Cerrar Sesión',
+                    style: TextStyle(
+                      color: constants.kMainColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ));
+            },
+
+          )
         ],
       ),
       body: ref.read(adMainMenuProvider).screens[ref.watch(adMainMenuProvider).index],

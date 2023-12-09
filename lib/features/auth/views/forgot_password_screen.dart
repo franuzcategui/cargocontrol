@@ -14,16 +14,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<ForgotPasswordState>(forgotPasswordProvider,
-        (previous, current) {
-      if (current.status.isInProgress) {
-        LoadingSheet.show(context);
-      } else if (current.status.isFailure) {
-        ErrorDialog.show(context, "${current.errorMessage}");
-      } else if (current.status.isSuccess) {
-        Navigator.of(context).pop();
-      }
-    });
+
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -67,7 +58,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  const ForgotPasswordTextField(),
+                  // const ForgotPasswordTextField(),
                   const SizedBox(
                     height: 10,
                   )
@@ -75,7 +66,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
           ),
 
           //Log in buttons
-          const ForgotPasswordButton(),
+          // const ForgotPasswordButton(),
           MainTextButton(
             text: 'REGRESAR',
             buttonStyle: ButtonThemeStyle.secondary,

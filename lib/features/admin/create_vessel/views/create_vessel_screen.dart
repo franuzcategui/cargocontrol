@@ -1,5 +1,6 @@
 import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
+import 'package:cargocontrol/core/enums/weight_unit_enum.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
@@ -9,6 +10,7 @@ import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_datpicker.dart';
 import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
+import '../../../../commons/common_widgets/custom_dropdown.dart';
 import '../../../../commons/common_widgets/wine_celler_widget.dart';
 
 class CreateVesselScreen extends StatefulWidget {
@@ -23,10 +25,14 @@ class _CreateVesselScreenState extends State<CreateVesselScreen> {
   final procedenciaCtr = TextEditingController();
   final shipperCtr = TextEditingController();
   final unCodeCtr = TextEditingController();
+  final weightUnitCtr = TextEditingController();
 
 
   DateTime? portDate;
   int? numberOfWines;
+  WeightUnitEnum? weightUnitEnum;
+
+
 
   @override
   void dispose() {
@@ -34,6 +40,7 @@ class _CreateVesselScreenState extends State<CreateVesselScreen> {
     procedenciaCtr.dispose();
     shipperCtr.dispose();
     unCodeCtr.dispose();
+    weightUnitCtr.dispose();
     super.dispose();
   }
 
@@ -91,7 +98,22 @@ class _CreateVesselScreenState extends State<CreateVesselScreen> {
                      onFieldSubmitted: (val){},
                      obscure: false,
                    ),
-                   WineCellerWidget(
+                   CustomDropDown(
+                     ctr: weightUnitCtr,
+                     list: const [
+                       "Kg",
+                       "Lb",
+                     ],
+                     labelText: "Unidad de peso",
+                     onChange: (val){
+                       weightUnitEnum = (val as String).toWeightUnitEnum();
+                       weightUnitCtr.text = val as String;
+                       setState(() {
+                       });
+                     },
+                   ),
+                   SizedBox(height: 14.h,),
+                   NumberOfCargoHoldsWidget(
                      seletedWines: (int selectedValue){},
                    ),
                    SizedBox(height: 45.h,),

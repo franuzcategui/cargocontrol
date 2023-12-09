@@ -7,9 +7,12 @@ class BodegaSectionWidget extends StatelessWidget {
   final int index;
   final Widget productWidget;
   final Widget varietyWidget;
+  final Widget tipoWidget;
+  final Widget originWidget;
+  final Widget cosechaWidget;
   final Widget weightWidget;
   final VoidCallback onRemove;
-  const BodegaSectionWidget({Key? key, required this.index, required this.productWidget, required this.varietyWidget, required this.weightWidget, required this.onRemove}) : super(key: key);
+  const BodegaSectionWidget({Key? key, required this.index, required this.productWidget, required this.varietyWidget, required this.weightWidget, required this.onRemove, required this.tipoWidget, required this.originWidget, required this.cosechaWidget}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +32,12 @@ class BodegaSectionWidget extends StatelessWidget {
         productWidget,
         SizedBox(height: 10.h,),
         varietyWidget,
+        SizedBox(height: 10.h,),
+        tipoWidget,
+        SizedBox(height: 10.h,),
+        originWidget,
+        SizedBox(height: 10.h,),
+        cosechaWidget,
         SizedBox(height: 10.h,),
         weightWidget
       ],

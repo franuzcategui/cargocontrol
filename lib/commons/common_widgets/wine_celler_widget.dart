@@ -3,15 +3,15 @@ import 'package:cargocontrol/core/extensions/color_extension.dart';
 import '../common_imports/common_libs.dart';
 import '../../utils/constants/font_manager.dart';
 
-class WineCellerWidget extends StatefulWidget {
+class NumberOfCargoHoldsWidget extends StatefulWidget {
   final Function(int val) seletedWines;
-  const WineCellerWidget({Key? key, required this.seletedWines, }) : super(key: key);
+  const NumberOfCargoHoldsWidget({Key? key, required this.seletedWines, }) : super(key: key);
 
   @override
-  State<WineCellerWidget> createState() => _WineCellerWidgetState();
+  State<NumberOfCargoHoldsWidget> createState() => _NumberOfCargoHoldsWidgetState();
 }
 
-class _WineCellerWidgetState extends State<WineCellerWidget> {
+class _NumberOfCargoHoldsWidgetState extends State<NumberOfCargoHoldsWidget> {
   int? selectedValue;
 
   @override

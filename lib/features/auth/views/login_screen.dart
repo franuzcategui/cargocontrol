@@ -4,14 +4,11 @@ import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/auth/controllers/auth_controller.dart';
-import 'package:cargocontrol/features/auth/views/forgot_password_screen.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:cargocontrol/utils/constants/assets_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../common_widgets/loading_sheet.dart';
-import '../widgets/login_widgets/signin_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

@@ -7,15 +7,6 @@ import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/enums/account_type.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/auth/controllers/auth_controller.dart';
-import 'package:cargocontrol/features/sign_up/components/email_text_field.dart';
-import 'package:cargocontrol/features/sign_up/components/password_text_field.dart';
-import 'package:cargocontrol/features/sign_up/components/sign_up_button.dart';
-import 'package:cargocontrol/features/sign_up/components/user_type_dropdown.dart';
-import 'package:cargocontrol/features/sign_up/controller/sign_up_controller.dart';
-import 'package:cargocontrol/features/sign_up/controller/sign_up_state.dart';
-import 'package:cargocontrol/common_widgets/loading_sheet.dart';
-import 'package:cargocontrol/utils/thems/my_colors.dart';
-import 'package:flutter/material.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:cargocontrol/common_widgets/main_text_button.dart';
 

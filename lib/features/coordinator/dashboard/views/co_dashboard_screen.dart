@@ -23,8 +23,7 @@ class CoDashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authenticationState = ref.watch(authProvider);
-    final String  userType = authenticationState.user.userType.toString().split('.').last;
+
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -42,7 +41,7 @@ class CoDashboardScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(left: 15),
               child: Text(
-                userType,
+                'userType',
                 style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
               ),
             ),

@@ -177,15 +177,19 @@ class AuthController extends StateNotifier<bool> {
   // LogOut User
   Future<void> logout({
     required BuildContext context,
+    required WidgetRef ref,
   }) async {
     state = true;
     final result = await _authApis.logout();
-    result.fold((l) {
-      state = false;
+    result.fold((l)async {
+      await ref.read(authServiceProvider).removeToken();
+      Navigator.pushNamedAndRemoveUntil(
+          context, AppRoutes.loginScreen, (route) => false);
       debugPrintStack(stackTrace: l.stackTrace);
       debugPrint(l.message);
-      showSnackBar(context, l.message);
-    }, (r) {
+      state = false;
+    }, (r)async {
+      await ref.read(authServiceProvider).removeToken();
       state = false;
       Navigator.pushNamedAndRemoveUntil(
           context, AppRoutes.loginScreen, (route) => false);

@@ -160,12 +160,11 @@ class AppRoutes {
       case inAllReportsScreen:
         return _buildRoute(const InAllReportsScreen());
 
-
-
-      case dashboardScreen:
-        return _buildRoute(const DashboardScreen());
       case loginScreen:
         return _buildRoute(const LoginScreen());
+
+
+
       default:
         return unDefinedRoute();
     }

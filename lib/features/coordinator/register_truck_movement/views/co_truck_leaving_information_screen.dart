@@ -42,7 +42,7 @@ class _CoTruckLeavingInformationScreenState extends State<CoTruckLeavingInformat
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  WineCellerWidget(
+                  NumberOfCargoHoldsWidget(
                     seletedWines: (int selectedValue){},
                   ),
                   SizedBox(height: 45.h,),
