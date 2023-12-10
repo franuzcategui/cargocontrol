@@ -44,13 +44,7 @@ class AdViajesDetailsScreen extends StatelessWidget {
                   SizedBox(height: 28.h,),
                   const AdCargaWidget(),
                   SizedBox(height: 26.h,),
-                  CustomButton(
-                      onPressed: (){
-                        Navigator.pushNamed(context, AppRoutes.adminViajesEditScreen);
-                      },
-                      backColor: context.brandColor,
-                      buttonText: "EDITAR"
-                  ),
+                  
                   CustomButton(
                       onPressed: (){
                         Navigator.pop(context);

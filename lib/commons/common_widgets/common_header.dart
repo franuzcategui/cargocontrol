@@ -13,20 +13,30 @@ class CommonHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(title, style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size28)),
-            Text(
-              subtitle,
-                style: getBoldStyle(color: context.mainColor, fontSize: MyFonts.size28)),
-          ],
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(title, style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size28)),
+                  Text(
+                    subtitle,
+                      textAlign: TextAlign.center,
+                      style: getBoldStyle(color: context.mainColor, fontSize: MyFonts.size28)),
+                ],
+              ),
+              SizedBox(height: 7.h,),
+              Text(
+                description,
+                style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size16),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
-        Text(
-            description,
-            style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size16),
-          textAlign: TextAlign.center,
-        ),
+
         SizedBox(height: 40.h,),
         Row(
           children: [

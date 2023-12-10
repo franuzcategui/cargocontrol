@@ -1,4 +1,3 @@
-import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
@@ -6,13 +5,10 @@ import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:numeric_keyboard/numeric_keyboard.dart';
-import '../../../../common_widgets/keypad_screen.dart';
 import '../../../../commons/common_imports/common_libs.dart';
-import '../../../../commons/common_widgets/common_datpicker.dart';
 import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
-import '../../../../commons/common_widgets/keyboard_textfield.dart';
-  
+
 class CreateIndustryScreen extends StatefulWidget {
   const CreateIndustryScreen({Key? key}) : super(key: key);
 

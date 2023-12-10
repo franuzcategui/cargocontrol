@@ -10,6 +10,7 @@ class AppAssets{
   static const String searchIcon = '$iconPath/searchIcon.png';
   static const String deleteArrowIcon = '$iconPath/deleteArrow.png';
   static const String deleteIcon = '$iconPath/delete.png';
+  static const String scanIcon = '$iconPath/scanIcon.png';
 
 
   // Images Paths

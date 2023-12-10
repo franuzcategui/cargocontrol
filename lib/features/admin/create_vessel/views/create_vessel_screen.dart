@@ -9,7 +9,7 @@ import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_datpicker.dart';
 import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
-import '../widgets/wine_celler_widget.dart';
+import '../../../../commons/common_widgets/wine_celler_widget.dart';
 
 class CreateVesselScreen extends StatefulWidget {
   const CreateVesselScreen({Key? key}) : super(key: key);

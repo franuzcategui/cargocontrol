@@ -2,7 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
-import 'detector_view.dart';
+import '../../common_widgets/detector_view.dart';
 import 'package:cargocontrol/common_widgets/painters/text_detector_painter.dart';
 
 class TextDetectorScreen extends StatefulWidget {
