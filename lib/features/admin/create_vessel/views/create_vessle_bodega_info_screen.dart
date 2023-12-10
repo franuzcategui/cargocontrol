@@ -9,6 +9,7 @@ import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../../../../commons/common_widgets/custom_dropdown.dart';
 
 class CreateVesselBodegaInfoScreen extends StatefulWidget {
+  
   const CreateVesselBodegaInfoScreen({Key? key}) : super(key: key);
 
   @override
