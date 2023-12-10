@@ -7,6 +7,7 @@ import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../../create_vessel/widgets/information_preliminar_widget.dart';
 import '../widgets/industries_for_all_data.dart';
+import '../widgets/info_preliminar_widget.dart';
 
 class CreateIndustryCompleteDataScreen extends StatefulWidget {
   const CreateIndustryCompleteDataScreen({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class _CreateIndustryCompleteDataScreenState extends State<CreateIndustryComplet
                   SizedBox(height: 14.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const InformationPreliminarWidget(),
+                  const InfoPreliminarIndustryWidget(),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),

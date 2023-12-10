@@ -22,4 +22,38 @@ Map<String, dynamic> userSearchTagsHandler({
 }
 
 
+Map<String, dynamic> vesselSearchTags({
+  required String name,
+  required String shipperName,
+  required String unlcode,
+
+}) {
+  Map<String, dynamic>? searchTags = <String, bool>{};
+  if(name != ''){
+    name.trim().split(' ').forEach((val) {
+      searchTags[val.toLowerCase()] = true;
+    });
+  }
+
+  if(shipperName != ""){
+    shipperName.trim().split(' ').forEach((val) {
+      searchTags[val.toLowerCase()] = true;
+    });
+  }
+
+  if(unlcode != ""){
+    unlcode.trim().split(' ').forEach((val) {
+      searchTags[val.toLowerCase()] = true;
+    });
+  }
+
+
+  return searchTags;
+}
+
+
+
+
+
+
 

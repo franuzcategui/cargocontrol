@@ -6,7 +6,7 @@ class VesselCargoModel{
   final String variety;
   final String cosecha;
   final double pesoTotal;
-  final double pesoUnloaded;
+  final dynamic pesoUnloaded;
 
 //<editor-fold desc="Data Methods">
   const VesselCargoModel({
@@ -69,7 +69,7 @@ class VesselCargoModel{
     String? variety,
     String? cosecha,
     double? pesoTotal,
-    double? pesoUnloaded,
+    dynamic pesoUnloaded,
   }) {
     return VesselCargoModel(
       cargoId: cargoId ?? this.cargoId,
@@ -105,7 +105,7 @@ class VesselCargoModel{
       variety: map['variety'] as String,
       cosecha: map['cosecha'] as String,
       pesoTotal: map['pesoTotal'] as double,
-      pesoUnloaded: map['pesoUnloaded'] as double,
+      pesoUnloaded: map['pesoUnloaded'] as dynamic,
     );
   }
 

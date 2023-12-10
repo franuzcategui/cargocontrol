@@ -94,9 +94,32 @@ class AppRoutes {
       case adminCreateVesselScreen:
         return _buildRoute(const CreateVesselScreen());
       case adminCreateVesselBodegaInfoScreen:
-        return _buildRoute(const CreateVesselBodegaInfoScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            CreateVesselBodegaInfoScreen(
+                vesselName : args['vesselName'],
+                procedencia : args['procedencia'],
+                shipper :args['shipper'],
+                unCode : args['unCode'],
+                portDate : args['portDate'],
+                numberOfWines : args['numberOfWines'],
+                weightUnitEnum : args['weightUnitEnum'],
+            ),
+        );
       case adminCreateVesselCompleteDataScreen:
-        return _buildRoute(const CreateVesselCompleteDataScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            CreateVesselCompleteDataScreen(
+                vesselName : args['vesselName'],
+                procedencia : args['procedencia'],
+                shipper :args['shipper'],
+                unCode : args['unCode'],
+                portDate : args['portDate'],
+                numberOfWines : args['numberOfWines'],
+                weightUnitEnum : args['weightUnitEnum'],
+                bogedaModels : args['bogedaModels'],
+            ),
+        );
       case registrationSuccessFullScreen:
         return _buildRoute(const RegistrationSuccessFullScreen());
 

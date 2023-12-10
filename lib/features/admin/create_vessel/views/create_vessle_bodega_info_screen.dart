@@ -1,16 +1,27 @@
+import 'package:cargocontrol/commons/common_functions/validator.dart';
 import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
+import 'package:cargocontrol/core/enums/weight_unit_enum.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/create_vessel/widgets/bodega_section_widget.dart';
+import 'package:cargocontrol/models/vessel_models/vessel_cargo_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
+import 'package:uuid/uuid.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../../../../commons/common_widgets/custom_dropdown.dart';
+import '../../../../commons/common_widgets/show_toast.dart';
 
 class CreateVesselBodegaInfoScreen extends StatefulWidget {
-  
-  const CreateVesselBodegaInfoScreen({Key? key}) : super(key: key);
+  final String vesselName;
+  final String procedencia;
+  final String shipper;
+  final String unCode;
+  final DateTime portDate;
+  final int numberOfWines;
+  final WeightUnitEnum weightUnitEnum;
+  const CreateVesselBodegaInfoScreen({Key? key, required this.vesselName, required this.procedencia, required this.shipper, required this.unCode, required this.portDate, required this.numberOfWines, required this.weightUnitEnum}) : super(key: key);
 
   @override
   State<CreateVesselBodegaInfoScreen> createState() => _CreateVesselBodegaInfoScreenState();
@@ -24,16 +35,28 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
   List<Widget> _origins = [];
   List<Widget> _tipos = [];
   List<Widget> _cosechas = [];
+  bool allGood = false;
+
+  final formKey = GlobalKey<FormState>();
+
+
 
   createBodegaSection() {
     final section = _BodegaInfoControllers();
-    final product =  CustomDropDown(ctr: section.productCtr, list: products, labelText: 'Producto',);
-    final variety = CustomDropDown(ctr: section.varietyCtr, list: varieties, labelText: 'Variedad',);
-    final origin = CustomDropDown(ctr: section.originCtr, list: originList, labelText: 'Origen',);
-    final tipo = CustomDropDown(ctr: section.tipoCtr, list: tipoList, labelText: 'Tipo',);
-    final cosecha = CustomDropDown(ctr: section.cosechaCtr, list: cosechaList, labelText: 'Cosecha',);
+    final product =  CustomDropDown(
+      ctr: section.productCtr, list: products, labelText: 'Producto',);
+    final variety = CustomDropDown(
+      ctr: section.varietyCtr, list: varieties, labelText: 'Variedad',);
+    final origin = CustomDropDown(
+      ctr: section.originCtr, list: originList, labelText: 'Origen',);
+    final tipo = CustomDropDown(
+      ctr: section.tipoCtr, list: tipoList, labelText: 'Tipo',);
+    final cosecha = CustomDropDown(
+      ctr: section.cosechaCtr, list: cosechaList, labelText: 'Cosecha',);
     final weight = CustomTextField(
+      validatorFn: sectionValidator,
       controller: section.weightCtr,
+      inputType: TextInputType.number,
       onTap: (){},
       hintText: "",
       label: 'Peso',
@@ -56,6 +79,7 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
     final children = [
       for (var i = 0; i < _bodegaInfoControllers.length; i++)
         BodegaSectionWidget(
+          formKey: formKey,
           index: i,
           onRemove: (){
             if(i ==0){
@@ -149,7 +173,54 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
                   ),
                   CustomButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, AppRoutes.adminCreateVesselCompleteDataScreen);
+                        if(formKey.currentState!.validate()){
+                          for (var section in _bodegaInfoControllers) {
+                            if(section.weightCtr.text == ""){
+                              setState(() {
+                                allGood = false;
+                              });
+                              showSnackBar(context: context,content:  "Select day!", duration: const Duration(milliseconds: 700) );
+                              break;
+                            }else{
+                              setState(() {
+                                allGood = true;
+                              });
+                            }
+                          }
+
+                          if(allGood){
+                            List<VesselCargoModel> bogedaModels = [];
+                            for (var section in _bodegaInfoControllers) {
+                                final cargoId = Uuid().v4();
+                                VesselCargoModel model = VesselCargoModel(
+                                  cargoId: cargoId,
+                                  cosecha: section.cosechaCtr.text,
+                                  origen: section.cosechaCtr.text,
+                                  pesoTotal: double.parse(section.weightCtr.text),
+                                  pesoUnloaded: 0.0,
+                                  productName: section.productCtr.text,
+                                  tipo: section.tipoCtr.text,
+                                  variety: section.varietyCtr.text,
+                                );
+                                bogedaModels.add(model);
+
+                            }
+                            Navigator.pushNamed(
+                                context,
+                                AppRoutes.adminCreateVesselCompleteDataScreen,
+                                arguments: {
+                                  'vesselName' : widget.vesselName,
+                                  'procedencia' : widget.procedencia,
+                                  'shipper' : widget.shipper,
+                                  'unCode' : widget.unCode,
+                                  'portDate' : widget.portDate,
+                                  'numberOfWines' : widget.numberOfWines,
+                                  'weightUnitEnum' : widget.weightUnitEnum,
+                                  'bogedaModels' : bogedaModels,
+                                }
+                            );
+                          }
+                        }
                       },
                       buttonText: "CONTINUAR"
                   ),

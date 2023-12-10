@@ -77,7 +77,7 @@ class AuthController extends StateNotifier<bool> {
     );
     result.fold((l) {
       state = false;
-      showSnackBar(context, l.message);
+      showSnackBar(context: context,  content: l.message);
       debugPrintStack(stackTrace: l.stackTrace);
       debugPrint(l.message);
     }, (r) async {
@@ -128,7 +128,7 @@ class AuthController extends StateNotifier<bool> {
     result.fold((l) {
       state = false;
       Navigator.pop(context);
-      showSnackBar(context, l.message);
+      showSnackBar(context: context,  content: l.message);
     }, (r) async {
       await ref.read(authServiceProvider).setAuth(r.uid);
       UserModel userModel = await getUserInfoByUidFuture(r.uid);
