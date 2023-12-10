@@ -43,7 +43,7 @@ class _CoTruckLeavingInformationScreenState extends State<CoTruckLeavingInformat
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
                   NumberOfCargoHoldsWidget(
-                    seletedWines: (int selectedValue){},
+                    seletedCargosNumber: (int selectedValue){},
                   ),
                   SizedBox(height: 45.h,),
                   CustomButton(

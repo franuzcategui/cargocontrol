@@ -4,8 +4,8 @@ import '../common_imports/common_libs.dart';
 import '../../utils/constants/font_manager.dart';
 
 class NumberOfCargoHoldsWidget extends StatefulWidget {
-  final Function(int val) seletedWines;
-  const NumberOfCargoHoldsWidget({Key? key, required this.seletedWines, }) : super(key: key);
+  final Function(int val) seletedCargosNumber;
+  const NumberOfCargoHoldsWidget({Key? key, required this.seletedCargosNumber, }) : super(key: key);
 
   @override
   State<NumberOfCargoHoldsWidget> createState() => _NumberOfCargoHoldsWidgetState();
@@ -29,6 +29,7 @@ class _NumberOfCargoHoldsWidgetState extends State<NumberOfCargoHoldsWidget> {
               onTap: (){
                 setState(() {
                   selectedValue = index;
+                  widget.seletedCargosNumber(index+1);
                 });
               },
               child: Container(

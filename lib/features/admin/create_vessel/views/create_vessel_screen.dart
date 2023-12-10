@@ -114,7 +114,9 @@ class _CreateVesselScreenState extends State<CreateVesselScreen> {
                    ),
                    SizedBox(height: 14.h,),
                    NumberOfCargoHoldsWidget(
-                     seletedWines: (int selectedValue){},
+                     seletedCargosNumber: (int selectedValue){
+                       print(selectedValue);
+                     },
                    ),
                    SizedBox(height: 45.h,),
                    CustomButton(
