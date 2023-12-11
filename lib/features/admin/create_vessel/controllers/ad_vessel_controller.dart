@@ -1,10 +1,7 @@
 import 'package:cargocontrol/commons/common_functions/search_tags_handler.dart';
 import 'package:cargocontrol/features/admin/create_vessel/data/apis/ad_vessel_apis.dart';
-import 'package:cargocontrol/models/vessel_models/cosecha_model.dart';
 import 'package:cargocontrol/models/vessel_models/origin_model.dart';
 import 'package:cargocontrol/models/vessel_models/product_model.dart';
-import 'package:cargocontrol/models/vessel_models/tipo_model.dart';
-import 'package:cargocontrol/models/vessel_models/variety_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:flutter/cupertino.dart';
@@ -84,8 +81,15 @@ class AdVesselController extends StateNotifier<bool> {
 
 
   Future productsUpload()async{
-    ProductModel productModel = ProductModel(productsNames: products);
-    await _datasource.uploadProducts(productModel:  productModel);
+    ProductModel productModel = ProductModel(
+      productsName: 'Arroz en cáscara',
+      cosechaNames: cosechas,
+      productId: const Uuid().v4(),
+      tipoNames: tipos,
+      varietyNames: varieties
+    );
+
+    await _datasource.uploadProduct(productModel:  productModel);
   }
 
 
@@ -95,30 +99,10 @@ class AdVesselController extends StateNotifier<bool> {
   }
 
 
-  Future tiposUpload()async{
-    TipoModel tipoModel = TipoModel(tipoNames: tipos);
-    await _datasource.uploadTipos(tipoModel:  tipoModel);
-  }
-
-
-  Future varietiesUpload()async{
-    VarietyModel varietyModel = VarietyModel(varietyNames: varieties);
-    await _datasource.uploadVarieties(varietyModel:  varietyModel);
-  }
-
-
-  Future cosechasUpload()async{
-    CosechaModel cosechaModel = CosechaModel(cosechaNames:  cosechas);
-    await _datasource.uploadCosecha(cosechaModel:  cosechaModel);
-  }
-
   Future uploadAllData()async{
     await Future.wait([
       productsUpload(),
       originsUpload(),
-      tiposUpload(),
-      varietiesUpload(),
-      cosechasUpload(),
     ]);
   }
 

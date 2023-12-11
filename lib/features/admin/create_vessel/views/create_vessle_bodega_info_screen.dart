@@ -43,16 +43,11 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
 
   createBodegaSection() {
     final section = _BodegaInfoControllers();
-    final product =  CustomDropDown(
-      ctr: section.productCtr, list: products, labelText: 'Producto',);
-    final variety = CustomDropDown(
-      ctr: section.varietyCtr, list: varieties, labelText: 'Variedad',);
-    final origin = CustomDropDown(
-      ctr: section.originCtr, list: originList, labelText: 'Origen',);
-    final tipo = CustomDropDown(
-      ctr: section.tipoCtr, list: tipoList, labelText: 'Tipo',);
-    final cosecha = CustomDropDown(
-      ctr: section.cosechaCtr, list: cosechaList, labelText: 'Cosecha',);
+    final product =  CustomDropDown(ctr: section.productCtr, list: products, labelText: 'Producto',);
+    final variety = CustomDropDown(ctr: section.varietyCtr, list: varieties, labelText: 'Variedad',);
+    final origin = CustomDropDown(ctr: section.originCtr, list: originList, labelText: 'Origen',);
+    final tipo = CustomDropDown(ctr: section.tipoCtr, list: tipoList, labelText: 'Tipo',);
+    final cosecha = CustomDropDown(ctr: section.cosechaCtr, list: cosechaList, labelText: 'Cosecha',);
     final weight = CustomTextField(
       validatorFn: sectionValidator,
       controller: section.weightCtr,
@@ -81,6 +76,11 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
         BodegaSectionWidget(
           formKey: formKey,
           index: i,
+          productCtr: _bodegaInfoControllers[i].productCtr,
+          cosechaCtr: _bodegaInfoControllers[i].cosechaCtr,
+          originCtr: _bodegaInfoControllers[i].originCtr,
+          tipoCtr: _bodegaInfoControllers[i].tipoCtr,
+          varietyCtr: _bodegaInfoControllers[i].varietyCtr,
           onRemove: (){
             if(i ==0){
 
@@ -97,12 +97,7 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
             }
 
           },
-          productWidget: _productDropDown[i],
-          varietyWidget: _varietyDropDown[i],
           weightWidget: _weights[i],
-          cosechaWidget: _cosechas[i],
-          originWidget: _origins[i],
-          tipoWidget: _tipos[i],
         )
     ];
     return SingleChildScrollView(
@@ -115,6 +110,7 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
   List<String> products = [
     "Rice",
     "Corn",
+    "piso",
     "Veggie"
   ];
 
@@ -241,6 +237,10 @@ class _BodegaInfoControllers {
   TextEditingController tipoCtr = TextEditingController();
   TextEditingController originCtr = TextEditingController();
   TextEditingController cosechaCtr = TextEditingController();
+
+
+
+
   void dispose() {
     weightCtr.dispose();
     productCtr.dispose();

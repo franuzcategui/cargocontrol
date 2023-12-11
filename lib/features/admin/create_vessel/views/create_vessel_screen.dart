@@ -1,4 +1,7 @@
 import 'package:cargocontrol/commons/common_functions/validator.dart';
+import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
+import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
+import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/enums/weight_unit_enum.dart';
@@ -13,15 +16,16 @@ import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../../../../commons/common_widgets/custom_dropdown.dart';
 import '../../../../commons/common_widgets/wine_celler_widget.dart';
+import '../controllers/ad_vessel_noti_controller.dart';
 
-class CreateVesselScreen extends StatefulWidget {
+class CreateVesselScreen extends ConsumerStatefulWidget {
   const CreateVesselScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreateVesselScreen> createState() => _CreateVesselScreenState();
+  ConsumerState<CreateVesselScreen> createState() => _CreateVesselScreenState();
 }
 
-class _CreateVesselScreenState extends State<CreateVesselScreen> {
+class _CreateVesselScreenState extends ConsumerState<CreateVesselScreen> {
   final vesselNameCtr = TextEditingController();
   final procedenciaCtr = TextEditingController();
   final shipperCtr = TextEditingController();
@@ -46,6 +50,18 @@ class _CreateVesselScreenState extends State<CreateVesselScreen> {
     dateCtr.dispose();
     weightUnitCtr.dispose();
     super.dispose();
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    initialization();
+  }
+
+  initialization()async{
+    await ref.read(adVesselNotiController).getAllProducts();
+
   }
 
 

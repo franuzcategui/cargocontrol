@@ -1,8 +1,5 @@
-import 'package:cargocontrol/models/vessel_models/cosecha_model.dart';
 import 'package:cargocontrol/models/vessel_models/origin_model.dart';
 import 'package:cargocontrol/models/vessel_models/product_model.dart';
-import 'package:cargocontrol/models/vessel_models/tipo_model.dart';
-import 'package:cargocontrol/models/vessel_models/variety_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -22,17 +19,11 @@ abstract class AdVesselApisImplements {
   FutureEitherVoid createVessel({required VesselModel vesselModel});
   Stream<List<VesselModel>> getVesselsList();
 
-  FutureEitherVoid uploadProducts({required ProductModel productModel});
-  FutureEitherVoid uploadTipos({required TipoModel tipoModel});
+  FutureEitherVoid uploadProduct({required ProductModel productModel});
   FutureEitherVoid uploadOrigins({required OriginModel originModel});
-  FutureEitherVoid uploadVarieties({required VarietyModel varietyModel});
-  FutureEitherVoid uploadCosecha({required CosechaModel cosechaModel});
 
-  Stream<VarietyModel> getVarietyModel();
-  Stream<OriginModel> getOriginModel();
-  Stream<ProductModel> getProductModel();
-  Stream<CosechaModel> getCosechaModel();
-  Stream<TipoModel> getTipoModel();
+  Stream<ProductModel> getProductModel({required String productId});
+  FutureEither<List<ProductModel>> getAllProducts();
 }
 
 class AdVesselApis implements AdVesselApisImplements{
@@ -57,10 +48,11 @@ class AdVesselApis implements AdVesselApisImplements{
 
 
   @override
-  FutureEitherVoid uploadProducts({required ProductModel productModel})async {
+  FutureEitherVoid uploadProduct({required ProductModel productModel})async {
     try{
       await _firestore.collection(FirebaseConstants.productsCollection).
-      add(productModel.toMap());
+      doc(productModel.productId).
+      set(productModel.toMap());
 
       return Right(null);
     }on FirebaseException catch(e, stackTrace){
@@ -70,19 +62,6 @@ class AdVesselApis implements AdVesselApisImplements{
     }
   }
 
-  @override
-  FutureEitherVoid uploadTipos({required TipoModel tipoModel})async {
-    try{
-      await _firestore.collection(FirebaseConstants.tiposCollection).
-      add(tipoModel.toMap());
-
-      return Right(null);
-    }on FirebaseException catch(e, stackTrace){
-      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
-    }catch (e, stackTrace){
-      return Left(Failure(e.toString(), stackTrace));
-    }
-  }
 
   @override
   FutureEitherVoid uploadOrigins({required OriginModel originModel})async {
@@ -98,33 +77,6 @@ class AdVesselApis implements AdVesselApisImplements{
     }
   }
 
-  @override
-  FutureEitherVoid uploadVarieties({required VarietyModel varietyModel})async {
-    try{
-      await _firestore.collection(FirebaseConstants.varietiesCollection).
-      add(varietyModel.toMap());
-
-      return Right(null);
-    }on FirebaseException catch(e, stackTrace){
-      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
-    }catch (e, stackTrace){
-      return Left(Failure(e.toString(), stackTrace));
-    }
-  }
-
-  @override
-  FutureEitherVoid uploadCosecha({required CosechaModel cosechaModel})async {
-    try{
-      await _firestore.collection(FirebaseConstants.cosechaCollection).
-      add(cosechaModel.toMap());
-
-      return Right(null);
-    }on FirebaseException catch(e, stackTrace){
-      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
-    }catch (e, stackTrace){
-      return Left(Failure(e.toString(), stackTrace));
-    }
-  }
 
   @override
   Stream<List<VesselModel>> getVesselsList() {
@@ -139,11 +91,35 @@ class AdVesselApis implements AdVesselApisImplements{
   }
 
   @override
-  Stream<VarietyModel> getVarietyModel(){
-    return _firestore.collection(FirebaseConstants.varietiesCollection).snapshots().map((event) {
-      var model = VarietyModel.fromMap(event.docs.first.data());
+  Stream<ProductModel> getProductModel({required String productId}){
+    return _firestore.collection(FirebaseConstants.productsCollection).
+    where('productId', isNotEqualTo:  productId).
+    snapshots().map((event) {
+      var model = ProductModel.fromMap(event.docs.first.data());
       return model;
     });
   }
+
+
+
+  FutureEither<List<ProductModel>> getAllProducts() async {
+    try {
+      var querySnapshot =
+      await _firestore.collection(FirebaseConstants.productsCollection).get();
+
+      List<ProductModel> models = [];
+      for (var document in querySnapshot.docs) {
+        var model = ProductModel.fromMap(document.data());
+        models.add(model);
+      }
+
+      return Right(models);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    } catch (e, stackTrace) {
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
   
 }

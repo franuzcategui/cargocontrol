@@ -8,7 +8,7 @@ class CustomDropDown extends StatefulWidget {
   final List<String> list;
   final String labelText;
   final TextEditingController? ctr;
-  final Function(String? val)? onChange;
+  final Function(String val)? onChange;
   const CustomDropDown({Key? key, required this.list, this.onChange, required this.labelText, this.ctr}) : super(key: key);
 
   @override
@@ -80,7 +80,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
             );
           }).toList(),
       onChanged: (val){
-        if(widget.onChange != null){
+        if(widget.onChange != null && val != null){
           widget.onChange!(val);
         }
         if(widget.ctr != null){
