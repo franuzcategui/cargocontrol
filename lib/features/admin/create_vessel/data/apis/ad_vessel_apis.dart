@@ -27,6 +27,12 @@ abstract class AdVesselApisImplements {
   FutureEitherVoid uploadOrigins({required OriginModel originModel});
   FutureEitherVoid uploadVarieties({required VarietyModel varietyModel});
   FutureEitherVoid uploadCosecha({required CosechaModel cosechaModel});
+
+  Stream<VarietyModel> getVarietyModel();
+  Stream<OriginModel> getOriginModel();
+  Stream<ProductModel> getProductModel();
+  Stream<CosechaModel> getCosechaModel();
+  Stream<TipoModel> getTipoModel();
 }
 
 class AdVesselApis implements AdVesselApisImplements{
@@ -129,6 +135,14 @@ class AdVesselApis implements AdVesselApisImplements{
         models.add(model);
       }
       return models;
+    });
+  }
+
+  @override
+  Stream<VarietyModel> getVarietyModel(){
+    return _firestore.collection(FirebaseConstants.varietiesCollection).snapshots().map((event) {
+      var model = VarietyModel.fromMap(event.docs.first.data());
+      return model;
     });
   }
   

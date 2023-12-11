@@ -1,4 +1,5 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
+import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
@@ -16,6 +17,14 @@ class AdMainMenuScreen extends ConsumerStatefulWidget {
 
 class _AdMainMenuScreenState extends ConsumerState<AdMainMenuScreen> {
 
+  @override
+  void initState() {
+    super.initState();
+    // initiallization();
+  }
+  initiallization()async{
+    await ref.read(adVesselProvider.notifier).uploadAllData();
+  }
 
   @override
   Widget build(BuildContext context) {

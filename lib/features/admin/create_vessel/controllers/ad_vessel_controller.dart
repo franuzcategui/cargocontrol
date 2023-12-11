@@ -1,5 +1,10 @@
 import 'package:cargocontrol/commons/common_functions/search_tags_handler.dart';
 import 'package:cargocontrol/features/admin/create_vessel/data/apis/ad_vessel_apis.dart';
+import 'package:cargocontrol/models/vessel_models/cosecha_model.dart';
+import 'package:cargocontrol/models/vessel_models/origin_model.dart';
+import 'package:cargocontrol/models/vessel_models/product_model.dart';
+import 'package:cargocontrol/models/vessel_models/tipo_model.dart';
+import 'package:cargocontrol/models/vessel_models/variety_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:flutter/cupertino.dart';
@@ -76,6 +81,47 @@ class AdVesselController extends StateNotifier<bool> {
   Stream<List<VesselModel>> getVesselsList() {
     return _datasource.getVesselsList();
   }
+
+
+  Future productsUpload()async{
+    ProductModel productModel = ProductModel(productsNames: products);
+    await _datasource.uploadProducts(productModel:  productModel);
+  }
+
+
+  Future originsUpload()async{
+    OriginModel originModel = OriginModel(originNames: origins);
+    await _datasource.uploadOrigins(originModel:  originModel);
+  }
+
+
+  Future tiposUpload()async{
+    TipoModel tipoModel = TipoModel(tipoNames: tipos);
+    await _datasource.uploadTipos(tipoModel:  tipoModel);
+  }
+
+
+  Future varietiesUpload()async{
+    VarietyModel varietyModel = VarietyModel(varietyNames: varieties);
+    await _datasource.uploadVarieties(varietyModel:  varietyModel);
+  }
+
+
+  Future cosechasUpload()async{
+    CosechaModel cosechaModel = CosechaModel(cosechaNames:  cosechas);
+    await _datasource.uploadCosecha(cosechaModel:  cosechaModel);
+  }
+
+  Future uploadAllData()async{
+    await Future.wait([
+      productsUpload(),
+      originsUpload(),
+      tiposUpload(),
+      varietiesUpload(),
+      cosechasUpload(),
+    ]);
+  }
+
 
   // All Data
   List<String> products = [
