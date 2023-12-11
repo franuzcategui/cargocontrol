@@ -72,10 +72,44 @@ class AdVesselController extends StateNotifier<bool> {
     state = false;
   }
 
-  // Fetch all Categories
 
   Stream<List<VesselModel>> getVesselsList() {
     return _datasource.getVesselsList();
   }
+
+  // All Data
+  List<String> products = [
+    'Arroz en cáscara'
+  ];
+
+  List<String> tipos = [
+    'Grano largo'
+  ];
+
+  List<String> origins = [
+    'Estados Unidos',
+    'Argentina',
+    'Brasil',
+    'Uruguay',
+    'Paraguay',
+    'Tailandia',
+  ];
+
+  List<String> varieties = [
+    'Olimar',
+    'Irga 424',
+    'Merin',
+    'Gurí',
+    'Híbrido',
+    'Combinación',
+    'Convencional',
+    'IP',
+  ];
+
+  List<String> cosechas = [
+    'Vieja',
+    'Nueva',
+    'Mezcla',
+  ];
 
 }

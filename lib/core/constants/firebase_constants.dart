@@ -4,6 +4,12 @@ class FirebaseConstants {
   static String vesselCollection = 'vessel-collection';
   static String coordinatorCollection = 'coordinator-collection';
 
+  static String productsCollection = 'products-collection';
+  static String tiposCollection = 'tipos-collection';
+  static String originsCollection = 'origins-collection';
+  static String varietiesCollection = 'varieties-collection';
+  static String cosechaCollection = 'cosecha-collection';
+
 
 
   // Storage Names

@@ -1,3 +1,8 @@
+import 'package:cargocontrol/models/vessel_models/cosecha_model.dart';
+import 'package:cargocontrol/models/vessel_models/origin_model.dart';
+import 'package:cargocontrol/models/vessel_models/product_model.dart';
+import 'package:cargocontrol/models/vessel_models/tipo_model.dart';
+import 'package:cargocontrol/models/vessel_models/variety_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -16,6 +21,12 @@ abstract class AdVesselApisImplements {
 
   FutureEitherVoid createVessel({required VesselModel vesselModel});
   Stream<List<VesselModel>> getVesselsList();
+
+  FutureEitherVoid uploadProducts({required ProductModel productModel});
+  FutureEitherVoid uploadTipos({required TipoModel tipoModel});
+  FutureEitherVoid uploadOrigins({required OriginModel originModel});
+  FutureEitherVoid uploadVarieties({required VarietyModel varietyModel});
+  FutureEitherVoid uploadCosecha({required CosechaModel cosechaModel});
 }
 
 class AdVesselApis implements AdVesselApisImplements{
@@ -30,6 +41,78 @@ class AdVesselApis implements AdVesselApisImplements{
       set(vesselModel.toMap());
 
       return const Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+
+
+  @override
+  FutureEitherVoid uploadProducts({required ProductModel productModel})async {
+    try{
+      await _firestore.collection(FirebaseConstants.productsCollection).
+      add(productModel.toMap());
+
+      return Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEitherVoid uploadTipos({required TipoModel tipoModel})async {
+    try{
+      await _firestore.collection(FirebaseConstants.tiposCollection).
+      add(tipoModel.toMap());
+
+      return Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEitherVoid uploadOrigins({required OriginModel originModel})async {
+    try{
+      await _firestore.collection(FirebaseConstants.originsCollection).
+      add(originModel.toMap());
+
+      return Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEitherVoid uploadVarieties({required VarietyModel varietyModel})async {
+    try{
+      await _firestore.collection(FirebaseConstants.varietiesCollection).
+      add(varietyModel.toMap());
+
+      return Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEitherVoid uploadCosecha({required CosechaModel cosechaModel})async {
+    try{
+      await _firestore.collection(FirebaseConstants.cosechaCollection).
+      add(cosechaModel.toMap());
+
+      return Right(null);
     }on FirebaseException catch(e, stackTrace){
       return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
     }catch (e, stackTrace){
