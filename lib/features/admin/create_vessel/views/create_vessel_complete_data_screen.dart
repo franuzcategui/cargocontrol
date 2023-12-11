@@ -91,7 +91,6 @@ class _CreateVesselCompleteDataScreenState extends ConsumerState<CreateVesselCom
                               ref: ref,
                               context: context,
                             );
-                            // Navigator.pushNamed(context, AppRoutes.registrationSuccessFullScreen);
                           },
                           buttonText: "CONTINUAR"
                       );

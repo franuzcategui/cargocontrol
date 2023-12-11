@@ -66,7 +66,7 @@ class AdVesselController extends StateNotifier<bool> {
       showSnackBar(context: context, content: l.message);
     }, (r) {
       state = false;
-      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.adminMainMenuScreen, (route) => false);
+      Navigator.pushNamed(context, AppRoutes.registrationSuccessFullScreen);
       showSnackBar(context: context, content: 'Vessel Created!');
     });
     state = false;
