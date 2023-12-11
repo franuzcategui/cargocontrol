@@ -62,6 +62,8 @@ class _BodegaSectionWidgetState extends ConsumerState<BodegaSectionWidget> {
       products.add(product.productsName);
       allProducts.add(product);
     });
+
+    originList = ref.read(adVesselNotiController).originModel?.originNames ?? [];
   }
 
   @override

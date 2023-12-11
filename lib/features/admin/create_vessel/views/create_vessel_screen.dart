@@ -60,7 +60,10 @@ class _CreateVesselScreenState extends ConsumerState<CreateVesselScreen> {
   }
 
   initialization()async{
-    await ref.read(adVesselNotiController).getAllProducts();
+    await Future.wait([
+    ref.read(adVesselNotiController).getAllProducts(),
+    ref.read(adVesselNotiController).getOrigins()
+    ]);
 
   }
 

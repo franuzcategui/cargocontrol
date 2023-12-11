@@ -24,6 +24,7 @@ abstract class AdVesselApisImplements {
 
   Stream<ProductModel> getProductModel({required String productId});
   FutureEither<List<ProductModel>> getAllProducts();
+  FutureEither<OriginModel> getAllOrigins();
 }
 
 class AdVesselApis implements AdVesselApisImplements{
@@ -102,6 +103,7 @@ class AdVesselApis implements AdVesselApisImplements{
 
 
 
+  @override
   FutureEither<List<ProductModel>> getAllProducts() async {
     try {
       var querySnapshot =
@@ -114,6 +116,26 @@ class AdVesselApis implements AdVesselApisImplements{
       }
 
       return Right(models);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    } catch (e, stackTrace) {
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEither<OriginModel> getAllOrigins() async {
+    try {
+      var querySnapshot =
+      await _firestore.collection(FirebaseConstants.originsCollection).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        var model = OriginModel.fromMap(querySnapshot.docs.first.data());
+        return Right(model);
+      } else{
+        return Left(Failure('No Origins Found!', StackTrace.fromString('getAllOrigins')));
+      }
+
     } on FirebaseAuthException catch (e, stackTrace) {
       return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
     } catch (e, stackTrace) {

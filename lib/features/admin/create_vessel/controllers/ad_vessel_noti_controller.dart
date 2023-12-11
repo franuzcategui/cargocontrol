@@ -38,7 +38,7 @@ class AdVesselNotiController extends ChangeNotifier {
     // notifyListeners();
   }
 
-  getAllProducts()async{
+  Future getAllProducts()async{
    final result = await  _datasource.getAllProducts();
    result.fold((l) {
      debugPrintStack(stackTrace: l.stackTrace);
@@ -47,5 +47,15 @@ class AdVesselNotiController extends ChangeNotifier {
      print(r.length);
      setAllProducts(r);
    });
+  }
+
+  Future getOrigins()async{
+    final result = await  _datasource.getAllOrigins();
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint( l.message);
+    }, (r) {
+      setOriginModel(r);
+    });
   }
 }
