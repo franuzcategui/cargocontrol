@@ -13,6 +13,7 @@ class VesselModel {
   final double cargoUnloadedWeight;
   final DateTime entryDate;
   final DateTime exitDate;
+  final bool isFinishedUnloading;
   final Map<String, dynamic> searchTags;
 
 
@@ -28,6 +29,7 @@ class VesselModel {
     required this.cargoModels,
     required this.cargoUnloadedWeight,
     required this.entryDate,
+    required this.isFinishedUnloading,
     required this.exitDate,
     required this.searchTags,
   });
@@ -43,6 +45,7 @@ class VesselModel {
           entryPort == other.entryPort &&
           shipper == other.shipper &&
           unlcode == other.unlcode &&
+          isFinishedUnloading == other.isFinishedUnloading &&
           totalCargoWeight == other.totalCargoWeight &&
           numberOfCargos == other.numberOfCargos &&
           cargoModels == other.cargoModels &&
@@ -65,6 +68,7 @@ class VesselModel {
       cargoUnloadedWeight.hashCode ^
       entryDate.hashCode ^
       exitDate.hashCode ^
+      isFinishedUnloading.hashCode ^
       searchTags.hashCode;
 
   @override
@@ -82,6 +86,7 @@ class VesselModel {
         ' cargoUnloadedWeight: $cargoUnloadedWeight,' +
         ' entryDate: $entryDate,' +
         ' exitDate: $exitDate,' +
+        ' exitDate: $isFinishedUnloading,' +
         ' searchTags: $searchTags,' +
         '}';
   }
@@ -98,6 +103,7 @@ class VesselModel {
     List<VesselCargoModel>? cargoModels,
     double? cargoUnloadedWeight,
     DateTime? entryDate,
+    bool? isFinishedUnloading,
     DateTime? exitDate,
     Map<String, dynamic>? searchTags,
   }) {
@@ -111,6 +117,7 @@ class VesselModel {
       totalCargoWeight: totalCargoWeight ?? this.totalCargoWeight,
       numberOfCargos: numberOfCargos ?? this.numberOfCargos,
       cargoModels: cargoModels ?? this.cargoModels,
+      isFinishedUnloading: isFinishedUnloading ?? this.isFinishedUnloading,
       cargoUnloadedWeight: cargoUnloadedWeight ?? this.cargoUnloadedWeight,
       entryDate: entryDate ?? this.entryDate,
       exitDate: exitDate ?? this.exitDate,
@@ -128,6 +135,7 @@ class VesselModel {
       'unlcode': this.unlcode,
       'totalCargoWeight': this.totalCargoWeight,
       'numberOfCargos': this.numberOfCargos,
+      'isFinishedUnloading': this.isFinishedUnloading,
       'cargoModels': this.cargoModels.map((e) => e.toMap()).toList(),
       'cargoUnloadedWeight': this.cargoUnloadedWeight,
       'entryDate': this.entryDate.millisecondsSinceEpoch,
@@ -144,6 +152,7 @@ class VesselModel {
       entryPort: map['entryPort'] as String,
       shipper: map['shipper'] as String,
       unlcode: map['unlcode'] as String,
+      isFinishedUnloading: map['isFinishedUnloading'] as bool,
       totalCargoWeight: map['totalCargoWeight'] as double,
       numberOfCargos: map['numberOfCargos'] as int,
       cargoModels: (map['cargoModels'] as List<dynamic>).

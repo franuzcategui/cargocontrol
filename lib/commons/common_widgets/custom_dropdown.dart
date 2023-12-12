@@ -1,5 +1,6 @@
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/utils/constants/assets_manager.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../utils/constants/font_manager.dart';
 import '../common_imports/common_libs.dart';
@@ -46,10 +47,12 @@ class _CustomDropDownState extends State<CustomDropDown> {
       icon: Image.asset(AppAssets.arrowDown, width: 16.w, height: 8.h,),
       onTap: _requestFocus,
       style: getMediumStyle(fontSize: MyFonts.size12, color: context.textColor),
+      borderRadius: BorderRadius.circular(10.r),
       decoration: InputDecoration(
         fillColor: context.textFieldColor,
         label: Text(widget.labelText, style: getRegularStyle(color: _focusNode.hasFocus?
         context.mainColor : context.secondaryTextColor, fontSize: MyFonts.size12),),
+
         contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(56.r),
@@ -76,7 +79,15 @@ class _CustomDropDownState extends State<CustomDropDown> {
               (String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: 250.w
+                ),
+                child: Text(
+                  value,
+                  style: getMediumStyle(color: context.textColor, fontSize: MyFonts.size12),
+                  overflow: TextOverflow.ellipsis,
+                )),
             );
           }).toList(),
       onChanged: (val){

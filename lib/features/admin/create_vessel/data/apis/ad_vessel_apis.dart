@@ -18,6 +18,7 @@ abstract class AdVesselApisImplements {
 
   FutureEitherVoid createVessel({required VesselModel vesselModel});
   Stream<List<VesselModel>> getVesselsList();
+  FutureEither<VesselModel> getCurrentVessel();
 
   FutureEitherVoid uploadProduct({required ProductModel productModel});
   FutureEitherVoid uploadOrigins({required OriginModel originModel});
@@ -90,6 +91,21 @@ class AdVesselApis implements AdVesselApisImplements{
       return models;
     });
   }
+
+  @override
+  FutureEither<VesselModel> getCurrentVessel() async {
+    try {
+      var querySnapshot =
+      await _firestore.collection(FirebaseConstants.vesselCollection).get();
+      var model = VesselModel.fromMap(querySnapshot.docs.first.data());
+      return Right(model);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    } catch (e, stackTrace) {
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
 
   @override
   Stream<ProductModel> getProductModel({required String productId}){

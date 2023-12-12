@@ -1,5 +1,12 @@
+import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
+import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
+import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
+import 'package:cargocontrol/commons/common_widgets/show_toast.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/admin/create_industry/controllers/ad_industry_noti_controller.dart';
+import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_controller.dart';
+import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_noti_controller.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/services.dart';
@@ -9,20 +16,29 @@ import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
 
-class CreateIndustryScreen extends StatefulWidget {
+class CreateIndustryScreen extends ConsumerStatefulWidget {
   const CreateIndustryScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreateIndustryScreen> createState() => _CreateIndustryScreenState();
+  ConsumerState<CreateIndustryScreen> createState() => _CreateIndustryScreenState();
 }
 
-class _CreateIndustryScreenState extends State<CreateIndustryScreen> {
+class _CreateIndustryScreenState extends ConsumerState<CreateIndustryScreen> {
   TextEditingController keyPadTextFieldController = TextEditingController();
 
   @override
   void initState() {
     keyPadTextFieldController.addListener(_onTextChange);
+    initiallization();
     super.initState();
+  }
+
+  initiallization()async{
+    await Future.wait([
+      ref.read(adVesselNotiController).getCurrentVessel(),
+      ref.read(adIndustryNotiController).getAllIndustriesModel(),
+    ]);
+
   }
 
   @override
@@ -58,17 +74,20 @@ class _CreateIndustryScreenState extends State<CreateIndustryScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 45.w),
                 child: TextField(
-                  maxLength: 6,
-                  maxLengthEnforcement:
-                  MaxLengthEnforcement.truncateAfterCompositionEnds,
+                  maxLength: 1,
+                  maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
+
                   style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size24),
                   autocorrect: false,
                   textAlign: TextAlign.center,
                   enableSuggestions: false,
                   readOnly: true,
                   controller: keyPadTextFieldController,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[1-4]')),
+                  ],
                   decoration: const InputDecoration(
-                    prefixText: 'C - ',
+                    prefixText: '',
                   ),
                 ),
               ),
@@ -76,9 +95,14 @@ class _CreateIndustryScreenState extends State<CreateIndustryScreen> {
               NumericKeyboard(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 onKeyboardTap: (string) {
-                  setState(() {
-                    keyPadTextFieldController.text += string;
-                  });
+                  RegExp digitOneToFourRegExp = RegExp(r'^[1-4]$');
+                  if (digitOneToFourRegExp.hasMatch(string) && keyPadTextFieldController.text.length < 1) {
+                    setState(() {
+                      keyPadTextFieldController.text += string;
+                    });
+                  } else {
+                    showSnackBar(context: context, content: 'You can register max 4 industries!');
+                  }
                 },
                 rightIcon: const Icon(FontAwesomeIcons.deleteLeft),
                 rightButtonFn: () {
@@ -88,11 +112,13 @@ class _CreateIndustryScreenState extends State<CreateIndustryScreen> {
               CustomButton(
                 buttonText:  'CONTINUAR',
                 onPressed: (){
-                  Navigator.pushNamed(context, AppRoutes.adminCreateIndustryInformationScreen,
-                    arguments: {
-                    'numberOfIndustries' : int.parse(keyPadTextFieldController.text)
-                  }
-                );
+                 if(keyPadTextFieldController.text.isNotEmpty){
+                   Navigator.pushNamed(context, AppRoutes.adminCreateIndustryInformationScreen,
+                       arguments: {
+                         'numberOfIndustries' : int.parse(keyPadTextFieldController.text[0])
+                       }
+                   );
+                 }
                 },
               ),
               SizedBox(

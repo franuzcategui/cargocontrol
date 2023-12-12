@@ -1,4 +1,5 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
+import 'package:cargocontrol/features/admin/create_industry/controllers/ad_industry_controller.dart';
 import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,7 +24,8 @@ class _AdMainMenuScreenState extends ConsumerState<AdMainMenuScreen> {
     // initiallization();
   }
   initiallization()async{
-    await ref.read(adVesselProvider.notifier).uploadAllData();
+    // await ref.read(adVesselProvider.notifier).uploadAllData();
+    await ref.read(adIndustryProvider.notifier).industriesUpload();
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:cargocontrol/commons/common_functions/search_tags_handler.dart';
 import 'package:cargocontrol/features/admin/create_vessel/data/apis/ad_vessel_apis.dart';
+import 'package:cargocontrol/models/industry_models/industries_model.dart';
 import 'package:cargocontrol/models/vessel_models/origin_model.dart';
 import 'package:cargocontrol/models/vessel_models/product_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
@@ -30,7 +31,7 @@ class AdIndustryController extends StateNotifier<bool> {
   AdIndustryController({required AdIndustryApisImplements datasource,})
       : _datasource = datasource,
         super(false);
-  //
+
   // Future<void> createIndustry({
   //   required String vesselName,
   //   required String procedencia,
@@ -81,17 +82,18 @@ class AdIndustryController extends StateNotifier<bool> {
   // }
   //
   //
-  // Future productsUpload()async{
-  //   ProductModel productModel = ProductModel(
-  //     productsName: 'Arroz en cáscara',
-  //     cosechaNames: cosechas,
-  //     productId: const Uuid().v4(),
-  //     tipoNames: tipos,
-  //     varietyNames: varieties
-  //   );
-  //
-  //   await _datasource.uploadProduct(productModel:  productModel);
-  // }
+  Future industriesUpload()async{
+    industriesModels.forEach((industriesModel) async{
+      await _datasource.uploadIndustry(industryModell:  industriesModel);
+    });
+  }
+
+  List<IndustriesModel> industriesModels = const[
+    IndustriesModel(industryId: '3-004-061893', industryName: 'Cooperativa de Productores Independientes de Liberia'),
+    IndustriesModel(industryId: '3-101-046884', industryName: 'Corporacion Arrocera Costa Rica S.A'),
+    IndustriesModel(industryId: '3-101-017062', industryName: 'Derivados De Maiz Alimenticio S.A'),
+    IndustriesModel(industryId: '3-101-002551', industryName: 'El Pelón De La Bajura S.A'),
+  ];
   //
   //
   // Future originsUpload()async{

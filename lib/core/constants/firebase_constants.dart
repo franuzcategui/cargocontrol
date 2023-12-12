@@ -11,7 +11,7 @@ class FirebaseConstants {
   static String cosechaCollection = 'cosecha-collection';
 
 
-  static String industryCollection = 'industry-collection';
+  static String industriesCollection = 'industries-collection';
 
 
 

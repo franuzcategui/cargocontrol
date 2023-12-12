@@ -1,4 +1,5 @@
 import 'package:cargocontrol/models/vessel_models/origin_model.dart';
+import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,5 +58,36 @@ class AdVesselNotiController extends ChangeNotifier {
     }, (r) {
       setOriginModel(r);
     });
+  }
+
+
+
+  VesselModel? _vesselModel;
+  VesselModel? get vesselModel => _vesselModel;
+  setVesselModel(VesselModel? model) {
+    _vesselModel = model;
+    List<String> tempNames = [];
+    _vesselModel?.cargoModels.forEach((cargoModel) {
+      if(!tempNames.contains(cargoModel.productName)){
+        tempNames.add(cargoModel.productName);
+      }
+    });
+    setVesselProductNames(tempNames);
+  }
+
+  Future getCurrentVessel()async{
+    final result = await  _datasource.getCurrentVessel();
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint( l.message);
+    }, (r) {
+      setVesselModel(r);
+    });
+  }
+
+  List<String> _vesselProductNames = [];
+  List<String> get vesselProductNames => _vesselProductNames;
+  setVesselProductNames(List<String> names) {
+    _vesselProductNames = names;
   }
 }

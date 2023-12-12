@@ -17,9 +17,13 @@ class AdIndustryNotiController extends ChangeNotifier {
 
   List<IndustriesModel> _allIndustriesModels = [];
   List<IndustriesModel> get allIndustriesModels => _allIndustriesModels;
-  setAllIndustriesModels(List<IndustriesModel> model) {
-    _allIndustriesModels = model;
-    // notifyListeners();
+  setAllIndustriesModels(List<IndustriesModel> models) {
+    _allIndustriesModels = models;
+    List<String> tempNames = [];
+    _allIndustriesModels.forEach((industryModel) {
+      tempNames.add(industryModel.industryName);
+    });
+    setIndustryNames(tempNames);
   }
 
   Future getAllIndustriesModel()async{
@@ -31,6 +35,12 @@ class AdIndustryNotiController extends ChangeNotifier {
      print(r.length);
      setAllIndustriesModels(r);
    });
+  }
+
+  List<String> _industryNames = [];
+  List<String> get industryNames => _industryNames;
+  setIndustryNames(List<String> names) {
+    _industryNames = names;
   }
 
 }

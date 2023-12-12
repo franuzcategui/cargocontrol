@@ -47,7 +47,7 @@ class AdIndustryApis implements AdIndustryApisImplements{
   @override
   FutureEitherVoid uploadIndustry({required IndustriesModel industryModell})async {
     try{
-      await _firestore.collection(FirebaseConstants.originsCollection).
+      await _firestore.collection(FirebaseConstants.industriesCollection).
       doc(industryModell.industryId).
       set(industryModell.toMap());
 
@@ -65,7 +65,7 @@ class AdIndustryApis implements AdIndustryApisImplements{
   FutureEither<List<IndustriesModel>> getAllIndustries() async {
     try {
       var querySnapshot =
-      await _firestore.collection(FirebaseConstants.industryCollection).get();
+      await _firestore.collection(FirebaseConstants.industriesCollection).get();
 
       List<IndustriesModel> models = [];
       for (var document in querySnapshot.docs) {

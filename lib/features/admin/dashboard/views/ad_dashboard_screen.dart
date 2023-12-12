@@ -65,7 +65,7 @@ class AdDashboardScreen extends ConsumerWidget {
               ),
             ),
             SizedBox(
-              height: 126.h,
+              height: 136.h,
               child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: const [
@@ -86,7 +86,7 @@ class AdDashboardScreen extends ConsumerWidget {
                   ]),
             ),
             SizedBox(
-              height: 126.h,
+              height: 136.h,
               child: ListView.builder(
                 itemCount: 2,
                 scrollDirection: Axis.horizontal,

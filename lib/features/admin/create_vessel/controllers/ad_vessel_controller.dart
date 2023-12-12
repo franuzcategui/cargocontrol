@@ -44,10 +44,10 @@ class AdVesselController extends StateNotifier<bool> {
     required BuildContext context,
   }) async {
     state = true;
-    DateTime createdAt = DateTime.now();
     final String vesselId = const Uuid().v4();
     VesselModel vesselModel = VesselModel(
         vesselId: vesselId,
+        isFinishedUnloading: false,
         vesselName: vesselName,
         exitPort: procedencia,
         entryPort: '',
@@ -78,6 +78,8 @@ class AdVesselController extends StateNotifier<bool> {
   Stream<List<VesselModel>> getVesselsList() {
     return _datasource.getVesselsList();
   }
+
+
 
 
   Future productsUpload()async{

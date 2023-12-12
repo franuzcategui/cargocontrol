@@ -73,8 +73,8 @@ class _CreateIndustryInformationScreenState extends State<CreateIndustryInformat
           comenzoWIdget: _comienzos[i],
           endOfGuideWidget: _endOfGuides[i],
           loadWidget: _loads[i],
-          nameWidget: _nameDropDowns[i],
-          productWidget: _productDropDowns[i],
+          industryNameCtr: _industryControllers[i].nameCtr,
+          productNameCtr: _industryControllers[i].productCtr,
           onRemove: (){
             if(i ==0){
 
