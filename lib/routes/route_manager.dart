@@ -102,7 +102,7 @@ class AppRoutes {
                 shipper :args['shipper'],
                 unCode : args['unCode'],
                 portDate : args['portDate'],
-                numberOfWines : args['numberOfWines'],
+                numberOfCargos : args['numberOfCargos'],
                 weightUnitEnum : args['weightUnitEnum'],
             ),
         );
@@ -126,7 +126,12 @@ class AppRoutes {
       case adminCreateIndustryScreen:
         return _buildRoute(const CreateIndustryScreen());
       case adminCreateIndustryInformationScreen:
-        return _buildRoute(const CreateIndustryInformationScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            CreateIndustryInformationScreen(
+              numberOfIndustries: args['numberOfIndustries'],
+            ),
+        );
       case adminCreateIndustryCompleteDataScreen:
         return _buildRoute(const CreateIndustryCompleteDataScreen());
 

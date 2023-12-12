@@ -19,9 +19,9 @@ class CreateVesselBodegaInfoScreen extends StatefulWidget {
   final String shipper;
   final String unCode;
   final DateTime portDate;
-  final int numberOfWines;
+  final int numberOfCargos;
   final WeightUnitEnum weightUnitEnum;
-  const CreateVesselBodegaInfoScreen({Key? key, required this.vesselName, required this.procedencia, required this.shipper, required this.unCode, required this.portDate, required this.numberOfWines, required this.weightUnitEnum}) : super(key: key);
+  const CreateVesselBodegaInfoScreen({Key? key, required this.vesselName, required this.procedencia, required this.shipper, required this.unCode, required this.portDate, required this.numberOfCargos, required this.weightUnitEnum}) : super(key: key);
 
   @override
   State<CreateVesselBodegaInfoScreen> createState() => _CreateVesselBodegaInfoScreenState();
@@ -139,7 +139,9 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
   @override
   void initState() {
     super.initState();
-    createBodegaSection();
+    for(int i = 1; i <= widget.numberOfCargos; i++){
+      createBodegaSection();
+    }
   }
 
   @override
@@ -192,7 +194,7 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
                             VesselCargoModel model = VesselCargoModel(
                               cargoId: cargoId,
                               cosecha: section.cosechaCtr.text,
-                              origen: section.cosechaCtr.text,
+                              origen: section.originCtr.text,
                               pesoTotal: double.parse(section.weightCtr.text),
                               pesoUnloaded: 0.0,
                               productName: section.productCtr.text,
@@ -211,7 +213,7 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
                                 'shipper' : widget.shipper,
                                 'unCode' : widget.unCode,
                                 'portDate' : widget.portDate,
-                                'numberOfWines' : widget.numberOfWines,
+                                'numberOfWines' : widget.numberOfCargos,
                                 'weightUnitEnum' : widget.weightUnitEnum,
                                 'bogedaModels' : bogedaModels,
                               }

@@ -11,6 +11,9 @@ class FirebaseConstants {
   static String cosechaCollection = 'cosecha-collection';
 
 
+  static String industryCollection = 'industry-collection';
+
+
 
   // Storage Names
   static String adminStorage = 'admin-auth-storage';

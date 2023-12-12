@@ -9,7 +9,8 @@ import '../../../../commons/common_widgets/custom_dropdown.dart';
 import '../widgets/industry_section_widget.dart';
 
 class CreateIndustryInformationScreen extends StatefulWidget {
-  const CreateIndustryInformationScreen({Key? key}) : super(key: key);
+  final int numberOfIndustries;
+  const CreateIndustryInformationScreen({Key? key, required this.numberOfIndustries}) : super(key: key);
 
   @override
   State<CreateIndustryInformationScreen> createState() => _CreateIndustryInformationScreenState();
@@ -113,7 +114,9 @@ class _CreateIndustryInformationScreenState extends State<CreateIndustryInformat
   @override
   void initState() {
     super.initState();
-    createIndustrySection();
+    for(int i = 1; i <= widget.numberOfIndustries; i++){
+      createIndustrySection();
+    }
   }
 
   @override

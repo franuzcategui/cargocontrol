@@ -36,7 +36,7 @@ class _CreateVesselScreenState extends ConsumerState<CreateVesselScreen> {
 
 
   DateTime? portDate;
-  int? numberOfWines;
+  int? numberOfCargos;
   WeightUnitEnum? weightUnitEnum;
 
 
@@ -147,15 +147,15 @@ class _CreateVesselScreenState extends ConsumerState<CreateVesselScreen> {
                      SizedBox(height: 14.h,),
                      NumberOfCargoHoldsWidget(
                        seletedCargosNumber: (int selectedValue){
-                         numberOfWines = selectedValue;
-                         print(numberOfWines);
+                         numberOfCargos = selectedValue;
+                         print(numberOfCargos);
                        },
                      ),
                      SizedBox(height: 45.h,),
                      CustomButton(
                          onPressed: (){
                            if(formKey.currentState!.validate()){
-                             if(numberOfWines != null){
+                             if(numberOfCargos != null){
                                Navigator.pushNamed(
                                  context,
                                  AppRoutes.adminCreateVesselBodegaInfoScreen,
@@ -165,7 +165,7 @@ class _CreateVesselScreenState extends ConsumerState<CreateVesselScreen> {
                                    'shipper' : shipperCtr.text,
                                    'unCode' : unCodeCtr.text,
                                    'portDate' : portDate,
-                                   'numberOfWines' : numberOfWines,
+                                   'numberOfCargos' : numberOfCargos,
                                    'weightUnitEnum' : weightUnitEnum,
                                  }
                                );

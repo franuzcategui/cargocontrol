@@ -88,7 +88,11 @@ class _CreateIndustryScreenState extends State<CreateIndustryScreen> {
               CustomButton(
                 buttonText:  'CONTINUAR',
                 onPressed: (){
-                  Navigator.pushNamed(context, AppRoutes.adminCreateIndustryInformationScreen);
+                  Navigator.pushNamed(context, AppRoutes.adminCreateIndustryInformationScreen,
+                    arguments: {
+                    'numberOfIndustries' : int.parse(keyPadTextFieldController.text)
+                  }
+                );
                 },
               ),
               SizedBox(
