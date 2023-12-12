@@ -169,53 +169,53 @@ class _CreateVesselBodegaInfoScreenState extends State<CreateVesselBodegaInfoScr
                   ),
                   CustomButton(
                       onPressed: (){
-                        if(formKey.currentState!.validate()){
+                        for (var section in _bodegaInfoControllers) {
+                          if(section.weightCtr.text == "" || section.productCtr.text == "" ||
+                              section.varietyCtr.text == "" || section.originCtr.text == "" ||
+                              section.tipoCtr.text == "" || section.cosechaCtr.text == ""){
+                            setState(() {
+                              allGood = false;
+                            });
+                            showSnackBar(context: context,content:  "Fill All Fields!", duration: const Duration(milliseconds: 700) );
+                            break;
+                          }else{
+                            setState(() {
+                              allGood = true;
+                            });
+                          }
+                        }
+
+                        if(allGood){
+                          List<VesselCargoModel> bogedaModels = [];
                           for (var section in _bodegaInfoControllers) {
-                            if(section.weightCtr.text == ""){
-                              setState(() {
-                                allGood = false;
-                              });
-                              showSnackBar(context: context,content:  "Select day!", duration: const Duration(milliseconds: 700) );
-                              break;
-                            }else{
-                              setState(() {
-                                allGood = true;
-                              });
-                            }
-                          }
-
-                          if(allGood){
-                            List<VesselCargoModel> bogedaModels = [];
-                            for (var section in _bodegaInfoControllers) {
-                                final cargoId = Uuid().v4();
-                                VesselCargoModel model = VesselCargoModel(
-                                  cargoId: cargoId,
-                                  cosecha: section.cosechaCtr.text,
-                                  origen: section.cosechaCtr.text,
-                                  pesoTotal: double.parse(section.weightCtr.text),
-                                  pesoUnloaded: 0.0,
-                                  productName: section.productCtr.text,
-                                  tipo: section.tipoCtr.text,
-                                  variety: section.varietyCtr.text,
-                                );
-                                bogedaModels.add(model);
-
-                            }
-                            Navigator.pushNamed(
-                                context,
-                                AppRoutes.adminCreateVesselCompleteDataScreen,
-                                arguments: {
-                                  'vesselName' : widget.vesselName,
-                                  'procedencia' : widget.procedencia,
-                                  'shipper' : widget.shipper,
-                                  'unCode' : widget.unCode,
-                                  'portDate' : widget.portDate,
-                                  'numberOfWines' : widget.numberOfWines,
-                                  'weightUnitEnum' : widget.weightUnitEnum,
-                                  'bogedaModels' : bogedaModels,
-                                }
+                            final cargoId = Uuid().v4();
+                            VesselCargoModel model = VesselCargoModel(
+                              cargoId: cargoId,
+                              cosecha: section.cosechaCtr.text,
+                              origen: section.cosechaCtr.text,
+                              pesoTotal: double.parse(section.weightCtr.text),
+                              pesoUnloaded: 0.0,
+                              productName: section.productCtr.text,
+                              tipo: section.tipoCtr.text,
+                              variety: section.varietyCtr.text,
                             );
+                            bogedaModels.add(model);
+
                           }
+                          Navigator.pushNamed(
+                              context,
+                              AppRoutes.adminCreateVesselCompleteDataScreen,
+                              arguments: {
+                                'vesselName' : widget.vesselName,
+                                'procedencia' : widget.procedencia,
+                                'shipper' : widget.shipper,
+                                'unCode' : widget.unCode,
+                                'portDate' : widget.portDate,
+                                'numberOfWines' : widget.numberOfWines,
+                                'weightUnitEnum' : widget.weightUnitEnum,
+                                'bogedaModels' : bogedaModels,
+                              }
+                          );
                         }
                       },
                       buttonText: "CONTINUAR"

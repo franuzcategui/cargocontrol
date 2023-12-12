@@ -36,7 +36,7 @@ class OriginModel{
 
   factory OriginModel.fromMap(Map<String, dynamic> map) {
     return OriginModel(
-      originNames: map['originNames'] as List<String>,
+      originNames: (map['originNames'] as List<dynamic>).cast<String>(),
     );
   }
 

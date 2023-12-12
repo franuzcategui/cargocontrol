@@ -63,7 +63,6 @@ class _BodegaSectionWidgetState extends ConsumerState<BodegaSectionWidget> {
       allProducts.add(product);
     });
 
-    originList = ref.read(adVesselNotiController).originModel?.originNames ?? [];
   }
 
   @override
@@ -109,7 +108,7 @@ class _BodegaSectionWidgetState extends ConsumerState<BodegaSectionWidget> {
                 SizedBox(height: 10.h,),
               ],
             ): SizedBox(),
-            CustomDropDown(ctr: widget.originCtr, list: originList, labelText: 'Origen',),
+            CustomDropDown(ctr: widget.originCtr, list: ref.read(adVesselNotiController).originModel?.originNames ??[], labelText: 'Origen',),
             SizedBox(height: 10.h,),
             widget.weightWidget
           ],
