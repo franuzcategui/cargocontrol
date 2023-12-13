@@ -1,4 +1,5 @@
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../utils/constants/font_manager.dart';
@@ -24,14 +25,19 @@ class CustomTile extends StatelessWidget {
             color: context.textColor,
             fontSize: MyFonts.size12,
           ),),
-          Text(subText, style: getRegularStyle(
-            color:
-            hasWarning ? context.errorColor:
-            isGoodSign ? context.brandColor:
-            context.textColor,
-            fontSize: MyFonts.size12,
-          ),
-            textAlign: TextAlign.end,
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: 150.w
+            ),
+            child: Text(subText, style: getRegularStyle(
+              color:
+              hasWarning ? context.errorColor:
+              isGoodSign ? context.brandColor:
+              context.textColor,
+              fontSize: MyFonts.size12,
+            ),
+              textAlign: TextAlign.end,
+            ),
           ),
         ],
       ),

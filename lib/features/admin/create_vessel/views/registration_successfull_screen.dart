@@ -12,31 +12,34 @@ class RegistrationSuccessFullScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        height: 812.h,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Spacer(),
-            Center(
-              child: Image.asset(AppAssets.logo, height: 78.h, width: 290.w,),
-            ),
-            Text(
-              "Su registro ha sido exitoso",
-              style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size16),
-              textAlign: TextAlign.center,
-            ),
-            const Spacer(),
-            CustomButton(
-                onPressed: (){
-                  Navigator.pushNamedAndRemoveUntil(context, AppRoutes.adminMainMenuScreen, (route) => false);
-                },
-                buttonText: "CONTINUAR",
-            ),
-            SizedBox(height: 42.h,)
-          ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: SizedBox(
+          height: 812.h,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
+              Center(
+                child: Image.asset(AppAssets.logo, height: 78.h, width: 290.w,),
+              ),
+              Text(
+                "Su registro ha sido exitoso",
+                style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size16),
+                textAlign: TextAlign.center,
+              ),
+              const Spacer(),
+              CustomButton(
+                  onPressed: (){
+                    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.adminMainMenuScreen, (route) => false);
+                  },
+                  buttonText: "CONTINUAR",
+              ),
+              SizedBox(height: 42.h,)
+            ],
+          ),
         ),
       ),
     );

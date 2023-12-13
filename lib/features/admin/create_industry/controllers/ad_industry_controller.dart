@@ -1,17 +1,12 @@
-import 'package:cargocontrol/commons/common_functions/search_tags_handler.dart';
-import 'package:cargocontrol/features/admin/create_vessel/data/apis/ad_vessel_apis.dart';
 import 'package:cargocontrol/models/industry_models/industries_model.dart';
-import 'package:cargocontrol/models/vessel_models/origin_model.dart';
-import 'package:cargocontrol/models/vessel_models/product_model.dart';
-import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
+import 'package:cargocontrol/models/industry_models/industry_guide_model.dart';
+import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../commons/common_widgets/show_toast.dart';
-import '../../../../core/enums/weight_unit_enum.dart';
-import '../../../../models/vessel_models/vessel_cargo_model.dart';
 import '../data/apis/ad_industry_apis.dart';
 
 final adIndustryProvider = StateNotifierProvider<AdIndustryController, bool>((ref) {
@@ -19,10 +14,10 @@ final adIndustryProvider = StateNotifierProvider<AdIndustryController, bool>((re
   return AdIndustryController(datasource:  adIndustryApi, );
 });
 
-// final fetchAllIndustrysProvider = StreamProvider((ref) {
-//   final categoryPrdr = ref.watch(adIndustryProvider.notifier);
-//   return categoryPrdr.getIndustrysList();
-// });
+final fetchCurrentIndustry = StreamProvider((ref) {
+  final industryProvider = ref.watch(adIndustryProvider.notifier);
+  return industryProvider.getCurrentIndusry();
+});
 
 
 class AdIndustryController extends StateNotifier<bool> {
@@ -32,60 +27,40 @@ class AdIndustryController extends StateNotifier<bool> {
       : _datasource = datasource,
         super(false);
 
-  // Future<void> createIndustry({
-  //   required String vesselName,
-  //   required String procedencia,
-  //   required String shipper,
-  //   required String unCode,
-  //   required DateTime portDate,
-  //   required int numberOfWines,
-  //   required WeightUnitEnum weightUnitEnum,
-  //   required List<IndustryCargoModel> bogedaModels,
-  //   required double totalCargoWeight,
-  //   required WidgetRef ref,
-  //   required BuildContext context,
-  // }) async {
-  //   state = true;
-  //   DateTime createdAt = DateTime.now();
-  //   final String vesselId = const Uuid().v4();
-  //   IndustryModel vesselModel = IndustryModel(
-  //       vesselId: vesselId,
-  //       vesselName: vesselName,
-  //       exitPort: procedencia,
-  //       entryPort: '',
-  //       shipper: shipper,
-  //       unlcode: unCode,
-  //       totalCargoWeight: totalCargoWeight,
-  //       numberOfCargos: bogedaModels.length,
-  //       cargoModels: bogedaModels,
-  //       cargoUnloadedWeight: 0.0,
-  //       entryDate: DateTime.now(),
-  //       exitDate: portDate,
-  //       searchTags: vesselSearchTags(unlcode: unCode, shipperName: shipper ,name: vesselName)
-  //   );
-  //   final result = await _datasource.createIndustry(vesselModel: vesselModel);
-  //
-  //   result.fold((l) {
-  //     state = false;
-  //     showSnackBar(context: context, content: l.message);
-  //   }, (r) {
-  //     state = false;
-  //     Navigator.pushNamed(context, AppRoutes.registrationSuccessFullScreen);
-  //     showSnackBar(context: context, content: 'Industry Created!');
-  //   });
-  //   state = false;
-  // }
-  //
-  //
-  // Stream<List<IndustryModel>> getIndustrysList() {
-  //   return _datasource.getIndustrysList();
-  // }
-  //
-  //
+  Future<void> createIndustryGuideModel({
+    required List<IndustrySubModel> industrySubModels,
+    required String vesselId,
+    required WidgetRef ref,
+    required BuildContext context,
+  }) async {
+    state = true;
+    final String indusrtyGuideId = const Uuid().v4();
+    IndustryGuideModel industryGuideModel = IndustryGuideModel(
+        vesselId: vesselId,
+        indusrtyGuideId: indusrtyGuideId,
+        industrySubModels: industrySubModels
+    );
+    final result = await _datasource.createIndustryGuideModel(industryModel: industryGuideModel);
+
+    result.fold((l) {
+      state = false;
+      showSnackBar(context: context, content: l.message);
+    }, (r) {
+      state = false;
+      Navigator.pushNamed(context, AppRoutes.registrationSuccessFullScreen);
+      showSnackBar(context: context, content: 'Industry Created!');
+    });
+    state = false;
+  }
+
   Future industriesUpload()async{
     industriesModels.forEach((industriesModel) async{
-      await _datasource.uploadIndustry(industryModell:  industriesModel);
+      await _datasource.uploadIndustries(industryModell:  industriesModel);
     });
+  }
+
+  Stream<IndustryGuideModel> getCurrentIndusry() {
+    return _datasource.getCurrentIndusry();
   }
 
   List<IndustriesModel> industriesModels = const[
@@ -94,55 +69,4 @@ class AdIndustryController extends StateNotifier<bool> {
     IndustriesModel(industryId: '3-101-017062', industryName: 'Derivados De Maiz Alimenticio S.A'),
     IndustriesModel(industryId: '3-101-002551', industryName: 'El Pelón De La Bajura S.A'),
   ];
-  //
-  //
-  // Future originsUpload()async{
-  //   OriginModel originModel = OriginModel(originNames: origins);
-  //   await _datasource.uploadOrigins(originModel:  originModel);
-  // }
-  //
-  //
-  // Future uploadAllData()async{
-  //   await Future.wait([
-  //     productsUpload(),
-  //     originsUpload(),
-  //   ]);
-  // }
-  //
-  //
-  // // All Data
-  // List<String> products = [
-  //   'Arroz en cáscara'
-  // ];
-  //
-  // List<String> tipos = [
-  //   'Grano largo'
-  // ];
-  //
-  // List<String> origins = [
-  //   'Estados Unidos',
-  //   'Argentina',
-  //   'Brasil',
-  //   'Uruguay',
-  //   'Paraguay',
-  //   'Tailandia',
-  // ];
-  //
-  // List<String> varieties = [
-  //   'Olimar',
-  //   'Irga 424',
-  //   'Merin',
-  //   'Gurí',
-  //   'Híbrido',
-  //   'Combinación',
-  //   'Convencional',
-  //   'IP',
-  // ];
-  //
-  // List<String> cosechas = [
-  //   'Vieja',
-  //   'Nueva',
-  //   'Mezcla',
-  // ];
-
 }

@@ -133,7 +133,13 @@ class AppRoutes {
             ),
         );
       case adminCreateIndustryCompleteDataScreen:
-        return _buildRoute(const CreateIndustryCompleteDataScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            CreateIndustryCompleteDataScreen(
+              industrySubModels: args['industrySubModels'],
+              vesselId: args['vesselId'],
+            ),
+        );
 
       case adminRegisterUserScreen:
         return _buildRoute(const RegisterUserScreen());

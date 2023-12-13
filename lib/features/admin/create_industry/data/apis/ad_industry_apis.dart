@@ -1,4 +1,5 @@
 import 'package:cargocontrol/models/industry_models/industries_model.dart';
+import 'package:cargocontrol/models/industry_models/industry_guide_model.dart';
 import 'package:cargocontrol/models/vessel_models/origin_model.dart';
 import 'package:cargocontrol/models/vessel_models/product_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
@@ -17,9 +18,10 @@ final adIndustryApiProvider = Provider<AdIndustryApisImplements>((ref){
 
 abstract class AdIndustryApisImplements {
 
-  // FutureEitherVoid createVessel({required VesselModel vesselModel});
-  FutureEitherVoid uploadIndustry({required IndustriesModel industryModell});
+  FutureEitherVoid createIndustryGuideModel({required IndustryGuideModel industryModel});
+  FutureEitherVoid uploadIndustries({required IndustriesModel industryModell});
   FutureEither<List<IndustriesModel>> getAllIndustries();
+  Stream<IndustryGuideModel> getCurrentIndusry();
 }
 
 class AdIndustryApis implements AdIndustryApisImplements{
@@ -27,25 +29,33 @@ class AdIndustryApis implements AdIndustryApisImplements{
   AdIndustryApis({required FirebaseFirestore firestore}): _firestore = firestore;
 
 
-  // @override
-  // FutureEitherVoid createIndustry({required IndustriesModel vesselModel}) async{
-  //   try{
-  //     await _firestore.collection(FirebaseConstants.vesselCollection).
-  //     doc(vesselModel.vesselId).
-  //     set(vesselModel.toMap());
-  //
-  //     return const Right(null);
-  //   }on FirebaseException catch(e, stackTrace){
-  //     return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
-  //   }catch (e, stackTrace){
-  //     return Left(Failure(e.toString(), stackTrace));
-  //   }
-  // }
+  @override
+  FutureEitherVoid createIndustryGuideModel({required IndustryGuideModel industryModel}) async{
+    try{
+      await _firestore.collection(FirebaseConstants.industryGuideCollection).
+      doc(industryModel.indusrtyGuideId).
+      set(industryModel.toMap());
 
-
+      return const Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
 
   @override
-  FutureEitherVoid uploadIndustry({required IndustriesModel industryModell})async {
+  Stream<IndustryGuideModel> getCurrentIndusry(){
+    return _firestore.collection(FirebaseConstants.industryGuideCollection).
+    snapshots().
+    map((event) {
+      var model = IndustryGuideModel.fromMap(event.docs.first.data());
+      return model;
+    });
+  }
+
+  @override
+  FutureEitherVoid uploadIndustries({required IndustriesModel industryModell})async {
     try{
       await _firestore.collection(FirebaseConstants.industriesCollection).
       doc(industryModell.industryId).

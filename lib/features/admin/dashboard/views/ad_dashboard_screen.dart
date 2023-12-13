@@ -12,8 +12,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
+import '../../../../models/industry_models/industry_sub_model.dart';
 import '../../../../routes/route_manager.dart';
 import '../../../auth/controllers/auth_controller.dart';
+import '../../create_industry/controllers/ad_industry_controller.dart';
 import '../widgets/ad_floating_action_sheet.dart';
 import '../widgets/ad_progress_dashboard_card.dart';
 import '../widgets/ad_recent_record_widget.dart';
@@ -85,23 +87,40 @@ class AdDashboardScreen extends ConsumerWidget {
                     ),
                   ]),
             ),
-            SizedBox(
-              height: 136.h,
-              child: ListView.builder(
-                itemCount: 2,
-                scrollDirection: Axis.horizontal,
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return ref.watch(fetchCurrentIndustry).when(
+                    data: (currentIndustry){
+                      return SizedBox(
+                        height: 136.h,
+                        child: ListView.builder(
+                          itemCount: currentIndustry.industrySubModels.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            IndustrySubModel model = currentIndustry.industrySubModels[index];
+                            return AdProgressIndicatorCard(
+                              numberOfTrips: '0',
+                              divideNumber2: '${model.cargoUnloaded}',
+                              divideNumber1: '${model.cargoAssigned}',
+                              barPercentage: model.cargoUnloaded!= 0? model.cargoAssigned/model.cargoUnloaded: 0,
+                              title: 'Industria #${index+1}',
+                            );
+                          },
 
-                itemBuilder: (BuildContext context, int index) {
-                  return AdProgressIndicatorCard(
-                    numberOfTrips: '0',
-                    divideNumber2: '0',
-                    divideNumber1: '0',
-                    barPercentage: 0,
-                    title: 'Industria #${index+1}',
-                  );
-                },
+                        ),
+                      );
+                    },
+                    error: (error, st){
+                      debugPrintStack(stackTrace: st);
+                      debugPrint(error.toString());
+                      return const SizedBox();
+                    },
+                    loading: (){
+                      return const SizedBox();
+                    }
+                );
+              },
 
-              ),
             ),
             const Row(
                 children:  [
