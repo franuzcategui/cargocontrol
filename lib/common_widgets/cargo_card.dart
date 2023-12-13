@@ -68,7 +68,7 @@ class CargoCard extends StatelessWidget {
                   style: const constants.TextStyles().bodyText1,
                 ),
                 Text(
-                  bottomLeftText,
+                  bottomRightText,
                   style: const constants.TextStyles().bodyText1,
                 )
               ],

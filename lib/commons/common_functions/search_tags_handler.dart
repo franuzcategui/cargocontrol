@@ -53,6 +53,28 @@ Map<String, dynamic> vesselSearchTags({
 
 
 
+Map<String, dynamic> choferesSearchTagsHandler({
+  required String name,
+  required String choferNationalId,
+
+}) {
+  Map<String, dynamic>? searchTags = <String, bool>{};
+  if(name != ''){
+    name.trim().split(' ').forEach((val) {
+      searchTags[val.toLowerCase()] = true;
+    });
+  }
+
+  if(choferNationalId != ""){
+    choferNationalId.trim().split(' ').forEach((val) {
+      searchTags[val.toLowerCase()] = true;
+    });
+  }
+
+
+  return searchTags;
+}
+
 
 
 

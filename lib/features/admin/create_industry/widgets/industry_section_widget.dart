@@ -26,25 +26,6 @@ class IndustrySectionWidget extends ConsumerStatefulWidget {
 class _IndustrySectionWidgetState extends ConsumerState<IndustrySectionWidget> {
 
 
-  List<String> industryNames = [
-
-  ];
-
-  List<String> productNames = [
-
-  ];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   initialization();
-  // }
-  //
-  // initialization()async{
-  //   ref.read(adIndustryNotiController).industryNames;
-  //
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -60,7 +60,7 @@ class CoDashboardScreen extends ConsumerWidget {
               ),
             ),
             SizedBox(
-              height: 116,
+              height: 136.h,
               child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: const <ProgressIndicatorCard>[
@@ -69,7 +69,7 @@ class CoDashboardScreen extends ConsumerWidget {
                   ]),
             ),
             SizedBox(
-              height: 116,
+              height: 136.h,
               child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: const <ProgressIndicatorCard>[

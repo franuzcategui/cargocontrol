@@ -46,13 +46,14 @@ class _CustomDropDownState extends State<CustomDropDown> {
       value == null ? 'field required' : null,
       icon: Image.asset(AppAssets.arrowDown, width: 16.w, height: 8.h,),
       onTap: _requestFocus,
+      // isExpanded: false,
+      // isDense: true,
       style: getMediumStyle(fontSize: MyFonts.size12, color: context.textColor),
       borderRadius: BorderRadius.circular(10.r),
       decoration: InputDecoration(
         fillColor: context.textFieldColor,
         label: Text(widget.labelText, style: getRegularStyle(color: _focusNode.hasFocus?
         context.mainColor : context.secondaryTextColor, fontSize: MyFonts.size12),),
-
         contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(56.r),
@@ -86,7 +87,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                 child: Text(
                   value,
                   style: getMediumStyle(color: context.textColor, fontSize: MyFonts.size12),
-                  overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.visible,
                 )),
             );
           }).toList(),
