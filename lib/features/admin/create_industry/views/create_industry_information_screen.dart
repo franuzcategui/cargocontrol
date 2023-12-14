@@ -11,6 +11,7 @@ import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../../../../commons/common_widgets/custom_dropdown.dart';
 import '../../../../commons/common_widgets/show_toast.dart';
+import '../../../../models/vessel_models/vessel_cargo_model.dart';
 import '../widgets/industry_section_widget.dart';
 
 class CreateIndustryInformationScreen extends ConsumerStatefulWidget {
@@ -183,7 +184,7 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                             IndustrySubModel model = IndustrySubModel(
                               industryId: industryId,
                               industryName: section.nameCtr.text,
-                              productName: section.productCtr.text,
+                              selectedVesselCargo: ref.read(adVesselNotiController).selectedVesselCargoModelForIndustry!,
                               finishedUnloading: false,
                               cargoAssigned: double.parse(section.loadCtr.text),
                               cargoUnloaded: 0,
@@ -193,6 +194,7 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                             industrySubModels.add(model);
 
                           }
+                          print(industrySubModels.length);
                           Navigator.pushNamed(
                               context,
                               AppRoutes.adminCreateIndustryCompleteDataScreen,

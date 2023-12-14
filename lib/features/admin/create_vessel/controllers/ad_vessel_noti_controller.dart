@@ -1,4 +1,5 @@
 import 'package:cargocontrol/models/vessel_models/origin_model.dart';
+import 'package:cargocontrol/models/vessel_models/vessel_cargo_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,8 +69,8 @@ class AdVesselNotiController extends ChangeNotifier {
     _vesselModel = model;
     List<String> tempNames = [];
     _vesselModel?.cargoModels.forEach((cargoModel) {
-      if(!tempNames.contains(cargoModel.productName)){
-        tempNames.add(cargoModel.productName);
+      if(!tempNames.contains('${cargoModel.productName }, ${cargoModel.variety }, ${cargoModel.cosecha }, ${cargoModel.tipo } ')){
+        tempNames.add('${cargoModel.productName }, ${cargoModel.variety }, ${cargoModel.cosecha }, ${cargoModel.tipo } ');
       }
     });
     setVesselProductNames(tempNames);
@@ -90,4 +91,11 @@ class AdVesselNotiController extends ChangeNotifier {
   setVesselProductNames(List<String> names) {
     _vesselProductNames = names;
   }
+  VesselCargoModel? _selectedVesselCargoModelForIndustry;
+  VesselCargoModel? get selectedVesselCargoModelForIndustry => _selectedVesselCargoModelForIndustry;
+  setVesselCargoModelForIndustry(VesselCargoModel? model) {
+    _selectedVesselCargoModelForIndustry = model;
+    notifyListeners();
+  }
+
 }

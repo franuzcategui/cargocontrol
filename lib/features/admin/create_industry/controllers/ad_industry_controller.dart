@@ -59,7 +59,7 @@ class AdIndustryController extends StateNotifier<bool> {
     });
   }
 
-  Stream<IndustryGuideModel> getCurrentIndusry() {
+  Stream<List<IndustryGuideModel>> getCurrentIndusry() {
     return _datasource.getCurrentIndusry();
   }
 

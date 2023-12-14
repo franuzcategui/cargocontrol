@@ -25,7 +25,7 @@ class _AdMainMenuScreenState extends ConsumerState<AdMainMenuScreen> {
   }
   initiallization()async{
     // await ref.read(adVesselProvider.notifier).uploadAllData();
-    await ref.read(adIndustryProvider.notifier).industriesUpload();
+    // await ref.read(adIndustryProvider.notifier).industriesUpload();
   }
 
   @override

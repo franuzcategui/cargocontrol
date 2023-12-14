@@ -91,13 +91,19 @@ class AdDashboardScreen extends ConsumerWidget {
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return ref.watch(fetchCurrentIndustry).when(
                     data: (currentIndustry){
+                      List<IndustrySubModel> models = [];
+                      currentIndustry.forEach((industryGuideModel) {
+                        industryGuideModel.industrySubModels.forEach((industrySubModel) {
+                          models.add(industrySubModel);
+                        });
+                      });
                       return SizedBox(
                         height: 136.h,
                         child: ListView.builder(
-                          itemCount: currentIndustry.industrySubModels.length,
+                          itemCount: models.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
-                            IndustrySubModel model = currentIndustry.industrySubModels[index];
+                            IndustrySubModel model = models[index];
                             return AdProgressIndicatorCard(
                               numberOfTrips: '0',
                               divideNumber2: '${model.cargoUnloaded}',

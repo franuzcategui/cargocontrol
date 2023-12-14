@@ -62,8 +62,9 @@ class _IndustrySectionWidgetState extends ConsumerState<IndustrySectionWidget> {
           labelText: 'Producto (Variedad)',
           onChange: (String val){
             ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((cargo) {
-              if(val == cargo.productName){
+              if(val.split(',')[0] == cargo.productName){
                 widget.cargoIdCtr.text = cargo.cargoId;
+                ref.read(adVesselNotiController).setVesselCargoModelForIndustry(cargo);
               }
             });
           },

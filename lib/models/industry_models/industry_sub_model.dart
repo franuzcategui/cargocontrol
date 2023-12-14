@@ -1,18 +1,20 @@
+import '../vessel_models/vessel_cargo_model.dart';
+
 class IndustrySubModel{
   final String industryId;
   final String industryName;
-  final String productName;
+  final VesselCargoModel selectedVesselCargo;
   final bool finishedUnloading;
-  final double cargoAssigned;
-  final double cargoUnloaded;
-  final double initialGuide;
-  final double lastGuide;
+  final dynamic cargoAssigned;
+  final dynamic cargoUnloaded;
+  final dynamic initialGuide;
+  final dynamic lastGuide;
 
 //<editor-fold desc="Data Methods">
   const IndustrySubModel({
     required this.industryId,
     required this.industryName,
-    required this.productName,
+    required this.selectedVesselCargo,
     required this.finishedUnloading,
     required this.cargoAssigned,
     required this.cargoUnloaded,
@@ -27,7 +29,7 @@ class IndustrySubModel{
           runtimeType == other.runtimeType &&
           industryId == other.industryId &&
           industryName == other.industryName &&
-          productName == other.productName &&
+          selectedVesselCargo == other.selectedVesselCargo &&
           finishedUnloading == other.finishedUnloading &&
           cargoAssigned == other.cargoAssigned &&
           cargoUnloaded == other.cargoUnloaded &&
@@ -38,7 +40,7 @@ class IndustrySubModel{
   int get hashCode =>
       industryId.hashCode ^
       industryName.hashCode ^
-      productName.hashCode ^
+      selectedVesselCargo.hashCode ^
       finishedUnloading.hashCode ^
       cargoAssigned.hashCode ^
       cargoUnloaded.hashCode ^
@@ -50,7 +52,7 @@ class IndustrySubModel{
     return 'IndustrySubModel{' +
         ' industryId: $industryId,' +
         ' industryName: $industryName,' +
-        ' productName: $productName,' +
+        ' selectedVesselCargo: $selectedVesselCargo,' +
         ' finishedUnloading: $finishedUnloading,' +
         ' cargoAssigned: $cargoAssigned,' +
         ' cargoUnloaded: $cargoUnloaded,' +
@@ -62,17 +64,17 @@ class IndustrySubModel{
   IndustrySubModel copyWith({
     String? industryId,
     String? industryName,
-    String? productName,
+    VesselCargoModel? selectedVesselCargo,
     bool? finishedUnloading,
-    double? cargoAssigned,
-    double? cargoUnloaded,
-    double? initialGuide,
-    double? lastGuide,
+    dynamic cargoAssigned,
+    dynamic cargoUnloaded,
+    dynamic initialGuide,
+    dynamic lastGuide,
   }) {
     return IndustrySubModel(
       industryId: industryId ?? this.industryId,
       industryName: industryName ?? this.industryName,
-      productName: productName ?? this.productName,
+      selectedVesselCargo: selectedVesselCargo ?? this.selectedVesselCargo,
       finishedUnloading: finishedUnloading ?? this.finishedUnloading,
       cargoAssigned: cargoAssigned ?? this.cargoAssigned,
       cargoUnloaded: cargoUnloaded ?? this.cargoUnloaded,
@@ -85,7 +87,7 @@ class IndustrySubModel{
     return {
       'industryId': this.industryId,
       'industryName': this.industryName,
-      'productName': this.productName,
+      'selectedVesselCargo': this.selectedVesselCargo.toMap(),
       'finishedUnloading': this.finishedUnloading,
       'cargoAssigned': this.cargoAssigned,
       'cargoUnloaded': this.cargoUnloaded,
@@ -98,12 +100,12 @@ class IndustrySubModel{
     return IndustrySubModel(
       industryId: map['industryId'] as String,
       industryName: map['industryName'] as String,
-      productName: map['productName'] as String,
+      selectedVesselCargo: VesselCargoModel.fromMap(map['selectedVesselCargo'] as Map<String, dynamic>),
       finishedUnloading: map['finishedUnloading'] as bool,
-      cargoAssigned: map['cargoAssigned'] as double,
-      cargoUnloaded: map['cargoUnloaded'] as double,
-      initialGuide: map['initialGuide'] as double,
-      lastGuide: map['lastGuide'] as double,
+      cargoAssigned: map['cargoAssigned'] as dynamic,
+      cargoUnloaded: map['cargoUnloaded'] as dynamic,
+      initialGuide: map['initialGuide'] as dynamic,
+      lastGuide: map['lastGuide'] as dynamic,
     );
   }
 

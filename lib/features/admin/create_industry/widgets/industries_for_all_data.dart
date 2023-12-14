@@ -39,11 +39,11 @@ class IndustriesForAllData extends StatelessWidget {
             ),
             CustomTile(
               title: 'Producto (Variedad)',
-              subText: model.productName.toString(),
+              subText: '${model.selectedVesselCargo.productName }, ${model.selectedVesselCargo.variety }, ${model.selectedVesselCargo.cosecha }, ${model.selectedVesselCargo.tipo } '
             ),
             CustomTile(
               title: 'Carga',
-              subText: '6991105',
+              subText: model.cargoAssigned.toString(),
             ),
           ],
         );

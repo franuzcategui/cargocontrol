@@ -1,6 +1,5 @@
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/utils/constants/assets_manager.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../utils/constants/font_manager.dart';
 import '../common_imports/common_libs.dart';

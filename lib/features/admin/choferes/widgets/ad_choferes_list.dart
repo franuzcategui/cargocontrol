@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cargocontrol/common_widgets/cargo_card.dart';
 import 'package:cargocontrol/common_widgets/loading_sheet.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
@@ -40,6 +42,13 @@ class _AdChoferesListState extends ConsumerState<AdChoferesList> {
       choferesNotiCtr.getAllChoferes();
     }
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {

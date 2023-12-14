@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cargocontrol/features/admin/choferes/data/apis/choferes_apis.dart';
 import 'package:cargocontrol/models/industry_models/industries_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -57,6 +59,7 @@ class ChoferesNotiController extends ChangeNotifier {
     notifyListeners();
   }
 
+
   Future getAllChoferes()async{
     setSecondaryLoading(true);
     QuerySnapshot querySnapshot = await _datasource.getAllChoferes(limit: limit, snapshot: _lastSnapshot);
@@ -66,7 +69,7 @@ class ChoferesNotiController extends ChangeNotifier {
       var model = ChoferesModel.fromMap(document.data() as Map<String, dynamic>);
       _choferesModels.add(model);
     }
-    // _choferesModels.add(models);
+
     if (querySnapshot.docs.isNotEmpty) {
       _lastSnapshot = querySnapshot.docs.last;
       _limit = _limit+10;

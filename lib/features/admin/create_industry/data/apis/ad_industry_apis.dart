@@ -21,7 +21,7 @@ abstract class AdIndustryApisImplements {
   FutureEitherVoid createIndustryGuideModel({required IndustryGuideModel industryModel});
   FutureEitherVoid uploadIndustries({required IndustriesModel industryModell});
   FutureEither<List<IndustriesModel>> getAllIndustries();
-  Stream<IndustryGuideModel> getCurrentIndusry();
+  Stream<List<IndustryGuideModel>> getCurrentIndusry();
 }
 
 class AdIndustryApis implements AdIndustryApisImplements{
@@ -45,12 +45,15 @@ class AdIndustryApis implements AdIndustryApisImplements{
   }
 
   @override
-  Stream<IndustryGuideModel> getCurrentIndusry(){
+  Stream<List<IndustryGuideModel>> getCurrentIndusry(){
     return _firestore.collection(FirebaseConstants.industryGuideCollection).
     snapshots().
     map((event) {
-      var model = IndustryGuideModel.fromMap(event.docs.first.data());
-      return model;
+      List<IndustryGuideModel> models = [];
+      event.docs.forEach((element) {
+        models.add(IndustryGuideModel.fromMap(event.docs.first.data()));
+      });
+      return models;
     });
   }
 
