@@ -16,7 +16,7 @@ final adIndustryProvider = StateNotifierProvider<AdIndustryController, bool>((re
 
 final fetchCurrentIndustry = StreamProvider((ref) {
   final industryProvider = ref.watch(adIndustryProvider.notifier);
-  return industryProvider.getCurrentIndusry();
+  return industryProvider.getAllIndustrySubModels();
 });
 
 
@@ -29,19 +29,11 @@ class AdIndustryController extends StateNotifier<bool> {
 
   Future<void> createIndustryGuideModel({
     required List<IndustrySubModel> industrySubModels,
-    required String vesselId,
     required WidgetRef ref,
     required BuildContext context,
   }) async {
     state = true;
-    final String indusrtyGuideId = const Uuid().v4();
-    IndustryGuideModel industryGuideModel = IndustryGuideModel(
-        vesselId: vesselId,
-        indusrtyGuideId: indusrtyGuideId,
-        industrySubModels: industrySubModels
-    );
-    final result = await _datasource.createIndustryGuideModel(industryModel: industryGuideModel);
-
+    final result = await _datasource.createIndustryGuideModel(industrySubModels: industrySubModels);
     result.fold((l) {
       state = false;
       showSnackBar(context: context, content: l.message);
@@ -50,6 +42,7 @@ class AdIndustryController extends StateNotifier<bool> {
       Navigator.pushNamed(context, AppRoutes.registrationSuccessFullScreen);
       showSnackBar(context: context, content: 'Industry Created!');
     });
+
     state = false;
   }
 
@@ -59,8 +52,8 @@ class AdIndustryController extends StateNotifier<bool> {
     });
   }
 
-  Stream<List<IndustryGuideModel>> getCurrentIndusry() {
-    return _datasource.getCurrentIndusry();
+  Stream<List<IndustrySubModel>> getAllIndustrySubModels() {
+    return _datasource.getAllIndustrySubModels();
   }
 
   List<IndustriesModel> industriesModels = const[

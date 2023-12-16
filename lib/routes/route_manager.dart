@@ -137,7 +137,6 @@ class AppRoutes {
         return _buildRoute(
             CreateIndustryCompleteDataScreen(
               industrySubModels: args['industrySubModels'],
-              vesselId: args['vesselId'],
             ),
         );
 
@@ -158,7 +157,12 @@ class AppRoutes {
       case registerTruckEnteringScreen:
         return _buildRoute(const RegisterTruckEnteringScreen());
       case coTruckInfoScreen:
-        return _buildRoute(const CoTruckInfoScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+        CoTruckInfoScreen(
+          guideNumber: args['guideNumber'],
+        ),
+        );
       case coTruckBriefScreen:
         return _buildRoute(const CoTruckBriefScreen());
       case coTruckLeavingBriefScreen:

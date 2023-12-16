@@ -14,8 +14,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:cargocontrol/features/dashboard/components/dashboard_button_modal.dart';
 
+import '../../../../models/industry_models/industry_sub_model.dart';
+import '../../../admin/create_industry/controllers/ad_industry_controller.dart';
+import '../../../auth/controllers/auth_notifier_controller.dart';
 import '../widgets/co_dashboard_mini_card.dart';
 import '../widgets/co_floating_action_sheet.dart';
+import '../widgets/co_progress_dashboard_card.dart';
 import '../widgets/co_recent_record_card.dart';
 
 class CoDashboardScreen extends ConsumerWidget {
@@ -40,9 +44,16 @@ class CoDashboardScreen extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15),
-              child: Text(
-                'userType',
-                style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+              child: Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  final userModel = ref.read(authNotifierCtr).userModel;
+                  print(userModel?.uid);
+                  return Text(userModel!.accountType.type,
+                    style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+                  );
+
+                },
+
               ),
             ),
             SizedBox(
@@ -63,19 +74,58 @@ class CoDashboardScreen extends ConsumerWidget {
               height: 136.h,
               child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: const <ProgressIndicatorCard>[
-                    ProgressIndicatorCard(),
-                    ProgressIndicatorCard(),
+                  children: const [
+                    CoProgressIndicatorCard(
+                      numberOfTrips: '0',
+                      divideNumber2: '0',
+                      divideNumber1: '0',
+                      barPercentage: 0,
+                      title: 'Descarga total',
+                    ),
+                    CoProgressIndicatorCard(
+                      numberOfTrips: '0',
+                      divideNumber2: '0',
+                      divideNumber1: '0',
+                      barPercentage: 0,
+                      title: 'Bodega # 1 ',
+                    ),
                   ]),
             ),
-            SizedBox(
-              height: 136.h,
-              child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: const <ProgressIndicatorCard>[
-                    ProgressIndicatorCard(),
-                    ProgressIndicatorCard(),
-                  ]),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return ref.watch(fetchCurrentIndustry).when(
+                    data: (allIndustries){
+
+                      return SizedBox(
+                        height: 136.h,
+                        child: ListView.builder(
+                          itemCount: allIndustries.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            IndustrySubModel model = allIndustries[index];
+                            return CoProgressIndicatorCard(
+                              numberOfTrips: '0',
+                              divideNumber2: '${model.cargoUnloaded}',
+                              divideNumber1: '${model.cargoAssigned}',
+                              barPercentage: model.cargoUnloaded!= 0? model.cargoAssigned/model.cargoUnloaded: 0,
+                              title: 'Industria #${index+1}',
+                            );
+                          },
+
+                        ),
+                      );
+                    },
+                    error: (error, st){
+                      debugPrintStack(stackTrace: st);
+                      debugPrint(error.toString());
+                      return const SizedBox();
+                    },
+                    loading: (){
+                      return const SizedBox();
+                    }
+                );
+              },
+
             ),
             SizedBox(
               height: 116.h,

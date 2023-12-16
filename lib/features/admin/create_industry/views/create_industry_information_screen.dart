@@ -182,6 +182,8 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                           for (var section in _industryControllers) {
                             final industryId = Uuid().v4();
                             IndustrySubModel model = IndustrySubModel(
+                              vesselId: ref.read(adVesselNotiController).vesselModel?.vesselId ?? '',
+                              vesselName: ref.read(adVesselNotiController).vesselModel?.vesselName ?? '',
                               industryId: industryId,
                               industryName: section.nameCtr.text,
                               selectedVesselCargo: ref.read(adVesselNotiController).selectedVesselCargoModelForIndustry!,
@@ -199,7 +201,6 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                               context,
                               AppRoutes.adminCreateIndustryCompleteDataScreen,
                               arguments: {
-                                'vesselId' : ref.read(adVesselNotiController).vesselModel?.vesselId ?? '',
                                 'industrySubModels' : industrySubModels,
                               }
                           );

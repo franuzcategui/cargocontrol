@@ -1,3 +1,4 @@
+import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
@@ -15,6 +16,17 @@ class CoMainMenuScreen extends ConsumerStatefulWidget {
 }
 
 class _CoMainMenuScreenState extends ConsumerState<CoMainMenuScreen> {
+
+
+  @override
+  void initState() {
+    super.initState();
+    initiallize();
+  }
+
+  initiallize()async{
+    await ref.read(truckRegistrationNotiApiProvider).getAllIndustriesModel();
+  }
 
 
   @override

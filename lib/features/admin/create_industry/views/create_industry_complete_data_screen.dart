@@ -13,9 +13,8 @@ import '../widgets/industries_for_all_data.dart';
 import '../widgets/info_preliminar_widget.dart';
 
 class CreateIndustryCompleteDataScreen extends ConsumerStatefulWidget {
-  final String vesselId;
   final List<IndustrySubModel> industrySubModels;
-  const CreateIndustryCompleteDataScreen({Key? key, required this.vesselId, required this.industrySubModels}) : super(key: key);
+  const CreateIndustryCompleteDataScreen({Key? key,  required this.industrySubModels}) : super(key: key);
 
   @override
   ConsumerState<CreateIndustryCompleteDataScreen> createState() => _CreateIndustryCompleteDataScreenState();
@@ -65,7 +64,6 @@ class _CreateIndustryCompleteDataScreenState extends ConsumerState<CreateIndustr
                           onPressed: (){
                             ref.read(adIndustryProvider.notifier).createIndustryGuideModel(
                                 industrySubModels: widget.industrySubModels,
-                                vesselId: widget.vesselId,
                                 ref: ref,
                                 context: context
                             );

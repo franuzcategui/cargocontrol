@@ -16,6 +16,8 @@ class FirebaseConstants {
 
   static String choferesCollection = 'choferes-collection';
 
+  static String viajesCollection = 'viajes-collection';
+
 
 
   // Storage Names

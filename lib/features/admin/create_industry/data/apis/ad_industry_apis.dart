@@ -1,5 +1,6 @@
 import 'package:cargocontrol/models/industry_models/industries_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_guide_model.dart';
+import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/vessel_models/origin_model.dart';
 import 'package:cargocontrol/models/vessel_models/product_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
@@ -18,10 +19,11 @@ final adIndustryApiProvider = Provider<AdIndustryApisImplements>((ref){
 
 abstract class AdIndustryApisImplements {
 
-  FutureEitherVoid createIndustryGuideModel({required IndustryGuideModel industryModel});
+  FutureEitherVoid createIndustryGuideModel({required List<IndustrySubModel> industrySubModels});
   FutureEitherVoid uploadIndustries({required IndustriesModel industryModell});
   FutureEither<List<IndustriesModel>> getAllIndustries();
-  Stream<List<IndustryGuideModel>> getCurrentIndusry();
+  Stream<List<IndustrySubModel>> getAllIndustrySubModels();
+  FutureEither<List<IndustrySubModel>> numberOfIndustriesCheck() ;
 }
 
 class AdIndustryApis implements AdIndustryApisImplements{
@@ -30,12 +32,13 @@ class AdIndustryApis implements AdIndustryApisImplements{
 
 
   @override
-  FutureEitherVoid createIndustryGuideModel({required IndustryGuideModel industryModel}) async{
+  FutureEitherVoid createIndustryGuideModel({required List<IndustrySubModel> industrySubModels}) async{
     try{
-      await _firestore.collection(FirebaseConstants.industryGuideCollection).
-      doc(industryModel.indusrtyGuideId).
-      set(industryModel.toMap());
-
+      industrySubModels.forEach((industrySubModel) async{
+        await _firestore.collection(FirebaseConstants.industryGuideCollection).
+        doc(industrySubModel.industryId).
+        set(industrySubModel.toMap());
+      });
       return const Right(null);
     }on FirebaseException catch(e, stackTrace){
       return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
@@ -45,16 +48,35 @@ class AdIndustryApis implements AdIndustryApisImplements{
   }
 
   @override
-  Stream<List<IndustryGuideModel>> getCurrentIndusry(){
+  Stream<List<IndustrySubModel>> getAllIndustrySubModels(){
     return _firestore.collection(FirebaseConstants.industryGuideCollection).
     snapshots().
     map((event) {
-      List<IndustryGuideModel> models = [];
+      List<IndustrySubModel> models = [];
       event.docs.forEach((element) {
-        models.add(IndustryGuideModel.fromMap(event.docs.first.data()));
+        models.add(IndustrySubModel.fromMap(element.data()));
       });
       return models;
     });
+  }
+
+  @override
+  FutureEither<List<IndustrySubModel>> numberOfIndustriesCheck() async {
+    try {
+      var querySnapshot = await _firestore.collection(FirebaseConstants.industriesCollection).get();
+
+      List<IndustrySubModel> models = [];
+      for (var document in querySnapshot.docs) {
+        var model = IndustrySubModel.fromMap(document.data());
+        models.add(model);
+      }
+
+      return Right(models);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    } catch (e, stackTrace) {
+      return Left(Failure(e.toString(), stackTrace));
+    }
   }
 
   @override
