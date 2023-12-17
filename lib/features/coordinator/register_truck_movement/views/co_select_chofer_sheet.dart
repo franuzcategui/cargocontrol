@@ -110,7 +110,7 @@ class _CoSelectChoferScreenState extends ConsumerState<CoSelectChoferScreen> {
                             ChoferesModel model = choferesNotiCtr.choferesModels[index];
                             return GestureDetector(
                               onTap: (){
-                                ref.read(truckRegistrationNotiApiProvider).setSelectedChofere(model);
+                                ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(model);
                                 widget.selectChofer('${model.firstName} - ID ${model.choferNationalId}');
                                 Navigator.pop(context);
                               },

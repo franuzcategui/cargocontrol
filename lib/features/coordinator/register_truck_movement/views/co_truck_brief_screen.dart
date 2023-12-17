@@ -50,7 +50,7 @@ class _CoTruckBriefScreenState extends ConsumerState<CoTruckBriefScreen> {
                   SizedBox(height: 28.h,),
                   Consumer(
                     builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                      final truckNotiCtr = ref.read(truckRegistrationNotiApiProvider);
+                      final truckNotiCtr = ref.read(truckRegistrationNotiControllerProvider);
                       return Column(
                         children: [
                           CoPreliminarInfoWidget(
@@ -86,6 +86,8 @@ class _CoTruckBriefScreenState extends ConsumerState<CoTruckBriefScreen> {
                                         industryId: truckNotiCtr.selectedIndustry?.industryId ?? '',
                                         choferesname: truckNotiCtr.selectedChofere?.firstName?? '',
                                         choferesId: truckNotiCtr.selectedChofere?.choferNationalId?? '',
+                                        industrySubModel: truckNotiCtr.selectedIndustry!,
+                                        cargoId: truckNotiCtr.selectedIndustry?.selectedVesselCargo.cargoId ?? '',
                                         ref: ref,
                                         context: context
                                     );

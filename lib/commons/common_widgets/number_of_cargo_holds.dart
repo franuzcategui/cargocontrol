@@ -5,7 +5,8 @@ import '../../utils/constants/font_manager.dart';
 
 class NumberOfCargoHoldsWidget extends StatefulWidget {
   final Function(int val) seletedCargosNumber;
-  const NumberOfCargoHoldsWidget({Key? key, required this.seletedCargosNumber, }) : super(key: key);
+  final int? numberOfCargoHolds;
+  const NumberOfCargoHoldsWidget({Key? key, required this.seletedCargosNumber, this.numberOfCargoHolds, }) : super(key: key);
 
   @override
   State<NumberOfCargoHoldsWidget> createState() => _NumberOfCargoHoldsWidgetState();
@@ -23,7 +24,7 @@ class _NumberOfCargoHoldsWidgetState extends State<NumberOfCargoHoldsWidget> {
         SizedBox(height: 10.h,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(5, (index){
+          children: List.generate(widget.numberOfCargoHolds ?? 5, (index){
             bool isSelected = selectedValue == index;
             return  GestureDetector(
               onTap: (){

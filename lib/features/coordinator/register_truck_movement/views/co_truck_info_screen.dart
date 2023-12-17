@@ -63,7 +63,7 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Consumer(
                   builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                    IndustrySubModel model = ref.read(truckRegistrationNotiApiProvider).selectedIndustry!;
+                    IndustrySubModel model = ref.read(truckRegistrationNotiControllerProvider).selectedIndustry!;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -161,6 +161,7 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                             onChanged: (val){},
                             onFieldSubmitted: (val){},
                             obscure: false,
+                            inputType: TextInputType.number,
                             label: 'Peso tara'
                         ),
                         SizedBox(

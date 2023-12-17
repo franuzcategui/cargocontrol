@@ -5,7 +5,12 @@ import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../utils/constants/font_manager.dart';
 
 class CoTruckInfoLeavingWidget extends StatelessWidget {
-  const CoTruckInfoLeavingWidget({Key? key}) : super(key: key);
+  final String plateNumber;
+  final String chofereName;
+  final String truckWeight;
+  final String totalWeight;
+  final String bogedaId;
+  const CoTruckInfoLeavingWidget({Key? key, required this.plateNumber, required this.chofereName, required this.truckWeight, required this.totalWeight, required this.bogedaId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,25 +22,25 @@ class CoTruckInfoLeavingWidget extends StatelessWidget {
           fontSize: MyFonts.size14,
         ),),
         SizedBox(height: 28.h,),
-        const CustomTile(
+        CustomTile(
             title: "Placa",
-            subText: "135526"
+            subText: plateNumber
         ),
-        const CustomTile(
+        CustomTile(
             title: "Nombre de chofer",
-            subText: "Juan Perez."
+            subText: chofereName
         ),
-        const CustomTile(
+        CustomTile(
             title: "Peso tara",
-            subText: "12690"
+            subText: truckWeight
         ),
-        const CustomTile(
+        CustomTile(
             title: "Peso bruto",
-            subText: "40,340"
+            subText: totalWeight
         ),
-        const CustomTile(
-            title: "Número de bodega",
-            subText: "4"
+        CustomTile(
+            title: "Bodega ID",
+            subText: bogedaId
         ),
       ],
     );

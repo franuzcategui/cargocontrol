@@ -174,7 +174,11 @@ class AppRoutes {
             ),
         );
       case coTruckLeavingBriefScreen:
-        return _buildRoute(const CoTruckLeavingBriefScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(CoTruckLeavingBriefScreen(
+          fullTruckWeight: args['fullTruckWeight'],
+          pureCargoWeight: args['pureCargoWeight'],
+        ));
       case coRegistrationSuccessFullScreen:
         return _buildRoute(const CoRegistrationSuccessFullScreen());
       case registerTruckLeavingScreen:

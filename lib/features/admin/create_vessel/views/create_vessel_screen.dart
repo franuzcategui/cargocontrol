@@ -15,7 +15,7 @@ import '../../../../commons/common_widgets/common_datpicker.dart';
 import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../../../../commons/common_widgets/custom_dropdown.dart';
-import '../../../../commons/common_widgets/wine_celler_widget.dart';
+import '../../../../commons/common_widgets/number_of_cargo_holds.dart';
 import '../controllers/ad_vessel_noti_controller.dart';
 
 class CreateVesselScreen extends ConsumerStatefulWidget {

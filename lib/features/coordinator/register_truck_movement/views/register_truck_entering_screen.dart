@@ -93,11 +93,11 @@ class _RegisterTruckEnteringScreenState extends ConsumerState<RegisterTruckEnter
                   builder: (BuildContext context, WidgetRef ref, Widget? child) {
                     return CustomButton(
                       buttonText:  'CONTINUAR',
-                      isLoading: ref.watch(truckRegistrationNotiApiProvider).isLoading,
+                      isLoading: ref.watch(truckRegistrationNotiControllerProvider).isLoading,
                       onPressed: ()async{
                         if(keyPadTextFieldController.text.isNotEmpty){
-                          await ref.read(truckRegistrationNotiApiProvider).getIndusytryFromGuideNumber(guideNumber: double.parse(keyPadTextFieldController.text));
-                          if(ref.read(truckRegistrationNotiApiProvider).industryMatched){
+                          await ref.read(truckRegistrationNotiControllerProvider).getIndusytryFromGuideNumber(guideNumber: double.parse(keyPadTextFieldController.text));
+                          if(ref.read(truckRegistrationNotiControllerProvider).industryMatched){
                             Navigator.pushNamed(context, AppRoutes.coTruckInfoScreen, arguments: {
                               'guideNumber': double.parse(keyPadTextFieldController.text)
                             });

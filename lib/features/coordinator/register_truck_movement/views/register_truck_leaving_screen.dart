@@ -1,9 +1,12 @@
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
+import 'package:cargocontrol/commons/common_widgets/show_toast.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/assets_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:numeric_keyboard/numeric_keyboard.dart';
 import '../../../../commons/common_widgets/text_detector_view.dart';
@@ -107,11 +110,26 @@ class _RegisterTruckLeavingScreenState extends State<RegisterTruckLeavingScreen>
                     keyPadTextFieldController.text = '';
                   },
                 ),
-                CustomButton(
-                  buttonText:  'CONTINUAR',
-                  onPressed: (){
-                    Navigator.pushNamed(context, AppRoutes.coTruckLeavingInformationScreen);
+                Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                    return CustomButton(
+                      buttonText:  'CONTINUAR',
+                      isLoading: ref.watch(truckRegistrationNotiControllerProvider).isLoading,
+                      onPressed: ()async{
+                        if(keyPadTextFieldController.text.isNotEmpty){
+                          await ref.read(truckRegistrationNotiControllerProvider).
+                          getMatchedViajes(
+                            plateNumber: keyPadTextFieldController.text,
+                            context: context,
+                            ref: ref,
+                          );
+                        }else{
+                          showSnackBar(context: context, content: 'Enter Plate Number!');
+                        }
+                      },
+                    );
                   },
+
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).padding.bottom,
