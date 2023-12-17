@@ -88,6 +88,7 @@ class _CoTruckLeavingBriefScreenState extends ConsumerState<CoTruckLeavingBriefS
                                 context: context
                             );
                           },
+                          isLoading: ref.watch(truckRegistrationControllerProvider),
                           buttonText: "CONFIRMAR"
                       ),
                     ],

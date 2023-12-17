@@ -142,12 +142,18 @@ class TruckRegistrationController extends StateNotifier<bool> {
       pureCargoWeight: pureCargoWeight,
       viajesStatusEnum: ViajesStatusEnum.portLeft
     );
+    VesselCargoModel vesselCargo = newCargoModel.copyWith(
+      pesoUnloaded: pureCargoWeight
+    );
 
-    VesselModel vessel = updateCargoModel(originalModel: vesselModel, updatedCargoModel: newCargoModel);
+    VesselModel vessel = updateCargoModel(originalModel: vesselModel, updatedCargoModel: vesselCargo);
+    VesselModel vesselUpdate = vessel.copyWith(
+      cargoUnloadedWeight: vessel.totalCargoWeight-pureCargoWeight
+    );
 
     final result = await _datasource.registerTruckLeavingFromPort(
-        viajesModel: viajesModel,
-        vesselModel: vessel
+        viajesModel: model,
+        vesselModel: vesselUpdate
     );
 
     result.fold((l) {
@@ -158,8 +164,6 @@ class TruckRegistrationController extends StateNotifier<bool> {
     }, (r) async{
       state = false;
       Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
-      ref.read(truckRegistrationNotiControllerProvider).setIndustryMatchedStatus(false);
-      ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(null);
       showSnackBar(context: context, content: 'Viajes Registered!');
       await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
     });
