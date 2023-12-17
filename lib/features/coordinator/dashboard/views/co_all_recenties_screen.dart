@@ -32,6 +32,9 @@ class CoAllRecentiesScreen extends StatelessWidget {
                     child: CoRecentRecordCard(
                       isEntered: index %2 ==0 ? true : false,
                       isLeaving:  index %2 !=0 ? true : false,
+                      portEntryTime: DateTime.now(),
+                      driverName: 'chofere',
+                      guideNumber: '00000',
                     ),
                   );
                 },

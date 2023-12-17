@@ -164,7 +164,15 @@ class AppRoutes {
         ),
         );
       case coTruckBriefScreen:
-        return _buildRoute(const CoTruckBriefScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            CoTruckBriefScreen(
+              guideNumber: args['guideNumber'],
+              plateNumber: args['plateNumber'],
+              marchamo: args['marchamo'],
+              emptyTruckWeight: args['emptyTruckWeight'],
+            ),
+        );
       case coTruckLeavingBriefScreen:
         return _buildRoute(const CoTruckLeavingBriefScreen());
       case coRegistrationSuccessFullScreen:

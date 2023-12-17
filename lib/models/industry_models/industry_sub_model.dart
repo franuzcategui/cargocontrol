@@ -7,6 +7,7 @@ class IndustrySubModel{
   final String vesselName;
   final VesselCargoModel selectedVesselCargo;
   final bool finishedUnloading;
+  final List<dynamic> usedGuideNumbers;
   final dynamic cargoAssigned;
   final dynamic cargoUnloaded;
   final dynamic initialGuide;
@@ -23,6 +24,7 @@ class IndustrySubModel{
     required this.cargoAssigned,
     required this.cargoUnloaded,
     required this.initialGuide,
+    required this.usedGuideNumbers,
     required this.lastGuide,
   });
 
@@ -40,6 +42,7 @@ class IndustrySubModel{
           cargoAssigned == other.cargoAssigned &&
           cargoUnloaded == other.cargoUnloaded &&
           initialGuide == other.initialGuide &&
+          usedGuideNumbers == other.usedGuideNumbers &&
           lastGuide == other.lastGuide);
 
   @override
@@ -53,6 +56,7 @@ class IndustrySubModel{
       cargoAssigned.hashCode ^
       cargoUnloaded.hashCode ^
       initialGuide.hashCode ^
+      usedGuideNumbers.hashCode ^
       lastGuide.hashCode;
 
   @override
@@ -67,6 +71,7 @@ class IndustrySubModel{
         ' cargoAssigned: $cargoAssigned,' +
         ' cargoUnloaded: $cargoUnloaded,' +
         ' initialGuide: $initialGuide,' +
+        ' usedGuideNumbers: $usedGuideNumbers,' +
         ' lastGuide: $lastGuide,' +
         '}';
   }
@@ -78,6 +83,7 @@ class IndustrySubModel{
     String? vesselName,
     VesselCargoModel? selectedVesselCargo,
     bool? finishedUnloading,
+    List<dynamic>? usedGuideNumbers,
     dynamic cargoAssigned,
     dynamic cargoUnloaded,
     dynamic initialGuide,
@@ -93,6 +99,7 @@ class IndustrySubModel{
       cargoAssigned: cargoAssigned ?? this.cargoAssigned,
       cargoUnloaded: cargoUnloaded ?? this.cargoUnloaded,
       initialGuide: initialGuide ?? this.initialGuide,
+      usedGuideNumbers: usedGuideNumbers ?? this.usedGuideNumbers,
       lastGuide: lastGuide ?? this.lastGuide,
     );
   }
@@ -108,6 +115,7 @@ class IndustrySubModel{
       'cargoAssigned': this.cargoAssigned,
       'cargoUnloaded': this.cargoUnloaded,
       'initialGuide': this.initialGuide,
+      'usedGuideNumbers': this.usedGuideNumbers,
       'lastGuide': this.lastGuide,
     };
   }
@@ -118,6 +126,7 @@ class IndustrySubModel{
       industryId: map['industryId'] as String,
       vesselName: map['vesselName'] as String,
       industryName: map['industryName'] as String,
+      usedGuideNumbers: map['usedGuideNumbers'] as List<dynamic>,
       selectedVesselCargo: VesselCargoModel.fromMap(map['selectedVesselCargo'] as Map<String, dynamic>),
       finishedUnloading: map['finishedUnloading'] as bool,
       cargoAssigned: map['cargoAssigned'] as dynamic,
@@ -126,6 +135,5 @@ class IndustrySubModel{
       lastGuide: map['lastGuide'] as dynamic,
     );
   }
-
 //</editor-fold>
 }

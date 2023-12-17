@@ -2,16 +2,17 @@ import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../models/choferes_models/choferes_model.dart';
 import '../data/apis/truck_registration_apis.dart';
 
 final truckRegistrationNotiApiProvider = ChangeNotifierProvider((ref){
   final api = ref.watch(truckRegistrationApisProvider);
-  return AdIndustryNotiController(datasource: api);
+  return TruckRegistrationNotiController(datasource: api);
 });
 
-class AdIndustryNotiController extends ChangeNotifier {
+class TruckRegistrationNotiController extends ChangeNotifier {
   final TruckRegistrationApisImplements _datasource;
-  AdIndustryNotiController({required TruckRegistrationApisImplements datasource,})
+  TruckRegistrationNotiController({required TruckRegistrationApisImplements datasource,})
       : _datasource = datasource,
         super();
 
@@ -37,9 +38,15 @@ class AdIndustryNotiController extends ChangeNotifier {
   IndustrySubModel? get selectedIndustry => _selectedIndustry;
   getIndusytryFromGuideNumber({required double guideNumber})async{
     setLoading(true);
-    if(allIndustriesModels.length!= 0){
-      for(int index =0; index<= _allIndustriesModels.length; index++){
-        if(guideNumber >= _allIndustriesModels[index].initialGuide && guideNumber <= _allIndustriesModels[index].lastGuide){
+    if(allIndustriesModels.length != 0){
+      for(int index =0; index< _allIndustriesModels.length; index++){
+        print(_allIndustriesModels.length);
+        print(index);
+        if(
+        guideNumber >= _allIndustriesModels[index].initialGuide &&
+            guideNumber <= _allIndustriesModels[index].lastGuide &&
+            !_allIndustriesModels[index].usedGuideNumbers.contains(guideNumber)
+        ){
           _selectedIndustry = _allIndustriesModels[index];
           setIndustryMatchedStatus(true);
           break;
@@ -50,8 +57,12 @@ class AdIndustryNotiController extends ChangeNotifier {
       setLoading(false);
     }else{
       await getAllIndustriesModel();
-      for(int index =0; index<= _allIndustriesModels.length; index++){
-        if(guideNumber >= _allIndustriesModels[index].initialGuide && guideNumber <= _allIndustriesModels[index].lastGuide){
+      for(int index =0; index< _allIndustriesModels.length; index++){
+        if(
+        guideNumber >= _allIndustriesModels[index].initialGuide &&
+        guideNumber <= _allIndustriesModels[index].lastGuide &&
+        !_allIndustriesModels[index].usedGuideNumbers.contains(guideNumber)
+        ){
           _selectedIndustry = _allIndustriesModels[index];
           setIndustryMatchedStatus(true);
           break;
@@ -80,4 +91,13 @@ class AdIndustryNotiController extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
+  ChoferesModel? _selectedChofere;
+  ChoferesModel? get selectedChofere=> _selectedChofere;
+
+  setSelectedChofere(ChoferesModel? snapshot) {
+    _selectedChofere = snapshot;
+    notifyListeners();
+  }
 }

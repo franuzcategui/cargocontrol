@@ -125,7 +125,8 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                             onChanged: (val){},
                             onFieldSubmitted: (val){},
                             obscure: false,
-                            label: 'Marchamo'
+                            label: 'Marchamo',
+                          inputType: TextInputType.number,
                         ),
 
                         CustomTextField(
@@ -140,6 +141,8 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                           onTap: (){
                             bottomSheetComponent(
                               context,
+                              adjustSizeOnOpenKeyboard: true,
+                              height: 750.h,
                               CoSelectChoferScreen(
                                 selectChofer: (String name){
                                   setState(() {
@@ -166,7 +169,16 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                         Center(
                           child: CustomButton(
                               onPressed: (){
-                                Navigator.pushNamed(context, AppRoutes.coTruckBriefScreen);
+                                Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.coTruckBriefScreen,
+                                  arguments: {
+                                    'guideNumber': widget.guideNumber,
+                                    'plateNumber': scanCtr.text,
+                                    'marchamo': double.parse(labelCtr.text),
+                                    'emptyTruckWeight': double.parse(emptyTruckWeightCtr.text),
+                                  }
+                                );
                               },
                               buttonText: 'CONTINUAR'
                           ),

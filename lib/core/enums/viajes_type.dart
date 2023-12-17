@@ -10,7 +10,7 @@ enum ViajesTypeEnum{
 
 // using an extension
 // enhanced enums
-extension ConvertAccountType on String{
+extension ConvertViajesTypeEnum on String{
   ViajesTypeEnum toViajesTypeEnum(){
     switch(this){
       case 'all':

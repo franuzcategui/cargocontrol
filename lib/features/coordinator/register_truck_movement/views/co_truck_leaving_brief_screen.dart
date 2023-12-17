@@ -39,7 +39,11 @@ class _CoTruckLeavingBriefScreenState extends State<CoTruckLeavingBriefScreen> {
                   SizedBox(height: 14.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const CoPreliminarInfoWidget(),
+                  CoPreliminarInfoWidget(
+                    guideNumber: 0.0,
+                    industryName: '',
+                    vesselName: '',
+                  ),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),

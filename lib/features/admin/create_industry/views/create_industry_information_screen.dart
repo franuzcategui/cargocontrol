@@ -184,6 +184,7 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                             IndustrySubModel model = IndustrySubModel(
                               vesselId: ref.read(adVesselNotiController).vesselModel?.vesselId ?? '',
                               vesselName: ref.read(adVesselNotiController).vesselModel?.vesselName ?? '',
+                              usedGuideNumbers: [],
                               industryId: industryId,
                               industryName: section.nameCtr.text,
                               selectedVesselCargo: ref.read(adVesselNotiController).selectedVesselCargoModelForIndustry!,

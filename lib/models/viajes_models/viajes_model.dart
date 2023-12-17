@@ -1,3 +1,4 @@
+import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_type.dart';
 
 class ViajesModel{
@@ -13,11 +14,13 @@ class ViajesModel{
   final DateTime timeToIndustry;
   final DateTime unloadingTimeInIndustry;
   final double guideNumber;
-  final int industryId;
-  final int chofereId;
+  final String industryId;
+  final String chofereId;
+  final String chofereName;
   final String licensePlate;
   final String cargoId;
   final ViajesTypeEnum viajesTypeEnum;
+  final ViajesStatusEnum viajesStatusEnum;
 
 //<editor-fold desc="Data Methods">
   const ViajesModel({
@@ -34,10 +37,12 @@ class ViajesModel{
     required this.guideNumber,
     required this.industryId,
     required this.chofereId,
+    required this.chofereName,
     required this.licensePlate,
     required this.cargoId,
     required this.viajesId,
     required this.viajesTypeEnum,
+    required this.viajesStatusEnum,
   });
 
   @override
@@ -51,6 +56,7 @@ class ViajesModel{
           exitTimeTruckWeightToPort == other.exitTimeTruckWeightToPort &&
           uploadingTime == other.uploadingTime &&
           pureCargoWeight == other.pureCargoWeight &&
+          chofereName == other.chofereName &&
           cargoUnloadWeight == other.cargoUnloadWeight &&
           cargoDeficitWeight == other.cargoDeficitWeight &&
           timeToIndustry == other.timeToIndustry &&
@@ -61,6 +67,7 @@ class ViajesModel{
           licensePlate == other.licensePlate &&
           cargoId == other.cargoId &&
           viajesId == other.viajesId &&
+          viajesStatusEnum == other.viajesStatusEnum &&
           viajesTypeEnum == other.viajesTypeEnum);
 
   @override
@@ -70,6 +77,7 @@ class ViajesModel{
       exitTimeToPort.hashCode ^
       exitTimeTruckWeightToPort.hashCode ^
       uploadingTime.hashCode ^
+      chofereName.hashCode ^
       pureCargoWeight.hashCode ^
       cargoUnloadWeight.hashCode ^
       cargoDeficitWeight.hashCode ^
@@ -81,6 +89,7 @@ class ViajesModel{
       licensePlate.hashCode ^
       viajesId.hashCode ^
       cargoId.hashCode ^
+      viajesStatusEnum.hashCode ^
       viajesTypeEnum.hashCode;
 
   @override
@@ -93,6 +102,7 @@ class ViajesModel{
         ' uploadingTime: $uploadingTime,' +
         ' pureCargoWeight: $pureCargoWeight,' +
         ' cargoUnloadWeight: $cargoUnloadWeight,' +
+        ' chofereName: $chofereName,' +
         ' cargoDeficitWeight: $cargoDeficitWeight,' +
         ' timeToIndustry: $timeToIndustry,' +
         ' unloadingTimeInIndustry: $unloadingTimeInIndustry,' +
@@ -102,6 +112,7 @@ class ViajesModel{
         ' licensePlate: $licensePlate,' +
         ' viajesId: $viajesId,' +
         ' cargoId: $cargoId,' +
+        ' viajesStatusEnum: $viajesStatusEnum,' +
         ' viajesTypeEnum: $viajesTypeEnum,' +
         '}';
   }
@@ -118,11 +129,13 @@ class ViajesModel{
     DateTime? timeToIndustry,
     DateTime? unloadingTimeInIndustry,
     double? guideNumber,
-    int? industryId,
-    int? chofereId,
+    String? industryId,
+    String? chofereId,
     String? licensePlate,
     String? cargoId,
+    String? chofereName,
     String? viajesId,
+    ViajesStatusEnum? viajesStatusEnum,
     ViajesTypeEnum? viajesTypeEnum,
   }) {
     return ViajesModel(
@@ -145,6 +158,8 @@ class ViajesModel{
       licensePlate: licensePlate ?? this.licensePlate,
       cargoId: cargoId ?? this.cargoId,
       viajesId: viajesId ?? this.viajesId,
+      chofereName: chofereName ?? this.chofereName,
+      viajesStatusEnum: viajesStatusEnum ?? this.viajesStatusEnum,
       viajesTypeEnum: viajesTypeEnum ?? this.viajesTypeEnum,
     );
   }
@@ -164,9 +179,11 @@ class ViajesModel{
       'guideNumber': this.guideNumber,
       'industryId': this.industryId,
       'chofereId': this.chofereId,
+      'chofereName': this.chofereName,
       'licensePlate': this.licensePlate,
       'cargoId': this.cargoId,
       'viajesId': this.viajesId,
+      'viajesStatusEnum': this.viajesStatusEnum.type,
       'viajesTypeEnum': this.viajesTypeEnum.type,
     };
   }
@@ -184,12 +201,14 @@ class ViajesModel{
       cargoUnloadWeight: map['cargoUnloadWeight'] as double,
       cargoDeficitWeight: map['cargoDeficitWeight'] as double,
       guideNumber: map['guideNumber'] as double,
-      industryId: map['industryId'] as int,
-      chofereId: map['chofereId'] as int,
+      industryId: map['industryId'] as String,
+      chofereName: map['chofereName'] as String,
+      chofereId: map['chofereId'] as String,
       licensePlate: map['licensePlate'] as String,
       cargoId: map['cargoId'] as String,
       viajesId: map['viajesId'] as String,
       viajesTypeEnum: (map['viajesTypeEnum'] as String).toViajesTypeEnum(),
+      viajesStatusEnum: (map['viajesStatusEnum'] as String).toViajesStatusEnum(),
     );
   }
 
