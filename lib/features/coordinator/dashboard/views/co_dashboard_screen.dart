@@ -1,12 +1,15 @@
 import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/common_widgets/cargo_bar_chart.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
+import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/dashboard/widgets/ad_dashboard_mini_card.dart';
+import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
 import 'package:cargocontrol/features/dashboard/components/dashboard_mini_card.dart';
 import 'package:cargocontrol/common_widgets/progress_indicator_card.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
+import 'package:cargocontrol/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,8 +17,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:cargocontrol/features/dashboard/components/dashboard_button_modal.dart';
 
+import '../../../../models/industry_models/industry_sub_model.dart';
+import '../../../../models/viajes_models/viajes_model.dart';
+import '../../../admin/create_industry/controllers/ad_industry_controller.dart';
+import '../../../auth/controllers/auth_notifier_controller.dart';
 import '../widgets/co_dashboard_mini_card.dart';
 import '../widgets/co_floating_action_sheet.dart';
+import '../widgets/co_progress_dashboard_card.dart';
 import '../widgets/co_recent_record_card.dart';
 
 class CoDashboardScreen extends ConsumerWidget {
@@ -23,8 +31,7 @@ class CoDashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authenticationState = ref.watch(authProvider);
-    final String  userType = authenticationState.user.userType.toString().split('.').last;
+
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -41,9 +48,16 @@ class CoDashboardScreen extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15),
-              child: Text(
-                userType,
-                style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+              child: Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  final userModel = ref.read(authNotifierCtr).userModel;
+                  print(userModel?.uid);
+                  return Text(userModel!.accountType.type,
+                    style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+                  );
+
+                },
+
               ),
             ),
             SizedBox(
@@ -61,43 +75,122 @@ class CoDashboardScreen extends ConsumerWidget {
               ),
             ),
             SizedBox(
-              height: 116,
+              height: 136.h,
               child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: const <ProgressIndicatorCard>[
-                    ProgressIndicatorCard(),
-                    ProgressIndicatorCard(),
+                  children: const [
+                    CoProgressIndicatorCard(
+                      numberOfTrips: '0',
+                      divideNumber2: '0',
+                      divideNumber1: '0',
+                      barPercentage: 0,
+                      title: 'Descarga total',
+                    ),
+                    CoProgressIndicatorCard(
+                      numberOfTrips: '0',
+                      divideNumber2: '0',
+                      divideNumber1: '0',
+                      barPercentage: 0,
+                      title: 'Bodega # 1 ',
+                    ),
                   ]),
             ),
-            SizedBox(
-              height: 116,
-              child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: const <ProgressIndicatorCard>[
-                    ProgressIndicatorCard(),
-                    ProgressIndicatorCard(),
-                  ]),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return ref.watch(fetchCurrentIndustry).when(
+                    data: (allIndustries){
+
+                      return SizedBox(
+                        height: 136.h,
+                        child: ListView.builder(
+                          itemCount: allIndustries.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            IndustrySubModel model = allIndustries[index];
+                            return CoProgressIndicatorCard(
+                              numberOfTrips: '0',
+                              divideNumber2: '${model.cargoUnloaded}',
+                              divideNumber1: '${model.cargoAssigned}',
+                              barPercentage: model.cargoUnloaded!= 0? model.cargoAssigned/model.cargoUnloaded: 0,
+                              title: 'Industria #${index+1}',
+                            );
+                          },
+
+                        ),
+                      );
+                    },
+                    error: (error, st){
+                      debugPrintStack(stackTrace: st);
+                      debugPrint(error.toString());
+                      return const SizedBox();
+                    },
+                    loading: (){
+                      return const SizedBox();
+                    }
+                );
+              },
+
             ),
-            SizedBox(
-              height: 116.h,
-              child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children:  const [
-                    CoDashboardMiniCard(
-                        title: 'Registros',
-                        subTitle: ' entrando',
-                        isGood: true,
-                        value: "0"),
-                    CoDashboardMiniCard(
-                        title: 'Registros',
-                        subTitle: ' saliendo',
-                        isBad: true,
-                        value: "0"),
-                    CoDashboardMiniCard(
-                        title: 'Camiones ',
-                        subTitle: 'en patio',
-                        value: "0"),
-                  ]),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return SizedBox(
+                  height: 116.h,
+                  child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children:  [
+                        ref.watch(getPortEnteringViajesList).when(
+                            data: (viajesList){
+                              return CoDashboardMiniCard(
+                                  title: 'Registros',
+                                  subTitle: ' entrando',
+                                  isGood: true,
+                                  value: "${viajesList.length}");
+                            },
+                            error: (error, st){
+                              debugPrintStack(stackTrace: st);
+                              debugPrint(error.toString());
+                              return const SizedBox.shrink();
+                            },
+                            loading: (){
+                              return const LoadingWidget();
+                            },
+                        ),
+                        ref.watch(getPortLeavingViajesList).when(
+                          data: (viajesList){
+                            return CoDashboardMiniCard(
+                                title: 'Registros',
+                                subTitle: ' saliendo',
+                                isBad: true,
+                                value: "${viajesList.length}");
+                          },
+                          error: (error, st){
+                            debugPrintStack(stackTrace: st);
+                            debugPrint(error.toString());
+                            return const SizedBox.shrink();
+                          },
+                          loading: (){
+                            return const LoadingWidget();
+                          },
+                        ),
+                        ref.watch(getPortEnteringViajesList).when(
+                          data: (viajesList){
+                            return CoDashboardMiniCard(
+                                title: 'Camiones ',
+                                subTitle: 'en patio',
+                                value: "${viajesList.length}");
+                          },
+                          error: (error, st){
+                            debugPrintStack(stackTrace: st);
+                            debugPrint(error.toString());
+                            return const SizedBox.shrink();
+                          },
+                          loading: (){
+                            return const LoadingWidget();
+                          },
+                        ),
+                      ]),
+                );
+              },
             ),
             SizedBox(height: 36.h,),
             Padding(
@@ -117,20 +210,42 @@ class CoDashboardScreen extends ConsumerWidget {
                     ],
                   ),
                   SizedBox(height: 28.h,),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 3,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: (){
+                  Consumer(
+                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                      return ref.watch(getAllViajesList).
+                      when(
+                        data: (viajesList){
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: viajesList.length> 5 ? 5:viajesList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              ViajesModel model =  viajesList[index];
+                              return GestureDetector(
+                                onTap: (){
 
+                                },
+                                child: CoRecentRecordCard(
+                                  isEntered: model.viajesStatusEnum.type == ViajesStatusEnum.portEntered.type ? true : false,
+                                  isLeaving:  model.viajesStatusEnum.type == ViajesStatusEnum.portLeft.type ? true : false,
+                                  guideNumber: model.guideNumber.toString(),
+                                  driverName: model.chofereName,
+                                  portEntryTime: model.entryTimeToPort,
+                                ),
+                              );
+                            },
+                          );
                         },
-                        child: CoRecentRecordCard(
-                          isEntered: index %2 ==0 ? true : false,
-                          isLeaving:  index %2 !=0 ? true : false,
-                        ),
+                        error: (error, st){
+                          debugPrintStack(stackTrace: st);
+                          debugPrint(error.toString());
+                          return const SizedBox.shrink();
+                        },
+                        loading: (){
+                          return const LoadingWidget();
+                        },
                       );
+
                     },
                   )
                 ],

@@ -3,15 +3,16 @@ import 'package:cargocontrol/core/extensions/color_extension.dart';
 import '../common_imports/common_libs.dart';
 import '../../utils/constants/font_manager.dart';
 
-class WineCellerWidget extends StatefulWidget {
-  final Function(int val) seletedWines;
-  const WineCellerWidget({Key? key, required this.seletedWines, }) : super(key: key);
+class NumberOfCargoHoldsWidget extends StatefulWidget {
+  final Function(int val) seletedCargosNumber;
+  final int? numberOfCargoHolds;
+  const NumberOfCargoHoldsWidget({Key? key, required this.seletedCargosNumber, this.numberOfCargoHolds, }) : super(key: key);
 
   @override
-  State<WineCellerWidget> createState() => _WineCellerWidgetState();
+  State<NumberOfCargoHoldsWidget> createState() => _NumberOfCargoHoldsWidgetState();
 }
 
-class _WineCellerWidgetState extends State<WineCellerWidget> {
+class _NumberOfCargoHoldsWidgetState extends State<NumberOfCargoHoldsWidget> {
   int? selectedValue;
 
   @override
@@ -23,12 +24,13 @@ class _WineCellerWidgetState extends State<WineCellerWidget> {
         SizedBox(height: 10.h,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(5, (index){
+          children: List.generate(widget.numberOfCargoHolds ?? 5, (index){
             bool isSelected = selectedValue == index;
             return  GestureDetector(
               onTap: (){
                 setState(() {
                   selectedValue = index;
+                  widget.seletedCargosNumber(index+1);
                 });
               },
               child: Container(

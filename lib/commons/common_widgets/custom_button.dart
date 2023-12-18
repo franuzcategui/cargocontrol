@@ -47,7 +47,7 @@ class CustomButton extends StatelessWidget {
           child: Center(
               child: isLoading
                   ?  LoadingWidget(
-                      color: context.mainColor
+                      color: context.scaffoldBackgroundColor
                     )
                   : Text(
                       buttonText,

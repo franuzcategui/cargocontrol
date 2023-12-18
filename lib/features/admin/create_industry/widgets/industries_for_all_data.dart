@@ -2,45 +2,48 @@ import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/create_vessel/widgets/preliminatr_tile.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
+import '../../../../models/industry_models/industry_sub_model.dart';
 import '../../../../utils/constants/font_manager.dart';
 
 class IndustriesForAllData extends StatelessWidget {
-  const IndustriesForAllData({Key? key}) : super(key: key);
+  final List<IndustrySubModel> industrySubModels;
+  const IndustriesForAllData({Key? key, required this.industrySubModels}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: 1,
+      itemCount: industrySubModels.length,
       itemBuilder: (BuildContext context, int index) {
+        IndustrySubModel model = industrySubModels[index];
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Industria #1", style: getBoldStyle(
+            Text("Industria #${index+1}", style: getBoldStyle(
               color: context.textColor,
               fontSize: MyFonts.size14,
             ),),
             SizedBox(height: 28.h,),
-            const CustomTile(
+            CustomTile(
               title: 'Nombre',
-              subText: 'C.A.C.S.A',
+              subText: model.industryName,
             ),
-            const CustomTile(
+            CustomTile(
               title: 'Comienzo de guia',
-              subText: '1000',
+              subText: model.initialGuide.toString(),
             ),
-            const CustomTile(
+            CustomTile(
               title: 'Final de guia',
-              subText: '2000',
+              subText: model.lastGuide.toString(),
             ),
-            const CustomTile(
+            CustomTile(
               title: 'Producto (Variedad)',
-              subText: 'Paddy Rice',
+              subText: '${model.selectedVesselCargo.productName }, ${model.selectedVesselCargo.variety }, ${model.selectedVesselCargo.cosecha }, ${model.selectedVesselCargo.tipo } '
             ),
-            const CustomTile(
+            CustomTile(
               title: 'Carga',
-              subText: '6991105',
+              subText: model.cargoAssigned.toString(),
             ),
           ],
         );

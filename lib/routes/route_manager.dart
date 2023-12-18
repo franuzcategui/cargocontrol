@@ -94,18 +94,51 @@ class AppRoutes {
       case adminCreateVesselScreen:
         return _buildRoute(const CreateVesselScreen());
       case adminCreateVesselBodegaInfoScreen:
-        return _buildRoute(const CreateVesselBodegaInfoScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            CreateVesselBodegaInfoScreen(
+                vesselName : args['vesselName'],
+                procedencia : args['procedencia'],
+                shipper :args['shipper'],
+                unCode : args['unCode'],
+                portDate : args['portDate'],
+                numberOfCargos : args['numberOfCargos'],
+                weightUnitEnum : args['weightUnitEnum'],
+            ),
+        );
       case adminCreateVesselCompleteDataScreen:
-        return _buildRoute(const CreateVesselCompleteDataScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            CreateVesselCompleteDataScreen(
+                vesselName : args['vesselName'],
+                procedencia : args['procedencia'],
+                shipper :args['shipper'],
+                unCode : args['unCode'],
+                portDate : args['portDate'],
+                numberOfWines : args['numberOfWines'],
+                weightUnitEnum : args['weightUnitEnum'],
+                bogedaModels : args['bogedaModels'],
+            ),
+        );
       case registrationSuccessFullScreen:
         return _buildRoute(const RegistrationSuccessFullScreen());
 
       case adminCreateIndustryScreen:
         return _buildRoute(const CreateIndustryScreen());
       case adminCreateIndustryInformationScreen:
-        return _buildRoute(const CreateIndustryInformationScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            CreateIndustryInformationScreen(
+              numberOfIndustries: args['numberOfIndustries'],
+            ),
+        );
       case adminCreateIndustryCompleteDataScreen:
-        return _buildRoute(const CreateIndustryCompleteDataScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            CreateIndustryCompleteDataScreen(
+              industrySubModels: args['industrySubModels'],
+            ),
+        );
 
       case adminRegisterUserScreen:
         return _buildRoute(const RegisterUserScreen());
@@ -124,11 +157,28 @@ class AppRoutes {
       case registerTruckEnteringScreen:
         return _buildRoute(const RegisterTruckEnteringScreen());
       case coTruckInfoScreen:
-        return _buildRoute(const CoTruckInfoScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+        CoTruckInfoScreen(
+          guideNumber: args['guideNumber'],
+        ),
+        );
       case coTruckBriefScreen:
-        return _buildRoute(const CoTruckBriefScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            CoTruckBriefScreen(
+              guideNumber: args['guideNumber'],
+              plateNumber: args['plateNumber'],
+              marchamo: args['marchamo'],
+              emptyTruckWeight: args['emptyTruckWeight'],
+            ),
+        );
       case coTruckLeavingBriefScreen:
-        return _buildRoute(const CoTruckLeavingBriefScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(CoTruckLeavingBriefScreen(
+          fullTruckWeight: args['fullTruckWeight'],
+          pureCargoWeight: args['pureCargoWeight'],
+        ));
       case coRegistrationSuccessFullScreen:
         return _buildRoute(const CoRegistrationSuccessFullScreen());
       case registerTruckLeavingScreen:
@@ -160,12 +210,11 @@ class AppRoutes {
       case inAllReportsScreen:
         return _buildRoute(const InAllReportsScreen());
 
-
-
-      case dashboardScreen:
-        return _buildRoute(const DashboardScreen());
       case loginScreen:
         return _buildRoute(const LoginScreen());
+
+
+
       default:
         return unDefinedRoute();
     }

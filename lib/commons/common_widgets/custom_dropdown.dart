@@ -8,7 +8,7 @@ class CustomDropDown extends StatefulWidget {
   final List<String> list;
   final String labelText;
   final TextEditingController? ctr;
-  final Function(String? val)? onChange;
+  final Function(String val)? onChange;
   const CustomDropDown({Key? key, required this.list, this.onChange, required this.labelText, this.ctr}) : super(key: key);
 
   @override
@@ -45,7 +45,10 @@ class _CustomDropDownState extends State<CustomDropDown> {
       value == null ? 'field required' : null,
       icon: Image.asset(AppAssets.arrowDown, width: 16.w, height: 8.h,),
       onTap: _requestFocus,
+      // isExpanded: false,
+      // isDense: true,
       style: getMediumStyle(fontSize: MyFonts.size12, color: context.textColor),
+      borderRadius: BorderRadius.circular(10.r),
       decoration: InputDecoration(
         fillColor: context.textFieldColor,
         label: Text(widget.labelText, style: getRegularStyle(color: _focusNode.hasFocus?
@@ -76,11 +79,19 @@ class _CustomDropDownState extends State<CustomDropDown> {
               (String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: 250.w
+                ),
+                child: Text(
+                  value,
+                  style: getMediumStyle(color: context.textColor, fontSize: MyFonts.size12),
+                  overflow: TextOverflow.visible,
+                )),
             );
           }).toList(),
       onChanged: (val){
-        if(widget.onChange != null){
+        if(widget.onChange != null && val != null){
           widget.onChange!(val);
         }
         if(widget.ctr != null){

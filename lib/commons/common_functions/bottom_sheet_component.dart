@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 void bottomSheetComponent(BuildContext context, Widget child, {double horizontalPadding = 20,
     bool isDismissible = true,
+    double height = 400,
     bool adjustSizeOnOpenKeyboard = true}) {
   showModalBottomSheet(
     context: context,
@@ -40,11 +41,7 @@ void bottomSheetComponent(BuildContext context, Widget child, {double horizontal
               ),
               SizedBox(height: 20.h),
               SizedBox(
-                height: adjustSizeOnOpenKeyboard
-                    ? MediaQuery.of(context).viewInsets.bottom != 0
-                        ? 400.h
-                        : null
-                    : null,
+                height: height,
                 child: child,
               ),
             ],

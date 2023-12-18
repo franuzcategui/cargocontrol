@@ -1,11 +1,17 @@
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/create_vessel/widgets/preliminatr_tile.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../utils/constants/font_manager.dart';
 
 class InformationPreliminarWidget extends StatelessWidget {
-  const InformationPreliminarWidget({Key? key}) : super(key: key);
+  final String vesselName;
+  final String procedencia;
+  final String shipper;
+  final DateTime entryDate;
+  final String unlcode;
+  const InformationPreliminarWidget({Key? key, required this.vesselName, required this.procedencia, required this.shipper, required this.entryDate, required this.unlcode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,25 +23,25 @@ class InformationPreliminarWidget extends StatelessWidget {
           fontSize: MyFonts.size14,
         ),),
         SizedBox(height: 28.h,),
-        const CustomTile(
+        CustomTile(
             title: "Nombre de buque",
-            subText: "10701"
+            subText: vesselName
         ),
-        const CustomTile(
+        CustomTile(
             title: "Procedencia",
-            subText: "M.V. Patient Lake"
+            subText: procedencia
         ),
-        const CustomTile(
+        CustomTile(
             title: "Shipper",
-            subText: "Damboriarena"
+            subText: shipper
         ),
-        const CustomTile(
+        CustomTile(
             title: "Fecha en puerto",
-            subText: "17/6/2023"
+            subText: DateFormat('dd/MM/yyyy').format(entryDate)
         ),
-        const CustomTile(
+        CustomTile(
             title: "UN/Locode",
-            subText: "UYMVD"
+            subText: unlcode
         ),
       ],
     );

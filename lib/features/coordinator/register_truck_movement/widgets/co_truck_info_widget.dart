@@ -5,7 +5,11 @@ import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../utils/constants/font_manager.dart';
 
 class CoTruckInfoWidget extends StatelessWidget {
-  const CoTruckInfoWidget({Key? key}) : super(key: key);
+  final String plateNumber;
+  final double marchamo;
+  final String choferName;
+  final double emptyTruckWeight;
+  const CoTruckInfoWidget({Key? key, required this.plateNumber, required this.marchamo, required this.choferName, required this.emptyTruckWeight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,21 +21,21 @@ class CoTruckInfoWidget extends StatelessWidget {
           fontSize: MyFonts.size14,
         ),),
         SizedBox(height: 28.h,),
-        const CustomTile(
-            title: "Placa",
-            subText: "135526"
+        CustomTile(
+            title: 'Placa',
+            subText: plateNumber
         ),
-        const CustomTile(
-            title: "Marchamo",
-            subText: "3462343"
+        CustomTile(
+            title: 'Marchamo',
+            subText: "$marchamo"
         ),
-        const CustomTile(
-            title: "Nombre de chofer",
-            subText: "Juan Perez."
+        CustomTile(
+            title: 'Nombre de chofer',
+            subText: choferName
         ),
-        const CustomTile(
-            title: "Peso tara",
-            subText: "12690"
+        CustomTile(
+            title: 'Peso tara',
+            subText: '$emptyTruckWeight'
         ),
       ],
     );

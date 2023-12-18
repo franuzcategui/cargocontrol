@@ -1,19 +1,16 @@
-import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
-import 'package:cargocontrol/common_widgets/cargo_card.dart';
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
-import 'package:cargocontrol/features/choferes/components/add_choferes_modal.dart';
-import 'package:cargocontrol/features/choferes/components/choferes_list.dart';
-import 'package:cargocontrol/features/choferes/controller/choferes_list_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:cargocontrol/features/admin/choferes/widgets/add_choferes_modal.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../utils/constants/assets_manager.dart';
 import '../../../../utils/constants/font_manager.dart';
+import '../../../../utils/loading.dart';
+import '../controllers/choferes_noti_controller.dart';
 import '../widgets/ad_choferes_list.dart';
 
 class AdChoferesScreen extends ConsumerWidget {
@@ -45,6 +42,8 @@ class AdChoferesScreen extends ConsumerWidget {
             ),
             SizedBox(height: 13.h,),
             const AdChoferesList(),
+            ref.watch(choferesNotiController).isSecondaryLoading?
+            const LoadingWidget(): const SizedBox()
           ],
         ),
       ),

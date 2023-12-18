@@ -6,7 +6,8 @@ class CommonDatePicker extends StatefulWidget {
   final  TextEditingController ctr;
   final  String labelText;
   final  String? headerText;
-  const CommonDatePicker({Key? key, required this.ctr, required this.labelText, this.headerText}) : super(key: key);
+  final  Function(DateTime date)? selectedDate;
+  const CommonDatePicker({Key? key, required this.ctr, required this.labelText, this.headerText, this.selectedDate}) : super(key: key);
 
   @override
   State<CommonDatePicker> createState() => _CommonDatePickerState();
@@ -28,6 +29,9 @@ class _CommonDatePickerState extends State<CommonDatePicker> {
           setState(() {
           });
           widget.ctr.text = DateFormat('dd/MM/yyyy').format(date);
+          if(widget.selectedDate!= null){
+          widget.selectedDate!(date);
+          }
         }
       },
       label: widget.labelText,

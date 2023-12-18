@@ -53,7 +53,6 @@ class _CoGeneralesEditWidgetState extends State<CoGeneralesEditWidget> {
           onChange: (val){
           },
         ),
-
       ],
     );
   }

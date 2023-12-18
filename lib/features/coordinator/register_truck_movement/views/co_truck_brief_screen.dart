@@ -1,6 +1,10 @@
 import 'package:cargocontrol/common_widgets/title_header.dart';
+import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
+import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
+import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import '../../../../commons/common_imports/common_libs.dart';
@@ -9,14 +13,18 @@ import '../../../admin/create_vessel/widgets/information_preliminar_widget.dart'
 import '../widgets/co_preliminary_info_widget.dart';
 import '../widgets/co_truck_info_widget.dart';
 
-class CoTruckBriefScreen extends StatefulWidget {
-  const CoTruckBriefScreen({Key? key}) : super(key: key);
+class CoTruckBriefScreen extends ConsumerStatefulWidget {
+  final double guideNumber;
+  final String plateNumber;
+  final double marchamo;
+  final double emptyTruckWeight;
+  const CoTruckBriefScreen({Key? key, required this.guideNumber, required this.plateNumber, required this.marchamo, required this.emptyTruckWeight}) : super(key: key);
 
   @override
-  State<CoTruckBriefScreen> createState() => _CoTruckBriefScreenState();
+  ConsumerState<CoTruckBriefScreen> createState() => _CoTruckBriefScreenState();
 }
 
-class _CoTruckBriefScreenState extends State<CoTruckBriefScreen> {
+class _CoTruckBriefScreenState extends ConsumerState<CoTruckBriefScreen> {
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +48,59 @@ class _CoTruckBriefScreenState extends State<CoTruckBriefScreen> {
                   SizedBox(height: 14.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const CoPreliminarInfoWidget(),
-                  SizedBox(height: 20.h,),
-                  Divider(height: 1.h,color: context.textFieldColor,),
-                  SizedBox(height: 28.h,),
-                  const CoTruckInfoWidget(),
-                  SizedBox(height: 20.h,),
-                  Divider(height: 1.h,color: context.textFieldColor,),
-                  
-                  SizedBox(height: 26.h,),
-                  CustomButton(
-                      onPressed: (){
-                        Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
-                      },
-                      buttonText: "CONFIRMAR"
+                  Consumer(
+                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                      final truckNotiCtr = ref.read(truckRegistrationNotiControllerProvider);
+                      return Column(
+                        children: [
+                          CoPreliminarInfoWidget(
+                            guideNumber: widget.guideNumber,
+                            vesselName: truckNotiCtr.selectedIndustry?.vesselName ?? '',
+                            industryName: truckNotiCtr.selectedIndustry?.industryName ?? '',
+                          ),
+                          SizedBox(height: 20.h,),
+                          Divider(height: 1.h,color: context.textFieldColor,),
+                          SizedBox(height: 28.h,),
+                          CoTruckInfoWidget(
+                            choferName: '${truckNotiCtr.selectedChofere?.firstName}',
+                            emptyTruckWeight: widget.emptyTruckWeight,
+                            marchamo: widget.marchamo,
+                            plateNumber: widget.plateNumber,
+                          ),
+                          SizedBox(height: 20.h,),
+                          Divider(height: 1.h,color: context.textFieldColor,),
+
+                          SizedBox(height: 26.h,),
+                          Consumer(
+                            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                              return CustomButton(
+                                isLoading: ref.watch(truckRegistrationControllerProvider),
+                                onPressed: ()async{
+                                  await ref.watch(truckRegistrationControllerProvider.notifier).registerTruckEnteringToPort(
+                                        guideNumber: widget.guideNumber,
+                                        plateNumber: widget.plateNumber,
+                                        marchamo: widget.marchamo,
+                                        emptyTruckWeight: widget.emptyTruckWeight,
+                                        vesselName: truckNotiCtr.selectedIndustry?.vesselName ?? '',
+                                        industryName: truckNotiCtr.selectedIndustry?.industryName ?? '',
+                                        industryId: truckNotiCtr.selectedIndustry?.industryId ?? '',
+                                        choferesname: truckNotiCtr.selectedChofere?.firstName?? '',
+                                        choferesId: truckNotiCtr.selectedChofere?.choferNationalId?? '',
+                                        industrySubModel: truckNotiCtr.selectedIndustry!,
+                                        cargoId: truckNotiCtr.selectedIndustry?.selectedVesselCargo.cargoId ?? '',
+                                        ref: ref,
+                                        context: context
+                                    );
+                                },
+                                buttonText: "CONFIRMAR"
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
                   ),
+
                 ],
               ),
             )

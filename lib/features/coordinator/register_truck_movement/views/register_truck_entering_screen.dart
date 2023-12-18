@@ -1,5 +1,10 @@
+import 'dart:ffi';
+
+import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
+import 'package:cargocontrol/commons/common_widgets/show_toast.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/services.dart';
@@ -9,14 +14,14 @@ import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
 
-class RegisterTruckEnteringScreen extends StatefulWidget {
+class RegisterTruckEnteringScreen extends ConsumerStatefulWidget {
   const RegisterTruckEnteringScreen({Key? key}) : super(key: key);
 
   @override
-  State<RegisterTruckEnteringScreen> createState() => _RegisterTruckEnteringScreenState();
+  ConsumerState<RegisterTruckEnteringScreen> createState() => _RegisterTruckEnteringScreenState();
 }
 
-class _RegisterTruckEnteringScreenState extends State<RegisterTruckEnteringScreen> {
+class _RegisterTruckEnteringScreenState extends ConsumerState<RegisterTruckEnteringScreen> {
   TextEditingController keyPadTextFieldController = TextEditingController();
 
   @override
@@ -33,7 +38,6 @@ class _RegisterTruckEnteringScreenState extends State<RegisterTruckEnteringScree
 
   void _onTextChange() {
     final text = keyPadTextFieldController.text;
-
   }
 
   @override
@@ -85,10 +89,24 @@ class _RegisterTruckEnteringScreenState extends State<RegisterTruckEnteringScree
                     keyPadTextFieldController.text = '';
                   },
                 ),
-                CustomButton(
-                  buttonText:  'CONTINUAR',
-                  onPressed: (){
-                    Navigator.pushNamed(context, AppRoutes.coTruckInfoScreen);
+                Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                    return CustomButton(
+                      buttonText:  'CONTINUAR',
+                      isLoading: ref.watch(truckRegistrationNotiControllerProvider).isLoading,
+                      onPressed: ()async{
+                        if(keyPadTextFieldController.text.isNotEmpty){
+                          await ref.read(truckRegistrationNotiControllerProvider).getIndusytryFromGuideNumber(guideNumber: double.parse(keyPadTextFieldController.text));
+                          if(ref.read(truckRegistrationNotiControllerProvider).industryMatched){
+                            Navigator.pushNamed(context, AppRoutes.coTruckInfoScreen, arguments: {
+                              'guideNumber': double.parse(keyPadTextFieldController.text)
+                            });
+                          }else{
+                            showSnackBar(context: context, content: 'No Industry Found!');
+                          }
+                        }
+                      },
+                    );
                   },
                 ),
                 SizedBox(

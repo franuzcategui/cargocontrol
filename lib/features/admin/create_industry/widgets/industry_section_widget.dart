@@ -1,17 +1,30 @@
+import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/admin/create_industry/controllers/ad_industry_noti_controller.dart';
+import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_noti_controller.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
+import '../../../../commons/common_widgets/custom_dropdown.dart';
 
-class IndustrySectionWidget extends StatelessWidget {
+class IndustrySectionWidget extends ConsumerStatefulWidget {
   final int index;
-  final Widget nameWidget;
+  final TextEditingController industryNameCtr;
+  final TextEditingController industryIdCtr;
+  final TextEditingController cargoIdCtr;
+  final TextEditingController productNameCtr;
   final Widget comenzoWIdget;
   final Widget endOfGuideWidget;
-  final Widget productWidget;
   final Widget loadWidget;
   final VoidCallback onRemove;
-  const IndustrySectionWidget({Key? key, required this.index, required this.productWidget, required this.onRemove, required this.nameWidget, required this.comenzoWIdget, required this.endOfGuideWidget, required this.loadWidget}) : super(key: key);
+  const IndustrySectionWidget({Key? key, required this.index,required this.industryIdCtr,required this.cargoIdCtr,  required this.onRemove, required this.comenzoWIdget, required this.endOfGuideWidget, required this.loadWidget, required this.industryNameCtr, required this.productNameCtr}) : super(key: key);
+
+  @override
+  ConsumerState<IndustrySectionWidget> createState() => _IndustrySectionWidgetState();
+}
+
+class _IndustrySectionWidgetState extends ConsumerState<IndustrySectionWidget> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,22 +34,43 @@ class IndustrySectionWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Industria #${index+1}', style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size14),),
+            Text('Industria #${widget.index+1}', style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size14),),
             GestureDetector(
-                onTap: onRemove,
+                onTap: widget.onRemove,
                 child: Icon(Icons.cancel_outlined, size: 18.sp, color: context.errorColor,))
           ],
         ),
         SizedBox(height: 8.h,),
-        nameWidget,
-        SizedBox(height: 10.h,),
-        comenzoWIdget,
-        SizedBox(height: 10.h,),
-        endOfGuideWidget,
-        SizedBox(height: 10.h,),
-        productWidget,
-        SizedBox(height: 10.h,),
-        loadWidget,
+        CustomDropDown(
+          ctr: widget.industryNameCtr,
+          list: ref.read(adIndustryNotiController).industryNames,
+          labelText: 'Nombre',
+          onChange: (String val){
+            ref.read(adIndustryNotiController).allIndustriesModels.forEach((industry) {
+              if(val == industry.industryName){
+                widget.industryIdCtr.text = industry.industryId;
+              }
+            });
+          },
+        ),
+        SizedBox(height: 16.h,),
+        widget.comenzoWIdget,
+        widget.endOfGuideWidget,
+        CustomDropDown(
+          ctr: widget.productNameCtr,
+          list: ref.read(adVesselNotiController).vesselProductNames,
+          labelText: 'Producto (Variedad)',
+          onChange: (String val){
+            ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((cargo) {
+              if(val.split(',')[0] == cargo.productName){
+                widget.cargoIdCtr.text = cargo.cargoId;
+                ref.read(adVesselNotiController).setVesselCargoModelForIndustry(cargo);
+              }
+            });
+          },
+        ),
+        SizedBox(height: 16.h,),
+        widget.loadWidget,
       ],
     );
   }

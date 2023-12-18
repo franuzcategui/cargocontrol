@@ -1,27 +1,37 @@
+import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_noti_controller.dart';
+import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
+import 'package:uuid/uuid.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../../../../commons/common_widgets/custom_dropdown.dart';
+import '../../../../commons/common_widgets/show_toast.dart';
+import '../../../../models/vessel_models/vessel_cargo_model.dart';
 import '../widgets/industry_section_widget.dart';
 
-class CreateIndustryInformationScreen extends StatefulWidget {
-  const CreateIndustryInformationScreen({Key? key}) : super(key: key);
+class CreateIndustryInformationScreen extends ConsumerStatefulWidget {
+  final int numberOfIndustries;
+  const CreateIndustryInformationScreen({Key? key, required this.numberOfIndustries}) : super(key: key);
 
   @override
-  State<CreateIndustryInformationScreen> createState() => _CreateIndustryInformationScreenState();
+  ConsumerState<CreateIndustryInformationScreen> createState() => _CreateIndustryInformationScreenState();
 }
 
-class _CreateIndustryInformationScreenState extends State<CreateIndustryInformationScreen> {
+class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustryInformationScreen> {
   List<_IndustryControllers> _industryControllers = [];
   List<Widget> _nameDropDowns = [];
   List<Widget> _productDropDowns = [];
   List<Widget> _comienzos = [];
   List<Widget> _endOfGuides = [];
   List<Widget> _loads = [];
+
+  bool allGood = false;
+
 
   createIndustrySection() {
     final section = _IndustryControllers();
@@ -30,6 +40,7 @@ class _CreateIndustryInformationScreenState extends State<CreateIndustryInformat
     final comenzio = CustomTextField(
       controller: section.comienzeCtr,
       onTap: (){},
+      inputType: TextInputType.number,
       hintText: "",
       label: 'Comienzo de guia',
       onChanged: (val){},
@@ -41,6 +52,7 @@ class _CreateIndustryInformationScreenState extends State<CreateIndustryInformat
       onTap: (){},
       hintText: "",
       label: 'Final de guia',
+      inputType: TextInputType.number,
       onChanged: (val){},
       obscure: false,
       onFieldSubmitted: (val){},
@@ -52,6 +64,7 @@ class _CreateIndustryInformationScreenState extends State<CreateIndustryInformat
       label: 'Carga asignada',
       onChanged: (val){},
       obscure: false,
+      inputType: TextInputType.number,
       onFieldSubmitted: (val){},
     );
     setState(() {
@@ -69,11 +82,13 @@ class _CreateIndustryInformationScreenState extends State<CreateIndustryInformat
       for (var i = 0; i < _industryControllers.length; i++)
         IndustrySectionWidget(
           index: i,
+          industryIdCtr: _industryControllers[i].industryIdCtr,
+          cargoIdCtr: _industryControllers[i].cargoIdCtr,
           comenzoWIdget: _comienzos[i],
           endOfGuideWidget: _endOfGuides[i],
           loadWidget: _loads[i],
-          nameWidget: _nameDropDowns[i],
-          productWidget: _productDropDowns[i],
+          industryNameCtr: _industryControllers[i].nameCtr,
+          productNameCtr: _industryControllers[i].productCtr,
           onRemove: (){
             if(i ==0){
 
@@ -113,7 +128,9 @@ class _CreateIndustryInformationScreenState extends State<CreateIndustryInformat
   @override
   void initState() {
     super.initState();
-    createIndustrySection();
+    for(int i = 1; i <= widget.numberOfIndustries; i++){
+      createIndustrySection();
+    }
   }
 
   @override
@@ -143,7 +160,54 @@ class _CreateIndustryInformationScreenState extends State<CreateIndustryInformat
                   ),
                   CustomButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, AppRoutes.adminCreateIndustryCompleteDataScreen);
+                        for (var section in _industryControllers) {
+                          if(section.productCtr.text == "" || section.nameCtr.text == "" ||
+                              section.endOfGuideCtr.text == "" || section.comienzeCtr.text == "" ||
+                              section.loadCtr.text == "" ){
+                            setState(() {
+                              allGood = false;
+                            });
+
+                            showSnackBar(context: context,content:  "Fill All Fields!", duration: const Duration(milliseconds: 700) );
+                            break;
+                          }else{
+                            setState(() {
+                              allGood = true;
+                            });
+                          }
+                        }
+
+                        if(allGood){
+                          List<IndustrySubModel> industrySubModels = [];
+                          for (var section in _industryControllers) {
+                            final industryId = Uuid().v4();
+                            IndustrySubModel model = IndustrySubModel(
+                              vesselId: ref.read(adVesselNotiController).vesselModel?.vesselId ?? '',
+                              vesselName: ref.read(adVesselNotiController).vesselModel?.vesselName ?? '',
+                              usedGuideNumbers: [],
+                              industryId: industryId,
+                              industryName: section.nameCtr.text,
+                              selectedVesselCargo: ref.read(adVesselNotiController).selectedVesselCargoModelForIndustry!,
+                              finishedUnloading: false,
+                              cargoAssigned: double.parse(section.loadCtr.text),
+                              cargoUnloaded: 0,
+                              initialGuide: double.parse(section.comienzeCtr.text),
+                              lastGuide: double.parse(section.endOfGuideCtr.text),
+                            );
+                            industrySubModels.add(model);
+
+                          }
+                          print(industrySubModels.length);
+                          Navigator.pushNamed(
+                              context,
+                              AppRoutes.adminCreateIndustryCompleteDataScreen,
+                              arguments: {
+                                'industrySubModels' : industrySubModels,
+                              }
+                          );
+                        }
+
+                        // Navigator.pushNamed(context, AppRoutes.adminCreateIndustryCompleteDataScreen);
                       },
                       buttonText: "CONTINUAR"
                   ),
@@ -163,12 +227,16 @@ class _IndustryControllers {
   TextEditingController endOfGuideCtr = TextEditingController();
   TextEditingController productCtr = TextEditingController();
   TextEditingController loadCtr = TextEditingController();
+  TextEditingController industryIdCtr = TextEditingController();
+  TextEditingController cargoIdCtr = TextEditingController();
   void dispose() {
     nameCtr.dispose();
     comienzeCtr.dispose();
     endOfGuideCtr.dispose();
     productCtr.dispose();
     loadCtr.dispose();
+    industryIdCtr.dispose();
+    cargoIdCtr.dispose();
   }
 
   void clear() {
@@ -177,6 +245,8 @@ class _IndustryControllers {
     endOfGuideCtr.clear();
     productCtr.clear();
     loadCtr.clear();
+    industryIdCtr.clear();
+    cargoIdCtr.clear();
   }
 }
 

@@ -27,7 +27,7 @@ class DatabaseApis extends IDatabaseApis {
   FutureEitherVoid saveUserInfo({required UserModel userModel}) async {
     try {
       await _firestore
-          .collection(FirebaseConstants.adminCollection)
+          .collection(FirebaseConstants.userCollection)
           .doc(userModel.uid)
           .set(userModel.toMap());
       return const Right(null);
@@ -41,7 +41,7 @@ class DatabaseApis extends IDatabaseApis {
   @override
   Stream<DocumentSnapshot<Map<String, dynamic>>> getCurrentUserStream({required String uid}) {
     return  _firestore
-        .collection(FirebaseConstants.adminCollection)
+        .collection(FirebaseConstants.userCollection)
         .doc(uid)
         .snapshots();
   }
@@ -50,7 +50,7 @@ class DatabaseApis extends IDatabaseApis {
   FutureEitherVoid updateFirestoreCurrentUserInfo({required UserModel userModel}) async {
     try {
       await _firestore
-          .collection(FirebaseConstants.adminCollection)
+          .collection(FirebaseConstants.userCollection)
           .doc(userModel.uid)
           .update(userModel.toMap());
       return const Right(null);
@@ -65,7 +65,7 @@ class DatabaseApis extends IDatabaseApis {
   @override
   Future<DocumentSnapshot> getCurrentUserInfo({required String uid}) async {
     final DocumentSnapshot document = await _firestore
-        .collection(FirebaseConstants.adminCollection)
+        .collection(FirebaseConstants.userCollection)
         .doc(uid)
         .get();
     return document;
@@ -73,7 +73,7 @@ class DatabaseApis extends IDatabaseApis {
 
   @override
   Stream<UserModel> getUserInfoByUidStream({required String userId}) {
-    return _firestore.collection(FirebaseConstants.adminCollection).doc(userId).snapshots().map(
+    return _firestore.collection(FirebaseConstants.userCollection).doc(userId).snapshots().map(
           (event) => UserModel.fromMap(
         event.data()!,
       ),

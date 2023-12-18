@@ -39,7 +39,8 @@ class AuthApis implements IAuthApis {
   FutureEither<User> registerWithEmailAndPass({required String email, required String password})async {
     try {
       final response = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+          email: email, password: password,
+      );
       return Right(response.user!);
     } on FirebaseAuthException catch (e, stackTrace) {
       return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
