@@ -73,9 +73,9 @@ class AppRoutes {
   static const String inMainMenuScreen = '/inMainMenuScreen';
   static const String inRegisterTruckArrivalScreen = '/inRegisterTruckArrivalScreen';
   static const String inTruckArrivalInfoScreen = '/inTruckArrivalInfoScreen';
-  static const String inRegisterTruckLeavingScreen = '/inRegisterTruckLeavingScreen';
-  static const String inTruckLeavingInfoScreen = '/inTruckLeavingInfoScreen';
-  static const String inTruckLeavingBriefScreen = '/inTruckLeavingBriefScreen';
+  static const String inRegisterTruckUnloadingScreen = '/inRegisterTruckUnloadingScreen';
+  static const String inTruckUnloadingInfoScreen = '/inTruckUnloadingInfoScreen';
+  static const String inTruckUnlaodingBriefScreen = '/inTruckUnlaodingBriefScreen';
   static const String inRegistrationSuccessFullScreen = '/inRegistrationSuccessFullScreen';
   static const String inViajesDetailsScreen = '/inViajesDetailsScreen';
   static const String inAllReportsScreen = '/inAllReportsScreen';
@@ -197,12 +197,17 @@ class AppRoutes {
         return _buildRoute(const InRegisterTruckArrivalScreen());
       case inTruckArrivalInfoScreen:
         return _buildRoute(const InTruckArrivalInfoScreen());
-      case inRegisterTruckLeavingScreen:
-        return _buildRoute(const InRegisterTruckLeavingScreen());
-      case inTruckLeavingInfoScreen:
-        return _buildRoute(const InTruckLeavingInfoScreen());
-      case inTruckLeavingBriefScreen:
-        return _buildRoute(const InTruckLeavingBriefScreen());
+      case inRegisterTruckUnloadingScreen:
+        return _buildRoute(const InRegisterTruckUnlaodingScreen());
+      case inTruckUnloadingInfoScreen:
+        return _buildRoute(const InTruckUnlaodingInfoScreen());
+      case inTruckUnlaodingBriefScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            InTruckUnlaodingBriefScreen(
+              cargoUnloadWeight: args['cargoUnloadWeight'],
+            ),
+        );
       case inRegistrationSuccessFullScreen:
         return _buildRoute(const InRegistrationSuccessFullScreen());
       case inViajesDetailsScreen:

@@ -31,8 +31,13 @@ abstract class TruckRegistrationApisImplements {
 
   FutureEither<List<IndustrySubModel>> getAllIndustries();
   FutureEither<ViajesModel> getMatchedViajes({required String plateNumber});
-  FutureEither<ViajesModel> getMatchedViajesLinkedWithIndustry({required String plateNumber, required String industryId, });
+  FutureEither<ViajesModel> getMatchedViajesLinkedWithIndustry({
+    required String plateNumber,
+    required String industryId,
+    required ViajesStatusEnum viajesStatusEnum,
+  });
   FutureEither<IndustrySubModel> getIndustriaIndustrywithFuture({required String realIndustryId});
+  FutureEither<VesselModel> getVesselCargoModel({required String vesselId});
 }
 
 class TruckRegistrationApis implements TruckRegistrationApisImplements{
@@ -219,11 +224,19 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
   }
 
   @override
-  FutureEither<ViajesModel> getMatchedViajesLinkedWithIndustry({required String plateNumber, required String industryId, })async {
+  FutureEither<ViajesModel> getMatchedViajesLinkedWithIndustry({
+    required String plateNumber,
+    required String industryId,
+    required ViajesStatusEnum viajesStatusEnum,
+  })async {
     try{
+      print(viajesStatusEnum.type);
+      print(plateNumber);
+      print(industryId);
       final querySnapshot = await _firestore.collection(FirebaseConstants.viajesCollection).
       where('licensePlate', isEqualTo: plateNumber).
       where('industryId', isEqualTo: industryId).
+      where('viajesStatusEnum', isEqualTo: viajesStatusEnum.type).
       get();
       if(querySnapshot.docs.length!=0){
         ViajesModel model = ViajesModel.fromMap(querySnapshot.docs.first.data());
@@ -249,6 +262,26 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
         return Right(model);
       }else{
         return Left(Failure('No Industry Found!', StackTrace.fromString('getIndustriaIndustrywithFuture')));
+      }
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+
+  @override
+  FutureEither<VesselModel> getVesselCargoModel({required String vesselId}) async{
+    try{
+      final querySnapshot = await _firestore.collection(FirebaseConstants.vesselCollection).
+      where('vesselId', isEqualTo: vesselId).
+      get();
+      if(querySnapshot.docs.length!=0){
+        VesselModel model = VesselModel.fromMap(querySnapshot.docs.first.data());
+        return Right(model);
+      }else{
+        return Left(Failure('No Vessel Found!', StackTrace.fromString('getVesselCargoModel')));
       }
     }on FirebaseException catch(e, stackTrace){
       return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));

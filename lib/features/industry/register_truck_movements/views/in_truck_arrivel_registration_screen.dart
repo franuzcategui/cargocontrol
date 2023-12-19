@@ -1,5 +1,6 @@
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/commons/common_widgets/show_toast.dart';
+import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/auth/controllers/auth_notifier_controller.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
@@ -126,6 +127,8 @@ class _InRegisterTruckArrivalScreenState extends State<InRegisterTruckArrivalScr
                         await industryNotiCtr.
                         getMatchedViajesLinkedWithIndustry(
                           plateNumber: keyPadTextFieldController.text,
+                          viajesStatusEnum: ViajesStatusEnum.portLeft,
+                          pageName: AppRoutes.inTruckArrivalInfoScreen,
                           context: context,
                           ref: ref,
                           industryId: ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel?.industryId ?? ''

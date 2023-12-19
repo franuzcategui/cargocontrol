@@ -1,53 +1,73 @@
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/create_vessel/widgets/preliminatr_tile.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
+import '../../../../models/viajes_models/viajes_model.dart';
 import '../../../../utils/constants/font_manager.dart';
+import '../controllers/in_truck_registration_noti_controller.dart';
 
-class InTruckLeavingDelCamionWidget extends StatelessWidget {
-  const InTruckLeavingDelCamionWidget({Key? key}) : super(key: key);
+class InTruckLeavingDelCamionWidget extends ConsumerStatefulWidget {
+  final double cargoUnloadWeight;
+  const InTruckLeavingDelCamionWidget({Key? key, required this.cargoUnloadWeight}) : super(key: key);
+
+  @override
+  ConsumerState<InTruckLeavingDelCamionWidget> createState() => _InTruckLeavingDelCamionWidgetState();
+}
+
+class _InTruckLeavingDelCamionWidgetState extends ConsumerState<InTruckLeavingDelCamionWidget> {
+
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Información del camión", style: getBoldStyle(
-          color: context.textColor,
-          fontSize: MyFonts.size14,
-        ),),
-        SizedBox(height: 28.h,),
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        ViajesModel model = ref.watch(inTruckRegistrationNotiControllerProvider).matchedViajes!;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Información del camión", style: getBoldStyle(
+              color: context.textColor,
+              fontSize: MyFonts.size14,
+            ),),
+            SizedBox(height: 28.h,),
 
-        //
-        const CustomTile(
-            title: "Placa",
-            subText: "135526"
-        ),
-        const CustomTile(
-            title: "Nombre de chofer",
-            subText: "Juan Perez"
-        ),
-        const CustomTile(
-            title: "Producto",
-            subText: "Paddy Rice"
-        ),
-        const CustomTile(
-            title: "Número de bodega",
-            subText: "4"
-        ),
-        const CustomTile(
-            title: "Peso tara",
-            subText: "12,690"
-        ),
-        const CustomTile(
-            title: "Peso bruto de salida",
-            subText: "40,340"
-        ),
-        const CustomTile(
-            title: "Peso bruto de llegada",
-            subText: "40,331"
-        ),
-      ],
+            //
+            CustomTile(
+                title: "Placa",
+                subText: model.licensePlate
+            ),
+            CustomTile(
+                title: "Nombre de chofer",
+                subText: model.chofereName
+            ),
+            CustomTile(
+                title: "Producto",
+                subText: '${ref.read(inTruckRegistrationNotiControllerProvider).vesselCargoModel?.productName}'
+                    ' ${ref.read(inTruckRegistrationNotiControllerProvider).vesselCargoModel?.tipo} '
+                    '${ref.read(inTruckRegistrationNotiControllerProvider).vesselCargoModel?.variety} '
+                    '${ref.read(inTruckRegistrationNotiControllerProvider).vesselCargoModel?.origen} '
+            ),
+            CustomTile(
+                title: "Número de bodega",
+                subText: "4"
+            ),
+            CustomTile(
+                title: "Peso tara",
+                subText: "12,690"
+            ),
+            CustomTile(
+                title: "Peso bruto de salida",
+                subText: "40,340"
+            ),
+            CustomTile(
+                title: "Peso bruto de llegada",
+                subText: "40,331"
+            ),
+          ],
+        );
+      },
+
     );
   }
 }

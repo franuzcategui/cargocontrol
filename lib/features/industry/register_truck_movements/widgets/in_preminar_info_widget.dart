@@ -33,7 +33,7 @@ class InPreliminarInfoWidget extends StatelessWidget {
                 subText: viajesModel.licensePlate
             ),
             CustomTile(
-                title: "Nombre de buque",
+                title: "Nombre del chofer",
                 subText: viajesModel.chofereName
             ),
             CustomTile(

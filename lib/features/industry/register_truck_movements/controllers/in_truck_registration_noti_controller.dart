@@ -2,10 +2,14 @@ import 'package:cargocontrol/commons/common_widgets/show_toast.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
+import 'package:cargocontrol/models/vessel_models/vessel_cargo_model.dart';
+import 'package:cargocontrol/models/vessel_models/vessel_cargo_model.dart';
+import 'package:cargocontrol/models/vessel_models/vessel_cargo_model.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/enums/viajes_status_enum.dart';
 import '../../../../routes/route_manager.dart';
 import '../../../coordinator/register_truck_movement/data/apis/truck_registration_apis.dart';
 
@@ -32,6 +36,8 @@ class TruckRegistrationNotiController extends ChangeNotifier {
   Future getMatchedViajesLinkedWithIndustry({
     required String plateNumber,
     required String industryId,
+    required String pageName,
+    required ViajesStatusEnum viajesStatusEnum,
     required BuildContext context,
     required WidgetRef ref,
   })async{
@@ -39,7 +45,8 @@ class TruckRegistrationNotiController extends ChangeNotifier {
     setLoading(true);
     final result = await  _datasource.getMatchedViajesLinkedWithIndustry(
       plateNumber: plateNumber,
-      industryId: industryId
+      industryId: industryId,
+      viajesStatusEnum: viajesStatusEnum
     );
     result.fold((l) {
       debugPrintStack(stackTrace: l.stackTrace);
@@ -49,7 +56,7 @@ class TruckRegistrationNotiController extends ChangeNotifier {
     }, (r) {
       _isLoading = false;
       setMatchedViajes(r);
-      Navigator.pushNamed(context, AppRoutes.inTruckArrivalInfoScreen);
+      Navigator.pushNamed(context, pageName);
     });
   }
 
@@ -89,4 +96,37 @@ class TruckRegistrationNotiController extends ChangeNotifier {
     });
   }
 
+  Future getViajesCargo({
+    required String vesselId,
+    required String cargoId,
+    required BuildContext context,
+    required WidgetRef ref,
+  })async{
+    _matchedViajes = null;
+    setLoading(true);
+    final result = await  _datasource.getVesselCargoModel(
+        vesselId: vesselId
+    );
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint( l.message);
+      showSnackBar(context: context, content: l.message);
+      setLoading(false);
+    }, (r) {
+      _isLoading = false;
+      r.cargoModels.forEach((cargo) {
+        if(cargo.cargoId == cargoId){
+          setViajesCargoModel(cargo);
+        }
+      });
+    });
+  }
+
+  VesselCargoModel? _vesselCargoModel;
+  VesselCargoModel? get vesselCargoModel=> _vesselCargoModel;
+
+  setViajesCargoModel(VesselCargoModel? model) {
+    _vesselCargoModel = model;
+    notifyListeners();
+  }
 }

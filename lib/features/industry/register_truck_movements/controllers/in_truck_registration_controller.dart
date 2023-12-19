@@ -68,7 +68,8 @@ class TruckRegistrationController extends StateNotifier<bool> {
       state = false;
       Navigator.pushNamed(context, AppRoutes.inRegistrationSuccessFullScreen);
       showSnackBar(context: context, content: 'Viajes Registered!');
-      await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
+      await ref.read(truckRegistrationNotiControllerProvider).setMatchedViajes(null);
+      // await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
     });
     state = false;
   }
