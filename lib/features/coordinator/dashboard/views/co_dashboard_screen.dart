@@ -99,7 +99,6 @@ class CoDashboardScreen extends ConsumerWidget {
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return ref.watch(fetchCurrentIndustry).when(
                     data: (allIndustries){
-
                       return SizedBox(
                         height: 136.h,
                         child: ListView.builder(

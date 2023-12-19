@@ -38,6 +38,14 @@ final getAllViajesList = StreamProvider((ref) {
   }
 );
 
+// Industria Section
+
+final getIndustriaIndustry = StreamProvider.family((ref, String realIndustryId) {
+  final truckProvider = ref.watch(truckRegistrationControllerProvider.notifier);
+  return truckProvider.getIndustriaIndustry(realIndustryId: realIndustryId);
+  }
+);
+
 
 class TruckRegistrationController extends StateNotifier<bool> {
   final TruckRegistrationApisImplements _datasource;
@@ -165,19 +173,13 @@ class TruckRegistrationController extends StateNotifier<bool> {
       state = false;
       Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
       showSnackBar(context: context, content: 'Viajes Registered!');
+      await ref.read(truckRegistrationNotiControllerProvider).setMatchedViajes(null);
       await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
     });
     state = false;
   }
 
 
-  // Stream<IndustrySubModel> getCurrentIndusry() {
-  //   return _datasource.getCurrentIndustry().
-  //   map((event) {
-  //     IndustrySubModel models = IndustrySubModel.fromMap(event.docs.first.data());
-  //     return models;
-  //   });
-  // }
 
 
   Stream<List<ViajesModel>> getPortEnteringViajesList() {
@@ -223,6 +225,14 @@ class TruckRegistrationController extends StateNotifier<bool> {
         models.add(ViajesModel.fromMap(element.data()));
       });
       return models;
+    });
+  }
+
+  // For Industria Section
+  Stream<IndustrySubModel> getIndustriaIndustry({required String realIndustryId}) {
+    return _datasource.getIndustriaIndustry(realIndustryId: realIndustryId).
+    map((event) {
+      return IndustrySubModel.fromMap(event.docs.first.data());
     });
   }
 

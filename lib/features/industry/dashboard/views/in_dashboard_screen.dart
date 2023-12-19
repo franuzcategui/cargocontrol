@@ -1,9 +1,6 @@
-import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/common_widgets/cargo_bar_chart.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
-import 'package:cargocontrol/common_widgets/progress_indicator_card.dart';
-import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
+import '../../../auth/controllers/auth_notifier_controller.dart';
+import '../../../coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
 import '../widgets/in_dashboard_mini_card.dart';
 import '../widgets/in_floating_action_sheet.dart';
 import '../widgets/in_progress_dashboard_card.dart';
@@ -20,8 +19,6 @@ class InDashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final authenticationState = ref.watch(authProvider);
-    // final String  userType = authenticationState.user.userType.toString().split('.').last;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -38,9 +35,16 @@ class InDashboardScreen extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15),
-              child: Text(
-                'user type',
-                style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+              child: Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  final userModel = ref.read(authNotifierCtr).userModel;
+                  print(userModel?.uid);
+                  return Text(userModel!.accountType.type,
+                    style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+                  );
+
+                },
+
               ),
             ),
             SizedBox(
@@ -57,32 +61,60 @@ class InDashboardScreen extends ConsumerWidget {
                 ],
               ),
             ),
-
             SizedBox(
-              height: 116,
+              height: 136.h,
               child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: const <ProgressIndicatorCard>[
-                    ProgressIndicatorCard(),
-                    ProgressIndicatorCard(),
+                  children: const [
+                    InProgressIndicatorCard(
+                      numberOfTrips: '0',
+                      divideNumber2: '0',
+                      divideNumber1: '0',
+                      barPercentage: 0,
+                      title: 'Descarga total',
+                      deficit: '',
+                    ),
+                    InProgressIndicatorCard(
+                      numberOfTrips: '0',
+                      divideNumber2: '0',
+                      divideNumber1: '0',
+                      barPercentage: 0,
+                      title: 'Bodega # 1 ',
+                      deficit: '',
+                    ),
                   ]),
             ),
-            SizedBox(
-              height: 116,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 1,
-                itemBuilder: (BuildContext context, int index) {
-                  return const InProgressIndicatorCard(
-                    title: 'C.A.C.S.A',
-                    barPercentage: 0.2,
-                    deficit: '20',
-                    divideNumber1: '6,991,105' ,
-                    divideNumber2: '40,340',
-                    numberOfTrips: '1',
-                  );
-                },
-              ),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return ref.watch(getIndustriaIndustry( ref.read(authNotifierCtr).userModel?.industryId?? "")).
+                when(
+                  data: (industryModel){
+                    return  SizedBox(
+                      height: 136.h,
+                      child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            InProgressIndicatorCard(
+                              numberOfTrips: industryModel.viajesIds.length.toString(),
+                              divideNumber2: industryModel.cargoUnloaded.toString(),
+                              divideNumber1: industryModel.cargoAssigned.toString(),
+                              barPercentage: 0,
+                              title: industryModel.industryName,
+                              deficit: '0',
+                            ),
+                          ]),
+                    );
+                  },
+                  error: (error, st){
+                    debugPrintStack(stackTrace: st);
+                    debugPrint(error.toString());
+                    return const SizedBox();
+                  },
+                  loading: (){
+                    return const SizedBox();
+                  },
+                );
+              },
             ),
             SizedBox(
               height: 116.h,

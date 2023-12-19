@@ -85,8 +85,7 @@ class ChoferesNotiController extends ChangeNotifier {
         _lastSnapshot = querySnapshot.docs.last;
         _limit = _limit+10;
       }
-      _isSecondaryLoading = false;
-      notifyListeners();
+      setSecondaryLoading(false);
       return models;
 
     }else if(searchWord == ''){
@@ -105,18 +104,19 @@ class ChoferesNotiController extends ChangeNotifier {
         _lastSnapshot = querySnapshot.docs.last;
         _limit = _limit+10;
       }
-      _isSecondaryLoading = false;
-      notifyListeners();
+      setSecondaryLoading(false);
       return models;
     }
+    setSecondaryLoading(false);
   }
 
 
   Future firstTime()async{
     // if(lastSnapshot == null){
     _limit = 10;
-    setChoferesModels([]);
-    setLastSnapShot(null);
+    _lastSnapshot= null;
+    _choferesModels = [];
+
 
       _isLoading = true;
       QuerySnapshot querySnapshot = await _datasource.getAllChoferes(limit: limit, snapshot: _lastSnapshot);

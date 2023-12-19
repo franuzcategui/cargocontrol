@@ -19,13 +19,20 @@ abstract class TruckRegistrationApisImplements {
 
   FutureEitherVoid registerTruckEnteringToPort({required ViajesModel viajesModel, required IndustrySubModel industrySubModel,});
   FutureEitherVoid registerTruckLeavingFromPort({required ViajesModel viajesModel, required VesselModel vesselModel,});
+  FutureEitherVoid registerTruckEnteringInIndustry({required ViajesModel viajesModel, required IndustrySubModel industrySubModel,}) ;
+  FutureEitherVoid registerTruckLeavingFromIndustry({required ViajesModel viajesModel, required VesselModel vesselModel,});
+
   Stream<QuerySnapshot<Map<String, dynamic>>> getLAllViajesModels();
   Stream<QuerySnapshot<Map<String, dynamic>>> getPortEnteringViajesList();
   Stream<QuerySnapshot<Map<String, dynamic>>> getPortLeavingViajesList();
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustryEnteringViajesList();
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesList();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required String realIndustryId});
+
   FutureEither<List<IndustrySubModel>> getAllIndustries();
   FutureEither<ViajesModel> getMatchedViajes({required String plateNumber});
+  FutureEither<ViajesModel> getMatchedViajesLinkedWithIndustry({required String plateNumber, required String industryId, });
+  FutureEither<IndustrySubModel> getIndustriaIndustrywithFuture({required String realIndustryId});
 }
 
 class TruckRegistrationApis implements TruckRegistrationApisImplements{
@@ -84,6 +91,52 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
     }
   }
 
+  @override
+  FutureEitherVoid registerTruckEnteringInIndustry({required ViajesModel viajesModel, required IndustrySubModel industrySubModel,}) async {
+    try{
+      await _firestore.runTransaction((Transaction transaction) async {
+        transaction.set(
+          _firestore.collection(FirebaseConstants.viajesCollection).
+          doc(viajesModel.viajesId),
+          viajesModel.toMap(),
+        );
+        transaction.update(
+          _firestore.collection(FirebaseConstants.industryGuideCollection).
+          doc(industrySubModel.industryId),
+          industrySubModel.toMap(),
+        );
+      });
+      return Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEitherVoid registerTruckLeavingFromIndustry({required ViajesModel viajesModel, required VesselModel vesselModel,}) async {
+    try{
+      await _firestore.runTransaction((Transaction transaction) async {
+        transaction.set(
+          _firestore.collection(FirebaseConstants.viajesCollection).
+          doc(viajesModel.viajesId),
+          viajesModel.toMap(),
+        );
+        transaction.set(
+          _firestore.collection(FirebaseConstants.vesselCollection).
+          doc(vesselModel.vesselId),
+          vesselModel.toMap(),
+        );
+      });
+      return Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getLAllViajesModels(){
@@ -115,6 +168,13 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesList(){
     return _firestore.collection(FirebaseConstants.viajesCollection).
+    snapshots();
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required String realIndustryId}){
+    return _firestore.collection(FirebaseConstants.industryGuideCollection).
+    where('realIndustryId', isEqualTo: realIndustryId).
     snapshots();
   }
 
@@ -150,6 +210,45 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
         return Right(model);
       }else{
         return Left(Failure('No Truck Found!', StackTrace.fromString('getMatchedViajes')));
+      }
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEither<ViajesModel> getMatchedViajesLinkedWithIndustry({required String plateNumber, required String industryId, })async {
+    try{
+      final querySnapshot = await _firestore.collection(FirebaseConstants.viajesCollection).
+      where('licensePlate', isEqualTo: plateNumber).
+      where('industryId', isEqualTo: industryId).
+      get();
+      if(querySnapshot.docs.length!=0){
+        ViajesModel model = ViajesModel.fromMap(querySnapshot.docs.first.data());
+        return Right(model);
+      }else{
+        return Left(Failure('No Truck Found!', StackTrace.fromString('getMatchedViajesLinkedWithIndustry')));
+      }
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEither<IndustrySubModel> getIndustriaIndustrywithFuture({required String realIndustryId})async{
+    try{
+      final querySnapshot = await _firestore.collection(FirebaseConstants.industryGuideCollection).
+      where('realIndustryId', isEqualTo: realIndustryId).
+      get();
+      if(querySnapshot.docs.length!=0){
+        IndustrySubModel model = IndustrySubModel.fromMap(querySnapshot.docs.first.data());
+        return Right(model);
+      }else{
+        return Left(Failure('No Industry Found!', StackTrace.fromString('getIndustriaIndustrywithFuture')));
       }
     }on FirebaseException catch(e, stackTrace){
       return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));

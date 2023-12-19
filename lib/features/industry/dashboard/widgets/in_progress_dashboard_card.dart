@@ -35,31 +35,32 @@ class InProgressIndicatorCard extends StatelessWidget {
                   title,
                   style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                 ),
+                deficit == '' ?const SizedBox():
                 Text(
                   'Deficit: $deficit',
                   style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 4,
+            SizedBox(
+              height: 4.h,
             ),
             Text(
               '${divideNumber1}/${divideNumber2}',
               style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size16),
             ),
-            const SizedBox(
-              height: 2,
+            SizedBox(
+              height: 2.h,
             ),
             LinearProgressIndicator(
               backgroundColor: const Color.fromRGBO(239, 240, 244, 1),
               color: constants.kMainColor,
               value: barPercentage,
-              minHeight: 5,
+              minHeight: 5.h,
               borderRadius: BorderRadius.circular(20.r),
             ),
-            const SizedBox(
-              height: 2,
+            SizedBox(
+              height: 2.h,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

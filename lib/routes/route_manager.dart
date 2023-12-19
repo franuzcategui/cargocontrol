@@ -31,9 +31,9 @@ import '../features/industry/manage_report/views/in_all_reports_screen.dart';
 import '../features/industry/register_truck_movements/views/in_registration_success_screen.dart';
 import '../features/industry/register_truck_movements/views/in_truck_arrival_info_sccreen.dart';
 import '../features/industry/register_truck_movements/views/in_truck_arrivel_registration_screen.dart';
-import '../features/industry/register_truck_movements/views/in_truck_leaving_brief_screen.dart';
-import '../features/industry/register_truck_movements/views/in_truck_leaving_info_screen.dart';
-import '../features/industry/register_truck_movements/views/in_truck_leaving_registery_screen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_unloading_brief_screen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_unloading_info_screen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_unloading_registery_screen.dart';
 import '../features/industry/viajes/views/in_viajes_details_screen.dart';
 import 'navigation.dart';
 
