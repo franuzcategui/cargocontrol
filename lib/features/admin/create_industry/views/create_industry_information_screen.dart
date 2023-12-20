@@ -177,6 +177,34 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                           }
                         }
 
+
+                        if(allGood){
+                          for (var section in _industryControllers) {
+
+                          }
+                          for (var section in _industryControllers) {
+                            VesselCargoModel? cargo;
+                            ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((model){
+                              if(section.cargoIdCtr.text == model.cargoId){
+                                cargo = model;
+                              };
+                            });
+
+                            if(double.parse(section.loadCtr.text) > cargo!.pesoTotal ){
+                              setState(() {
+                                allGood = false;
+                              });
+                              showSnackBar(context: context,content:  "Cannot Assign more then Cargo weight!", duration: const Duration(milliseconds: 1000) );
+                              break;
+                            }else{
+                              print('Hurry!');
+                              setState(() {
+                                allGood = true;
+                              });
+                            }
+                          }
+                        }
+
                         if(allGood){
                           List<IndustrySubModel> industrySubModels = [];
                           for (var section in _industryControllers) {
@@ -200,13 +228,13 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
 
                           }
                           print(industrySubModels.length);
-                          Navigator.pushNamed(
-                              context,
-                              AppRoutes.adminCreateIndustryCompleteDataScreen,
-                              arguments: {
-                                'industrySubModels' : industrySubModels,
-                              }
-                          );
+                          // Navigator.pushNamed(
+                          //     context,
+                          //     AppRoutes.adminCreateIndustryCompleteDataScreen,
+                          //     arguments: {
+                          //       'industrySubModels' : industrySubModels,
+                          //     }
+                          // );
                         }
 
                         // Navigator.pushNamed(context, AppRoutes.adminCreateIndustryCompleteDataScreen);

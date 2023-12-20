@@ -17,6 +17,7 @@ class ViajesModel{
   final String industryId;
   final String chofereId;
   final String chofereName;
+  final String productName;
   final String licensePlate;
   final String cargoId;
   final ViajesTypeEnum viajesTypeEnum;
@@ -30,6 +31,7 @@ class ViajesModel{
     required this.exitTimeTruckWeightToPort,
     required this.uploadingTime,
     required this.pureCargoWeight,
+    required this.productName,
     required this.cargoUnloadWeight,
     required this.cargoDeficitWeight,
     required this.timeToIndustry,
@@ -56,6 +58,7 @@ class ViajesModel{
           exitTimeTruckWeightToPort == other.exitTimeTruckWeightToPort &&
           uploadingTime == other.uploadingTime &&
           pureCargoWeight == other.pureCargoWeight &&
+          productName == other.productName &&
           chofereName == other.chofereName &&
           cargoUnloadWeight == other.cargoUnloadWeight &&
           cargoDeficitWeight == other.cargoDeficitWeight &&
@@ -81,6 +84,7 @@ class ViajesModel{
       pureCargoWeight.hashCode ^
       cargoUnloadWeight.hashCode ^
       cargoDeficitWeight.hashCode ^
+      productName.hashCode ^
       timeToIndustry.hashCode ^
       unloadingTimeInIndustry.hashCode ^
       guideNumber.hashCode ^
@@ -103,6 +107,7 @@ class ViajesModel{
         ' pureCargoWeight: $pureCargoWeight,' +
         ' cargoUnloadWeight: $cargoUnloadWeight,' +
         ' chofereName: $chofereName,' +
+        ' productName: $productName,' +
         ' cargoDeficitWeight: $cargoDeficitWeight,' +
         ' timeToIndustry: $timeToIndustry,' +
         ' unloadingTimeInIndustry: $unloadingTimeInIndustry,' +
@@ -125,6 +130,7 @@ class ViajesModel{
     DateTime? uploadingTime,
     double? pureCargoWeight,
     double? cargoUnloadWeight,
+    String? productName,
     double? cargoDeficitWeight,
     DateTime? timeToIndustry,
     DateTime? unloadingTimeInIndustry,
@@ -147,6 +153,7 @@ class ViajesModel{
           exitTimeTruckWeightToPort ?? this.exitTimeTruckWeightToPort,
       uploadingTime: uploadingTime ?? this.uploadingTime,
       pureCargoWeight: pureCargoWeight ?? this.pureCargoWeight,
+      productName: productName ?? this.productName,
       cargoUnloadWeight: cargoUnloadWeight ?? this.cargoUnloadWeight,
       cargoDeficitWeight: cargoDeficitWeight ?? this.cargoDeficitWeight,
       timeToIndustry: timeToIndustry ?? this.timeToIndustry,
@@ -173,6 +180,7 @@ class ViajesModel{
       'unloadingTimeInIndustry': this.unloadingTimeInIndustry.millisecondsSinceEpoch,
       'pureCargoWeight': this.pureCargoWeight,
       'cargoUnloadWeight': this.cargoUnloadWeight,
+      'productName': this.productName,
       'exitTimeTruckWeightToPort': this.exitTimeTruckWeightToPort,
       'entryTimeTruckWeightToPort': this.entryTimeTruckWeightToPort,
       'cargoDeficitWeight': this.cargoDeficitWeight,
@@ -203,6 +211,7 @@ class ViajesModel{
       guideNumber: map['guideNumber'] as double,
       industryId: map['industryId'] as String,
       chofereName: map['chofereName'] as String,
+      productName: map['productName'] as String,
       chofereId: map['chofereId'] as String,
       licensePlate: map['licensePlate'] as String,
       cargoId: map['cargoId'] as String,

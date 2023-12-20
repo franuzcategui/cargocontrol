@@ -5,12 +5,14 @@ class DashboardModalButton extends StatelessWidget {
   final String title1;
   final String title2;
   final String subtitle;
+  final bool isDisable;
   final void Function() onTap;
   const DashboardModalButton(
       {super.key,
       required this.title1,
       required this.title2,
       required this.subtitle,
+      this.isDisable = false,
       required this.onTap});
 
   @override
@@ -18,8 +20,9 @@ class DashboardModalButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: OutlinedButton(
-        onPressed: onTap,
+        onPressed: isDisable ? null: onTap,
         style: constants.ButtonStyles.buttonStyle3,
+
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           RichText(
             text: TextSpan(

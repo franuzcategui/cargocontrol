@@ -1,8 +1,11 @@
+import '../../core/enums/choferes_status_enum.dart';
+
 class ChoferesModel{
   final String choferId;
   final String choferNationalId;
   final dynamic averageCargoDeficit;
   final DateTime averageTimeDeficit;
+  final ChoferesStatusEnum choferesStatusEnum;
   final double rating;
   final int numberOfTrips;
   final String firstName;
@@ -18,6 +21,7 @@ class ChoferesModel{
     required this.averageTimeDeficit,
     required this.rating,
     required this.numberOfTrips,
+    required this.choferesStatusEnum,
     required this.firstName,
     required this.lastName,
     required this.rankingColor,
@@ -30,6 +34,7 @@ class ChoferesModel{
       (other is ChoferesModel &&
           runtimeType == other.runtimeType &&
           choferId == other.choferId &&
+          choferesStatusEnum == other.choferesStatusEnum &&
           choferNationalId == other.choferNationalId &&
           averageCargoDeficit == other.averageCargoDeficit &&
           averageTimeDeficit == other.averageTimeDeficit &&
@@ -46,6 +51,7 @@ class ChoferesModel{
       choferNationalId.hashCode ^
       averageCargoDeficit.hashCode ^
       averageTimeDeficit.hashCode ^
+      choferesStatusEnum.hashCode ^
       rating.hashCode ^
       numberOfTrips.hashCode ^
       firstName.hashCode ^
@@ -60,6 +66,7 @@ class ChoferesModel{
         ' choferNationalId: $choferNationalId,' +
         ' averageCargoDeficit: $averageCargoDeficit,' +
         ' averageTimeDeficit: $averageTimeDeficit,' +
+        ' choferesStatusEnum: $choferesStatusEnum,' +
         ' rating: $rating,' +
         ' numberOfTrips: $numberOfTrips,' +
         ' firstName: $firstName,' +
@@ -74,6 +81,7 @@ class ChoferesModel{
     String? choferNationalId,
     double? averageCargoDeficit,
     DateTime? averageTimeDeficit,
+    ChoferesStatusEnum? choferesStatusEnum,
     double? rating,
     int? numberOfTrips,
     String? firstName,
@@ -84,6 +92,7 @@ class ChoferesModel{
     return ChoferesModel(
       choferId: choferId ?? this.choferId,
       choferNationalId: choferNationalId ?? this.choferNationalId,
+      choferesStatusEnum: choferesStatusEnum ?? this.choferesStatusEnum,
       averageCargoDeficit: averageCargoDeficit ?? this.averageCargoDeficit,
       averageTimeDeficit: averageTimeDeficit ?? this.averageTimeDeficit,
       rating: rating ?? this.rating,
@@ -100,6 +109,7 @@ class ChoferesModel{
       'choferId': this.choferId,
       'choferNationalId': this.choferNationalId,
       'averageCargoDeficit': this.averageCargoDeficit,
+      'choferesStatusEnum': this.choferesStatusEnum.type,
       'averageTimeDeficit': this.averageTimeDeficit.millisecondsSinceEpoch,
       'rating': this.rating,
       'numberOfTrips': this.numberOfTrips,
@@ -115,6 +125,7 @@ class ChoferesModel{
       choferId: map['choferId'] as String,
       choferNationalId: map['choferNationalId'] as String,
       averageCargoDeficit: map['averageCargoDeficit'] as dynamic,
+      choferesStatusEnum: (map['choferesStatusEnum'] as String).toChoferesStatusEnum(),
       averageTimeDeficit: DateTime.fromMillisecondsSinceEpoch(map['averageTimeDeficit']),
       rating: map['rating'] as double,
       numberOfTrips: map['numberOfTrips'] as int,

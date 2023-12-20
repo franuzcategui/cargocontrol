@@ -1,11 +1,8 @@
 import 'dart:async';
 
 import 'package:cargocontrol/commons/common_functions/search_tags_handler.dart';
+import 'package:cargocontrol/core/enums/choferes_status_enum.dart';
 import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
-import 'package:cargocontrol/models/industry_models/industries_model.dart';
-import 'package:cargocontrol/models/industry_models/industry_guide_model.dart';
-import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
-import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,6 +35,7 @@ class ChoferesController extends StateNotifier<bool> {
     bool hasSecondName = hasLastName(firstName);
     ChoferesModel choferesModel = ChoferesModel(
         choferId: choferId,
+        choferesStatusEnum: ChoferesStatusEnum.available,
         choferNationalId: choferNationalId,
         averageCargoDeficit: 0.0,
         averageTimeDeficit: DateTime.now(),

@@ -4,12 +4,9 @@ import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
-import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
-import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
-import '../../../admin/create_vessel/widgets/information_preliminar_widget.dart';
 import '../widgets/co_preliminary_info_widget.dart';
 import '../widgets/co_truck_info_widget.dart';
 
@@ -84,6 +81,7 @@ class _CoTruckBriefScreenState extends ConsumerState<CoTruckBriefScreen> {
                                         vesselName: truckNotiCtr.selectedIndustry?.vesselName ?? '',
                                         industryName: truckNotiCtr.selectedIndustry?.industryName ?? '',
                                         industryId: truckNotiCtr.selectedIndustry?.industryId ?? '',
+                                        productName: truckNotiCtr.selectedIndustry?.selectedVesselCargo.productName ?? '',
                                         choferesname: truckNotiCtr.selectedChofere?.firstName?? '',
                                         choferesId: truckNotiCtr.selectedChofere?.choferNationalId?? '',
                                         industrySubModel: truckNotiCtr.selectedIndustry!,

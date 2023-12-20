@@ -65,6 +65,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
     required String cargoId,
     required String choferesId,
     required String choferesname,
+    required String productName,
     required IndustrySubModel industrySubModel,
     required WidgetRef ref,
     required BuildContext context,
@@ -90,6 +91,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
         chofereName: choferesname,
         licensePlate: plateNumber,
         cargoId: cargoId,
+        productName: productName,
         viajesId: viajesId,
         viajesTypeEnum: ViajesTypeEnum.inProgress,
       viajesStatusEnum: ViajesStatusEnum.portEntered
