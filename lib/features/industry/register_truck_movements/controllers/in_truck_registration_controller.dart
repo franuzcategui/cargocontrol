@@ -2,6 +2,7 @@ import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_type.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
+import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
@@ -13,6 +14,7 @@ import 'package:uuid/uuid.dart';
 import '../../../../commons/common_widgets/show_toast.dart';
 import '../../../../models/vessel_models/vessel_cargo_model.dart';
 import '../../../coordinator/register_truck_movement/data/apis/truck_registration_apis.dart';
+import 'in_truck_registration_noti_controller.dart';
 
 final inTruckRegistrationControllerProvider = StateNotifierProvider<TruckRegistrationController, bool>((ref) {
   final api = ref.watch(truckRegistrationApisProvider);
@@ -68,11 +70,67 @@ class TruckRegistrationController extends StateNotifier<bool> {
       state = false;
       Navigator.pushNamed(context, AppRoutes.inRegistrationSuccessFullScreen);
       showSnackBar(context: context, content: 'Viajes Registered!');
-      await ref.read(truckRegistrationNotiControllerProvider).setMatchedViajes(null);
-      // await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
+      await ref.read(inTruckRegistrationNotiControllerProvider).setMatchedViajes(null);
     });
     state = false;
   }
+
+
+  Future<void> registerTruckUnloadingInIndustry({
+    required double cargoUnloadWeight,
+    required ViajesModel viajesModel,
+    required IndustrySubModel industrySubModel,
+    required ChoferesModel choferesModel,
+    required WidgetRef ref,
+    required BuildContext context,
+  }) async {
+    state = true;
+
+    DateTime unloadingTimeInIndustry= DateTime.now();
+    ViajesModel model = viajesModel.copyWith(
+      cargoDeficitWeight: viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight,
+      cargoUnloadWeight: cargoUnloadWeight,
+      unloadingTimeInIndustry: unloadingTimeInIndustry,
+      viajesTypeEnum: ViajesTypeEnum.completed,
+      viajesStatusEnum: ViajesStatusEnum.industryUnloaded
+    );
+
+    IndustrySubModel industry = industrySubModel.copyWith(
+      cargoUnloaded: cargoUnloadWeight- (viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ),
+      selectedVesselCargo: industrySubModel.selectedVesselCargo.copyWith(
+            pesoUnloaded: cargoUnloadWeight- (viajesModel.entryTimeTruckWeightToPort - viajesModel.exitTimeTruckWeightToPort),
+          ),
+    );
+
+    ChoferesModel chofere  = choferesModel.copyWith(
+      averageCargoDeficit: choferesModel.averageCargoDeficit + (cargoUnloadWeight- (viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort )) /choferesModel.numberOfTrips +1,
+      numberOfTrips: choferesModel.numberOfTrips +1,
+    );
+
+    final result = await _datasource.registerTruckUnloadingInIndustry(
+      viajesModel: model,
+      industrySubModel: industry,
+      choferesModel: chofere
+    );
+
+    result.fold((l) {
+      state = false;
+      showSnackBar(context: context, content: l.message);
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+    }, (r) async{
+      state = false;
+      Navigator.pushNamed(context, AppRoutes.inRegistrationSuccessFullScreen);
+      showSnackBar(context: context, content: 'Viajes Unlaoded!');
+      await ref.read(inTruckRegistrationNotiControllerProvider).setMatchedViajes(null);
+      await ref.read(inTruckRegistrationNotiControllerProvider).setCurrentIndustry(null);
+      await ref.read(inTruckRegistrationNotiControllerProvider).setViajesCargoModel(null);
+      await ref.read(inTruckRegistrationNotiControllerProvider).setViajesChoferesModel(null);
+    });
+    state = false;
+  }
+
+
 
   // For Industria Section
   Stream<IndustrySubModel> getIndustriaIndustry({required String realIndustryId}) {

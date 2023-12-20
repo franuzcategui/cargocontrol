@@ -4,6 +4,7 @@ import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/industry/register_truck_movements/controllers/in_truck_registration_controller.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import '../../../../commons/common_imports/common_libs.dart';
@@ -73,11 +74,31 @@ class _InTruckUnlaodingBriefScreenState extends ConsumerState<InTruckUnlaodingBr
                   Divider(height: 1.h,color: context.textFieldColor,),
 
                   SizedBox(height: 26.h,),
-                  CustomButton(
-                      onPressed: (){
-                        Navigator.pushNamed(context, AppRoutes.inRegistrationSuccessFullScreen);
-                      },
-                      buttonText: "CONFIRMAR"
+                  Consumer(
+                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                      return CustomButton(
+                        isLoading: ref.watch(inTruckRegistrationNotiControllerProvider).isLoading,
+                        onPressed: ()async{
+                            await ref.read(inTruckRegistrationNotiControllerProvider).getChoferesModel(
+                              ref: ref,
+                              context: context,
+                              nationalIdNumber: ref.read(inTruckRegistrationNotiControllerProvider).matchedViajes!.chofereId
+                            );
+
+                            if(ref.read(inTruckRegistrationNotiControllerProvider).viajesChoferesModel!= null){
+                              await ref.read(inTruckRegistrationControllerProvider.notifier).registerTruckUnloadingInIndustry(
+                                choferesModel: ref.read(inTruckRegistrationNotiControllerProvider).viajesChoferesModel!,
+                                cargoUnloadWeight: widget.cargoUnloadWeight,
+                                industrySubModel: ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel!,
+                                viajesModel: ref.read(inTruckRegistrationNotiControllerProvider).matchedViajes!,
+                                context: context,
+                                ref: ref,
+                              );
+                            }
+                          },
+                          buttonText: "CONFIRMAR"
+                      );
+                    },
                   ),
                 ],
               ),

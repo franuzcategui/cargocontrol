@@ -47,22 +47,23 @@ class _InTruckLeavingDelCamionWidgetState extends ConsumerState<InTruckLeavingDe
                     ' ${ref.read(inTruckRegistrationNotiControllerProvider).vesselCargoModel?.tipo} '
                     '${ref.read(inTruckRegistrationNotiControllerProvider).vesselCargoModel?.variety} '
                     '${ref.read(inTruckRegistrationNotiControllerProvider).vesselCargoModel?.origen} '
+
             ),
             CustomTile(
                 title: "Número de bodega",
-                subText: "4"
+                subText: model.cargoId
             ),
             CustomTile(
                 title: "Peso tara",
-                subText: "12,690"
+                subText: model.entryTimeTruckWeightToPort.toString()
             ),
             CustomTile(
                 title: "Peso bruto de salida",
-                subText: "40,340"
+                subText: model.exitTimeTruckWeightToPort.toString()
             ),
             CustomTile(
                 title: "Peso bruto de llegada",
-                subText: "40,331"
+                subText: widget.cargoUnloadWeight.toString()
             ),
           ],
         );

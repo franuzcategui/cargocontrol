@@ -1,4 +1,7 @@
 import 'package:cargocontrol/commons/common_widgets/show_toast.dart';
+import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
+import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
+import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
@@ -102,7 +105,6 @@ class TruckRegistrationNotiController extends ChangeNotifier {
     required BuildContext context,
     required WidgetRef ref,
   })async{
-    _matchedViajes = null;
     setLoading(true);
     final result = await  _datasource.getVesselCargoModel(
         vesselId: vesselId
@@ -129,4 +131,35 @@ class TruckRegistrationNotiController extends ChangeNotifier {
     _vesselCargoModel = model;
     notifyListeners();
   }
+
+
+  Future getChoferesModel({
+    required String nationalIdNumber,
+    required BuildContext context,
+    required WidgetRef ref,
+  })async{
+    setLoading(true);
+    final result = await  _datasource.getChoferesForViajes(
+       nationalId: nationalIdNumber
+    );
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint( l.message);
+      showSnackBar(context: context, content: l.message);
+      setLoading(false);
+    }, (r) {
+      _isLoading = false;
+      setViajesChoferesModel(r);
+    });
+  }
+
+
+  ChoferesModel? _viajesChoferesModel;
+  ChoferesModel? get viajesChoferesModel=> _viajesChoferesModel;
+
+  setViajesChoferesModel(ChoferesModel? model) {
+    _viajesChoferesModel = model;
+    notifyListeners();
+  }
+
 }

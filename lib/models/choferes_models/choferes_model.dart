@@ -1,7 +1,7 @@
 class ChoferesModel{
   final String choferId;
   final String choferNationalId;
-  final double averageCargoDeficit;
+  final dynamic averageCargoDeficit;
   final DateTime averageTimeDeficit;
   final double rating;
   final int numberOfTrips;
@@ -114,7 +114,7 @@ class ChoferesModel{
     return ChoferesModel(
       choferId: map['choferId'] as String,
       choferNationalId: map['choferNationalId'] as String,
-      averageCargoDeficit: map['averageCargoDeficit'] as double,
+      averageCargoDeficit: map['averageCargoDeficit'] as dynamic,
       averageTimeDeficit: DateTime.fromMillisecondsSinceEpoch(map['averageTimeDeficit']),
       rating: map['rating'] as double,
       numberOfTrips: map['numberOfTrips'] as int,
