@@ -18,7 +18,11 @@ final truckRegistrationApisProvider = Provider<TruckRegistrationApisImplements>(
 
 abstract class TruckRegistrationApisImplements {
 
-  FutureEitherVoid registerTruckEnteringToPort({required ViajesModel viajesModel, required IndustrySubModel industrySubModel,});
+  FutureEitherVoid registerTruckEnteringToPort({
+    required ViajesModel viajesModel,
+    required IndustrySubModel industrySubModel,
+    required ChoferesModel choferesModel,
+  });
   FutureEitherVoid registerTruckLeavingFromPort({required ViajesModel viajesModel, required VesselModel vesselModel,});
   FutureEitherVoid registerTruckEnteringInIndustry({required ViajesModel viajesModel, required IndustrySubModel industrySubModel,}) ;
   FutureEitherVoid registerTruckUnloadingInIndustry({
@@ -56,6 +60,7 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
   FutureEitherVoid registerTruckEnteringToPort({
     required ViajesModel viajesModel,
     required IndustrySubModel industrySubModel,
+    required ChoferesModel choferesModel,
   })async {
     try{
       await _firestore.runTransaction((Transaction transaction) async {
@@ -64,10 +69,16 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
           doc(viajesModel.viajesId),
           viajesModel.toMap(),
         );
-        transaction.set(
+        transaction.update(
           _firestore.collection(FirebaseConstants.industryGuideCollection).
           doc(industrySubModel.industryId),
           industrySubModel.toMap(),
+        );
+
+        transaction.update(
+          _firestore.collection(FirebaseConstants.choferesCollection).
+          doc(choferesModel.choferNationalId),
+          choferesModel.toMap(),
         );
       });
       return const Right(null);

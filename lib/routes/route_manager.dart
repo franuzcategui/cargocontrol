@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 
 import '../features/admin/create_industry/widgets/industries_for_all_data.dart';
 import '../features/admin/create_vessel/views/create_vessle_bodega_info_screen.dart';
+import '../features/admin/dashboard/views/ad_all_recenties_screen.dart';
 import '../features/admin/manage_ships/views/manage_ships_screen.dart';
 import '../features/coordinator/register_truck_movement/views/co_select_chofer_sheet.dart';
 import '../features/coordinator/register_truck_movement/views/co_truck_brief_screen.dart';
@@ -55,6 +56,8 @@ class AppRoutes {
   static const String adminViajesEditScreen = '/adminViajesEditScreen';
 
   static const String adManageShipsScreen = '/adManageShipsScreen';
+  static const String adAllRecentiesScreen = '/adAllRecentiesScreen';
+
 
   // Coordinator Section
   static const String coMainMenuScreen = '/coMainMenuScreen';
@@ -150,6 +153,8 @@ class AppRoutes {
 
       case adManageShipsScreen:
         return _buildRoute(const AdManageShipsScreen());
+      case adAllRecentiesScreen:
+        return _buildRoute(const AdAllRecentiesScreen());
 
     // Coordinator Screens
       case coMainMenuScreen:

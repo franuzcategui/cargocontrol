@@ -73,7 +73,9 @@ class _CoTruckBriefScreenState extends ConsumerState<CoTruckBriefScreen> {
                               return CustomButton(
                                 isLoading: ref.watch(truckRegistrationControllerProvider),
                                 onPressed: ()async{
-                                  await ref.watch(truckRegistrationControllerProvider.notifier).registerTruckEnteringToPort(
+                                  if(truckNotiCtr.selectedChofere!= null){
+                                    await ref.watch(truckRegistrationControllerProvider.notifier).registerTruckEnteringToPort(
+                                        choferesModel: truckNotiCtr.selectedChofere!,
                                         guideNumber: widget.guideNumber,
                                         plateNumber: widget.plateNumber,
                                         marchamo: widget.marchamo,
@@ -89,6 +91,7 @@ class _CoTruckBriefScreenState extends ConsumerState<CoTruckBriefScreen> {
                                         ref: ref,
                                         context: context
                                     );
+                                  }
                                 },
                                 buttonText: "CONFIRMAR"
                               );

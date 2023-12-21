@@ -10,8 +10,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
+import '../../../../core/enums/viajes_status_enum.dart';
 import '../../../../models/industry_models/industry_sub_model.dart';
+import '../../../../models/viajes_models/viajes_model.dart';
 import '../../../../routes/route_manager.dart';
+import '../../../../utils/loading.dart';
+import '../../../coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
 import '../../create_industry/controllers/ad_industry_controller.dart';
 import '../widgets/ad_floating_action_sheet.dart';
 import '../widgets/ad_progress_dashboard_card.dart';
@@ -101,7 +105,7 @@ class AdDashboardScreen extends ConsumerWidget {
                           itemBuilder: (BuildContext context, int index) {
                             IndustrySubModel model = allIndustries[index];
                             return AdProgressIndicatorCard(
-                              numberOfTrips: '0',
+                              numberOfTrips: '${model.viajesIds.length}',
                               divideNumber2: '${model.cargoUnloaded}',
                               divideNumber1: '${model.cargoAssigned}',
                               barPercentage: model.cargoUnloaded!= 0? model.cargoAssigned/model.cargoUnloaded: 0,
@@ -141,26 +145,48 @@ class AdDashboardScreen extends ConsumerWidget {
                       Text('Registros recientes', style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size18),),
                       GestureDetector(
                           onTap: (){
-                            Navigator.pushNamed(context, AppRoutes.coAllRecentiesScreen);
+                            Navigator.pushNamed(context, AppRoutes.adAllRecentiesScreen);
                           },
                           child: Text('Ver todos', style: getExtraBoldStyle(color: context.mainColor, fontSize: MyFonts.size12),))
                     ],
                   ),
                   SizedBox(height: 28.h,),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 3,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: (){
+                  Consumer(
+                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                      return ref.watch(getAllViajesList).
+                      when(
+                        data: (viajesList){
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: viajesList.length> 5 ? 5:viajesList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              ViajesModel model =  viajesList[index];
+                              return GestureDetector(
+                                onTap: (){
 
+                                },
+                                child: AdRecentRecordCard(
+                                  isEntered: model.viajesStatusEnum.type == ViajesStatusEnum.portEntered.type ? true : false,
+                                  isLeaving:  model.viajesStatusEnum.type == ViajesStatusEnum.portLeft.type ? true : false,
+                                  guideNumber: model.guideNumber.toString(),
+                                  driverName: model.chofereName,
+                                  portEntryTime: model.entryTimeToPort,
+                                ),
+                              );
+                            },
+                          );
                         },
-                        child: AdRecentRecordCard(
-                          isEntered: index %2 ==0 ? true : false,
-                          isLeaving:  index %2 !=0 ? true : false,
-                        ),
+                        error: (error, st){
+                          debugPrintStack(stackTrace: st);
+                          debugPrint(error.toString());
+                          return const SizedBox.shrink();
+                        },
+                        loading: (){
+                          return const LoadingWidget();
+                        },
                       );
+
                     },
                   )
                 ],

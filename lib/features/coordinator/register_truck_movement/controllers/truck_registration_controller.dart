@@ -1,7 +1,9 @@
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
+import 'package:cargocontrol/core/enums/choferes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_type.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
+import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
@@ -67,6 +69,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
     required String choferesname,
     required String productName,
     required IndustrySubModel industrySubModel,
+    required ChoferesModel choferesModel,
     required WidgetRef ref,
     required BuildContext context,
   }) async {
@@ -96,14 +99,18 @@ class TruckRegistrationController extends StateNotifier<bool> {
         viajesTypeEnum: ViajesTypeEnum.inProgress,
       viajesStatusEnum: ViajesStatusEnum.portEntered
     );
+    ChoferesModel choferes = choferesModel.copyWith(
+      choferesStatusEnum: ChoferesStatusEnum.portEntered
+    );
 
     IndustrySubModel industryModel = industrySubModel.copyWith(
       usedGuideNumbers: industrySubModel.usedGuideNumbers..add(guideNumber),
     );
 
     final result = await _datasource.registerTruckEnteringToPort(
-        viajesModel: viajesModel,
-      industrySubModel: industryModel
+      viajesModel: viajesModel,
+      industrySubModel: industryModel,
+        choferesModel: choferes
     );
 
     result.fold((l) {

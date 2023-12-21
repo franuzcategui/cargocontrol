@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/commons/common_widgets/show_toast.dart';
