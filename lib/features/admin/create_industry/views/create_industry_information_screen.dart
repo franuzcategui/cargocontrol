@@ -269,8 +269,6 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                               }
                           );
                         }
-
-                        // Navigator.pushNamed(context, AppRoutes.adminCreateIndustryCompleteDataScreen);
                       },
                       buttonText: "CONTINUAR"
                   ),
