@@ -86,6 +86,9 @@ class _CoSelectChoferScreenState extends ConsumerState<CoSelectChoferScreen> {
                       hintText: "",
                       onChanged: (val){
                         choferesNotiCtr.getAllChoferes(searchWord: searchCtr.text);
+                        if(searchCtr.text.isEmpty){
+                          choferesNotiCtr.firstTime();
+                        }
                         setState(() {
                         });
                       },

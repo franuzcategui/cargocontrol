@@ -15,6 +15,7 @@ final choferesApisProvider = Provider<ChoferesApisImplements>((ref){
 abstract class ChoferesApisImplements {
 
   FutureEitherVoid registerChofere({required ChoferesModel choferesModel});
+  FutureEitherVoid deleteChofere({required String chofereId});
   Future<QuerySnapshot> getAllChoferes({int limit = 10, DocumentSnapshot? snapshot});
 }
 
@@ -29,6 +30,21 @@ class ChoferesApis implements ChoferesApisImplements{
       await _firestore.collection(FirebaseConstants.choferesCollection).
       doc(choferesModel.choferNationalId).
       set(choferesModel.toMap());
+
+      return const Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEitherVoid deleteChofere({required String chofereId}) async{
+    try{
+      await _firestore.collection(FirebaseConstants.choferesCollection).
+      doc(chofereId).
+      delete();
 
       return const Right(null);
     }on FirebaseException catch(e, stackTrace){

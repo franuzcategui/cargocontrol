@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cargocontrol/common_widgets/cargo_card.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/admin/choferes/controllers/choferes_controller.dart';
 import 'package:cargocontrol/features/admin/choferes/controllers/choferes_noti_controller.dart';
 import 'package:cargocontrol/utils/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,6 +49,7 @@ class _AdChoferesListState extends ConsumerState<AdChoferesList> {
   @override
   void dispose() {
     _scrollController.dispose();
+    searchCtr.dispose();
     super.dispose();
   }
 
@@ -62,9 +64,16 @@ class _AdChoferesListState extends ConsumerState<AdChoferesList> {
           child: Column(
             children: [
               CustomTextField(
-                controller: TextEditingController(),
+                controller: searchCtr,
                 hintText: "",
-                onChanged: (val){},
+                onChanged: (val){
+                  choferesNotiCtr.getAllChoferes(searchWord: searchCtr.text);
+                  if(searchCtr.text.isEmpty){
+                    choferesNotiCtr.firstTime();
+                  }
+                  setState(() {
+                  });
+                },
                 onFieldSubmitted: (val){},
                 obscure: false,
                 label: 'Buscar chofer',
@@ -86,6 +95,15 @@ class _AdChoferesListState extends ConsumerState<AdChoferesList> {
                         return Dismissible(
                           key: UniqueKey(),
                           direction: DismissDirection.endToStart,
+                          confirmDismiss: (direction)async {
+                            await ref.read(choferesControllerProvider.notifier).
+                            deleteChofere(
+                                choferNationalId: model.choferNationalId,
+                                ref: ref,
+                                context: context,
+                            );
+                            return false;
+                          },
                           background: Container(
                             color: context.errorColor,
                             alignment: Alignment.centerRight,

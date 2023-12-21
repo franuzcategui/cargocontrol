@@ -19,6 +19,11 @@ final fetchCurrentIndustry = StreamProvider((ref) {
   return industryProvider.getAllIndustrySubModels();
 });
 
+final fetchgetAllIndustryNamesStream = StreamProvider((ref) {
+  final industryProvider = ref.watch(adIndustryProvider.notifier);
+  return industryProvider.getAllIndustriesStream();
+});
+
 
 class AdIndustryController extends StateNotifier<bool> {
   final AdIndustryApisImplements _datasource;
@@ -54,6 +59,10 @@ class AdIndustryController extends StateNotifier<bool> {
 
   Stream<List<IndustrySubModel>> getAllIndustrySubModels() {
     return _datasource.getAllIndustrySubModels();
+  }
+
+  Stream<List<IndustriesModel>> getAllIndustriesStream() {
+    return _datasource.getAllIndustriesStream();
   }
 
   List<IndustriesModel> industriesModels = const[

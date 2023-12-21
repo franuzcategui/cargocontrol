@@ -1,9 +1,7 @@
-import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/common_widgets/cargo_bar_chart.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/dashboard/widgets/ad_dashboard_mini_card.dart';
-import 'package:cargocontrol/common_widgets/progress_indicator_card.dart';
 import 'package:cargocontrol/features/auth/controllers/auth_notifier_controller.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +12,6 @@ import 'package:cargocontrol/utils/constants.dart' as constants;
 
 import '../../../../models/industry_models/industry_sub_model.dart';
 import '../../../../routes/route_manager.dart';
-import '../../../auth/controllers/auth_controller.dart';
 import '../../create_industry/controllers/ad_industry_controller.dart';
 import '../widgets/ad_floating_action_sheet.dart';
 import '../widgets/ad_progress_dashboard_card.dart';
@@ -92,11 +89,15 @@ class AdDashboardScreen extends ConsumerWidget {
                 return ref.watch(fetchCurrentIndustry).when(
                     data: (allIndustries){
 
-                      return SizedBox(
-                        height: 136.h,
+                      return Container(
+                        constraints: BoxConstraints(
+                          minHeight:  136.h,
+                          maxHeight: 160.h
+                        ),
                         child: ListView.builder(
                           itemCount: allIndustries.length,
                           scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             IndustrySubModel model = allIndustries[index];
                             return AdProgressIndicatorCard(
@@ -104,7 +105,7 @@ class AdDashboardScreen extends ConsumerWidget {
                               divideNumber2: '${model.cargoUnloaded}',
                               divideNumber1: '${model.cargoAssigned}',
                               barPercentage: model.cargoUnloaded!= 0? model.cargoAssigned/model.cargoUnloaded: 0,
-                              title: 'Industria #${index+1}',
+                              title: '${model.industryName}',
                             );
                           },
 

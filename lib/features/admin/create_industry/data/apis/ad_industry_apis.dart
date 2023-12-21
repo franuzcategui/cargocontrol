@@ -22,6 +22,7 @@ abstract class AdIndustryApisImplements {
   FutureEitherVoid createIndustryGuideModel({required List<IndustrySubModel> industrySubModels});
   FutureEitherVoid uploadIndustries({required IndustriesModel industryModell});
   FutureEither<List<IndustriesModel>> getAllIndustries();
+  Stream<List<IndustriesModel>> getAllIndustriesStream();
   Stream<List<IndustrySubModel>> getAllIndustrySubModels();
   FutureEither<List<IndustrySubModel>> numberOfIndustriesCheck() ;
 }
@@ -55,6 +56,19 @@ class AdIndustryApis implements AdIndustryApisImplements{
       List<IndustrySubModel> models = [];
       event.docs.forEach((element) {
         models.add(IndustrySubModel.fromMap(element.data()));
+      });
+      return models;
+    });
+  }
+
+  @override
+  Stream<List<IndustriesModel>> getAllIndustriesStream(){
+    return _firestore.collection(FirebaseConstants.industriesCollection).
+    snapshots().
+    map((event) {
+      List<IndustriesModel> models = [];
+      event.docs.forEach((element) {
+        models.add(IndustriesModel.fromMap(element.data()));
       });
       return models;
     });

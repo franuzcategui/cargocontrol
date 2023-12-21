@@ -89,6 +89,7 @@ class ChoferesNotiController extends ChangeNotifier {
       return models;
 
     }else if(searchWord == ''){
+
       setSecondaryLoading(true);
       QuerySnapshot querySnapshot = await _datasource.getAllChoferes(
         limit: limit,
@@ -136,5 +137,8 @@ class ChoferesNotiController extends ChangeNotifier {
       notifyListeners();
     // }
   }
+
+
+
 
 }
