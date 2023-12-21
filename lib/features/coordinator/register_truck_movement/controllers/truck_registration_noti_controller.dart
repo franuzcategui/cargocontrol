@@ -44,6 +44,12 @@ class TruckRegistrationNotiController extends ChangeNotifier {
 
   IndustrySubModel? _selectedIndustry;
   IndustrySubModel? get selectedIndustry => _selectedIndustry;
+  setSelectedIndustry(IndustrySubModel? model){
+    _selectedIndustry = model;
+    notifyListeners();
+  }
+
+
   getIndusytryFromGuideNumber({required double guideNumber})async{
     setLoading(true);
     if(allIndustriesModels.length != 0){

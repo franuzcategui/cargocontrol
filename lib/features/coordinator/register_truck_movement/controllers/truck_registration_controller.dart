@@ -120,7 +120,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
       debugPrint(l.message);
     }, (r) async{
       state = false;
-      Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
+      await Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
       ref.read(truckRegistrationNotiControllerProvider).setIndustryMatchedStatus(false);
       ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(null);
       showSnackBar(context: context, content: 'Viajes Registered!');
@@ -179,11 +179,12 @@ class TruckRegistrationController extends StateNotifier<bool> {
       debugPrintStack(stackTrace: l.stackTrace);
       debugPrint(l.message);
     }, (r) async{
-      state = false;
       Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
+      state = false;
       showSnackBar(context: context, content: 'Viajes Registered!');
-      await ref.read(truckRegistrationNotiControllerProvider).setMatchedViajes(null);
       await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
+      await ref.read(truckRegistrationNotiControllerProvider).setMatchedViajes(null);
+      ref.read(truckRegistrationNotiControllerProvider).setSelectedIndustry(null);
     });
     state = false;
   }

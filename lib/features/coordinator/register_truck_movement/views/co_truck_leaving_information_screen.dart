@@ -3,6 +3,7 @@ import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/commons/common_widgets/show_toast.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
+import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -92,10 +93,13 @@ class _CoTruckLeavingInformationScreenState extends State<CoTruckLeavingInformat
                       SizedBox(height: 25.h,),
                       CustomButton(
                           onPressed: (){
-                            if(fullTruckWeightCtr.text.isNotEmpty && truckCtr.selectedIndustry!= null){
+                            truckCtr.allIndustriesModels.forEach((industry) {
+                              if(industry.industryId == truckCtr.matchedViajes!.industryId){
+                                truckCtr.setSelectedIndustry(industry);
+                              }
+                            });
+                            if(fullTruckWeightCtr.text.isNotEmpty && truckCtr.selectedIndustry != null){
                               double pureCargoWeight =   double.parse(fullTruckWeightCtr.text) - truckCtr.matchedViajes!.entryTimeTruckWeightToPort;
-                              print('Entered Cargo Weight ${pureCargoWeight}');
-                              print('Assigned Cargo ${truckCtr.selectedIndustry!.cargoAssigned}');
                               if(pureCargoWeight <= truckCtr.selectedIndustry!.cargoAssigned){
                                 Navigator.pushNamed(
                                     context,
@@ -106,7 +110,7 @@ class _CoTruckLeavingInformationScreenState extends State<CoTruckLeavingInformat
                                     }
                                 );
                               }else{
-                                showSnackBar(context: context, content: 'Peso bruto is more then total carga!');
+                                showSnackBar(context: context, content: 'Peso bruto is more then total carga! Max limit is ${truckCtr.selectedIndustry!.cargoAssigned}');
                               }
                             }else{
                               showSnackBar(context: context, content: 'Enter Peso bruto!');

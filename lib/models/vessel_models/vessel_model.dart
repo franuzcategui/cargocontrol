@@ -7,10 +7,10 @@ class VesselModel {
   final String entryPort;
   final String shipper;
   final String unlcode;
-  final double totalCargoWeight;
+  final dynamic totalCargoWeight;
   final int numberOfCargos;
   final List<VesselCargoModel> cargoModels;
-  final double cargoUnloadedWeight;
+  final dynamic cargoUnloadedWeight;
   final DateTime entryDate;
   final DateTime exitDate;
   final bool isFinishedUnloading;
@@ -98,10 +98,10 @@ class VesselModel {
     String? entryPort,
     String? shipper,
     String? unlcode,
-    double? totalCargoWeight,
+    dynamic totalCargoWeight,
     int? numberOfCargos,
     List<VesselCargoModel>? cargoModels,
-    double? cargoUnloadedWeight,
+    dynamic cargoUnloadedWeight,
     DateTime? entryDate,
     bool? isFinishedUnloading,
     DateTime? exitDate,
@@ -153,11 +153,11 @@ class VesselModel {
       shipper: map['shipper'] as String,
       unlcode: map['unlcode'] as String,
       isFinishedUnloading: map['isFinishedUnloading'] as bool,
-      totalCargoWeight: map['totalCargoWeight'] as double,
+      totalCargoWeight: map['totalCargoWeight'] as dynamic,
       numberOfCargos: map['numberOfCargos'] as int,
       cargoModels: (map['cargoModels'] as List<dynamic>).
       map((e) => VesselCargoModel.fromMap(e)).toList(),
-      cargoUnloadedWeight: map['cargoUnloadedWeight'] as double,
+      cargoUnloadedWeight: map['cargoUnloadedWeight'] as dynamic,
       entryDate: DateTime.fromMillisecondsSinceEpoch(map['entryDate'] ),
       exitDate: DateTime.fromMillisecondsSinceEpoch(map['exitDate'] ),
       searchTags: map['searchTags'] as Map<String, dynamic>,
