@@ -1,4 +1,5 @@
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
+import 'package:cargocontrol/core/enums/choferes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_type.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
@@ -103,6 +104,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
 
     ChoferesModel chofere  = choferesModel.copyWith(
       averageCargoDeficit: choferesModel.averageCargoDeficit + ((viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ) - cargoUnloadWeight) /choferesModel.numberOfTrips +1,
+      choferesStatusEnum: ChoferesStatusEnum.available
     );
 
     final result = await _datasource.registerTruckUnloadingInIndustry(

@@ -168,7 +168,7 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                               allGood = false;
                             });
 
-                            showSnackBar(context: context,content:  "Fill All Fields!", duration: const Duration(milliseconds: 700) );
+                            showToast(msg:  "Fill All Fields!",);
                             break;
                           }else{
                             setState(() {
