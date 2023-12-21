@@ -26,7 +26,6 @@ class AdDashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -36,7 +35,8 @@ class AdDashboardScreen extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 15),
               child: Text(
                 'Bienvenido',
-                style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size18),
+                style: getBoldStyle(
+                    color: context.textColor, fontSize: MyFonts.size18),
               ),
             ),
             Padding(
@@ -45,12 +45,12 @@ class AdDashboardScreen extends ConsumerWidget {
                 builder: (BuildContext context, WidgetRef ref, Widget? child) {
                   final userModel = ref.read(authNotifierCtr).userModel;
                   print(userModel?.uid);
-                  return Text(userModel!.accountType.type,
-                    style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+                  return Text(
+                    userModel!.accountType.type,
+                    style: getBoldStyle(
+                        color: context.textColor, fontSize: MyFonts.size36),
                   );
-
                 },
-
               ),
             ),
             SizedBox(
@@ -69,71 +69,93 @@ class AdDashboardScreen extends ConsumerWidget {
             ),
             SizedBox(
               height: 136.h,
-              child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: const [
-                    AdProgressIndicatorCard(
-                      numberOfTrips: '0',
-                      divideNumber2: '0',
-                      divideNumber1: '0',
-                      barPercentage: 0,
-                      title: 'Descarga total',
-                    ),
-                    AdProgressIndicatorCard(
-                      numberOfTrips: '0',
-                      divideNumber2: '0',
-                      divideNumber1: '0',
-                      barPercentage: 0,
-                      title: 'Bodega # 1 ',
-                    ),
-                  ]),
+              child:
+                  ListView(scrollDirection: Axis.horizontal, children: const [
+                AdProgressIndicatorCard(
+                  numberOfTrips: '0',
+                  divideNumber2: '0',
+                  divideNumber1: '0',
+                  barPercentage: 0,
+                  title: 'Descarga total',
+                ),
+                AdProgressIndicatorCard(
+                  numberOfTrips: '0',
+                  divideNumber2: '0',
+                  divideNumber1: '0',
+                  barPercentage: 0,
+                  title: 'Bodega # 1 ',
+                ),
+              ]),
             ),
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return ref.watch(fetchCurrentIndustry).when(
-                    data: (allIndustries){
-
-                      return Container(
-                        constraints: BoxConstraints(
-                          minHeight:  136.h,
-                          maxHeight: 160.h
+                    data: (allIndustries) {
+                  return Container(
+                    constraints:
+                        BoxConstraints(minHeight: 136.h, maxHeight: 160.h),
+                    child: ListView.builder(
+                      itemCount: allIndustries.length,
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        IndustrySubModel model = allIndustries[index];
+                        return AdProgressIndicatorCard(
+                          numberOfTrips: '${model.viajesIds.length}',
+                          divideNumber2: '${model.cargoUnloaded}',
+                          divideNumber1: '${model.cargoAssigned}',
+                          barPercentage: double.parse(
+                              (model.cargoUnloaded / model.cargoAssigned)
+                                  .toStringAsFixed(2)),
+                          title: '${model.industryName}',
+                        );
+                      },
+                    ),
+                  );
+                }, error: (error, st) {
+                  debugPrintStack(stackTrace: st);
+                  debugPrint(error.toString());
+                  return const SizedBox();
+                }, loading: () {
+                  return const SizedBox();
+                });
+              },
+            ),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return ref.watch(getPortEnteringViajesList).
+                when(
+                  data: (viajes){
+                    return Row(
+                      children: [
+                        AdDashboardMiniCard(
+                          title: 'Descarga total',
+                          value: "${viajes.fold(0, (sum, viaje) => (sum + viaje.cargoDeficitWeight).toInt())}"
                         ),
-                        child: ListView.builder(
-                          itemCount: allIndustries.length,
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            IndustrySubModel model = allIndustries[index];
-                            return AdProgressIndicatorCard(
-                              numberOfTrips: '${model.viajesIds.length}',
-                              divideNumber2: '${model.cargoUnloaded}',
-                              divideNumber1: '${model.cargoAssigned}',
-                              barPercentage: model.cargoUnloaded!= 0? model.cargoAssigned/model.cargoUnloaded: 0,
-                              title: '${model.industryName}',
-                            );
-                          },
-
+                        AdDashboardMiniCard(
+                          title: 'Viajes en camino',
+                          value: "${viajes.length}"
                         ),
-                      );
-                    },
-                    error: (error, st){
-                      debugPrintStack(stackTrace: st);
-                      debugPrint(error.toString());
-                      return const SizedBox();
-                    },
-                    loading: (){
-                      return const SizedBox();
-                    }
+                      ],
+                    );
+                  },
+                  error: (error, st){
+                    return Row(
+                      children: [
+                        AdDashboardMiniCard(title: 'Descarga total', value: "0"),
+                        AdDashboardMiniCard(title: 'Viajes en camino', value: "0"),
+                      ],
+                    );
+                  },
+                  loading: (){
+                    return const SizedBox();
+                  }
                 );
               },
-
             ),
-            const Row(
-                children:  [
-                  AdDashboardMiniCard(title: 'Descarga total', value: "0"),
-                  AdDashboardMiniCard(title: 'Viajes en camino', value: "0"),
-                ]),
-            SizedBox(height: 36.h,),
+            SizedBox(
+              height: 36.h,
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Column(
@@ -142,33 +164,50 @@ class AdDashboardScreen extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Registros recientes', style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size18),),
+                      Text(
+                        'Registros recientes',
+                        style: getBoldStyle(
+                            color: context.textColor, fontSize: MyFonts.size18),
+                      ),
                       GestureDetector(
-                          onTap: (){
-                            Navigator.pushNamed(context, AppRoutes.adAllRecentiesScreen);
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.adAllRecentiesScreen);
                           },
-                          child: Text('Ver todos', style: getExtraBoldStyle(color: context.mainColor, fontSize: MyFonts.size12),))
+                          child: Text(
+                            'Ver todos',
+                            style: getExtraBoldStyle(
+                                color: context.mainColor,
+                                fontSize: MyFonts.size12),
+                          ))
                     ],
                   ),
-                  SizedBox(height: 28.h,),
+                  SizedBox(
+                    height: 28.h,
+                  ),
                   Consumer(
-                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                      return ref.watch(getAllViajesList).
-                      when(
-                        data: (viajesList){
+                    builder:
+                        (BuildContext context, WidgetRef ref, Widget? child) {
+                      return ref.watch(getAllViajesList).when(
+                        data: (viajesList) {
                           return ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: viajesList.length> 5 ? 5:viajesList.length,
+                            itemCount:
+                                viajesList.length > 5 ? 5 : viajesList.length,
                             itemBuilder: (BuildContext context, int index) {
-                              ViajesModel model =  viajesList[index];
+                              ViajesModel model = viajesList[index];
                               return GestureDetector(
-                                onTap: (){
-
-                                },
+                                onTap: () {},
                                 child: AdRecentRecordCard(
-                                  isEntered: model.viajesStatusEnum.type == ViajesStatusEnum.portEntered.type ? true : false,
-                                  isLeaving:  model.viajesStatusEnum.type == ViajesStatusEnum.portLeft.type ? true : false,
+                                  isEntered: model.viajesStatusEnum.type ==
+                                          ViajesStatusEnum.portEntered.type
+                                      ? true
+                                      : false,
+                                  isLeaving: model.viajesStatusEnum.type ==
+                                          ViajesStatusEnum.portLeft.type
+                                      ? true
+                                      : false,
                                   guideNumber: model.guideNumber.toString(),
                                   driverName: model.chofereName,
                                   portEntryTime: model.entryTimeToPort,
@@ -177,22 +216,23 @@ class AdDashboardScreen extends ConsumerWidget {
                             },
                           );
                         },
-                        error: (error, st){
+                        error: (error, st) {
                           debugPrintStack(stackTrace: st);
                           debugPrint(error.toString());
                           return const SizedBox.shrink();
                         },
-                        loading: (){
+                        loading: () {
                           return const LoadingWidget();
                         },
                       );
-
                     },
                   )
                 ],
               ),
             ),
-            SizedBox(height: 100.h,)
+            SizedBox(
+              height: 100.h,
+            )
           ],
         ),
       ),

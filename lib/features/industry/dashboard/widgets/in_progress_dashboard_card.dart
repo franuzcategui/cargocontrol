@@ -22,7 +22,6 @@ class InProgressIndicatorCard extends StatelessWidget {
       child: Container(
         decoration: constants.DecorationStyles.shadow2,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-        height: 100.h,
         width: 320.w,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,9 +30,14 @@ class InProgressIndicatorCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 220.w
+                  ),
+                  child: Text(
+                    title,
+                    style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
+                  ),
                 ),
                 deficit == '' ?const SizedBox():
                 Text(

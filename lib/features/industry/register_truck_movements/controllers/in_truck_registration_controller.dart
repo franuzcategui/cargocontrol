@@ -70,7 +70,6 @@ class TruckRegistrationController extends StateNotifier<bool> {
       state = false;
       Navigator.pushNamed(context, AppRoutes.inRegistrationSuccessFullScreen);
       showSnackBar(context: context, content: 'Viajes Registered!');
-      await ref.read(inTruckRegistrationNotiControllerProvider).setMatchedViajes(null);
     });
     state = false;
   }
@@ -96,15 +95,14 @@ class TruckRegistrationController extends StateNotifier<bool> {
     );
 
     IndustrySubModel industry = industrySubModel.copyWith(
-      cargoUnloaded: cargoUnloadWeight- (viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ),
+      cargoUnloaded: (viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ) - cargoUnloadWeight,
       selectedVesselCargo: industrySubModel.selectedVesselCargo.copyWith(
-            pesoUnloaded: cargoUnloadWeight- (viajesModel.entryTimeTruckWeightToPort - viajesModel.exitTimeTruckWeightToPort),
+            pesoUnloaded: (viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ) - cargoUnloadWeight,
           ),
     );
 
     ChoferesModel chofere  = choferesModel.copyWith(
-      averageCargoDeficit: choferesModel.averageCargoDeficit + (cargoUnloadWeight- (viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort )) /choferesModel.numberOfTrips +1,
-      numberOfTrips: choferesModel.numberOfTrips +1,
+      averageCargoDeficit: choferesModel.averageCargoDeficit + ((viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ) - cargoUnloadWeight) /choferesModel.numberOfTrips +1,
     );
 
     final result = await _datasource.registerTruckUnloadingInIndustry(
@@ -122,10 +120,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
       state = false;
       Navigator.pushNamed(context, AppRoutes.inRegistrationSuccessFullScreen);
       showSnackBar(context: context, content: 'Viajes Unlaoded!');
-      await ref.read(inTruckRegistrationNotiControllerProvider).setMatchedViajes(null);
-      await ref.read(inTruckRegistrationNotiControllerProvider).setCurrentIndustry(null);
-      await ref.read(inTruckRegistrationNotiControllerProvider).setViajesCargoModel(null);
-      await ref.read(inTruckRegistrationNotiControllerProvider).setViajesChoferesModel(null);
+
     });
     state = false;
   }

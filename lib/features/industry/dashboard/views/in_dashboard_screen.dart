@@ -1,6 +1,7 @@
 import 'package:cargocontrol/common_widgets/cargo_bar_chart.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/industry/register_truck_movements/controllers/in_truck_registration_noti_controller.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -62,7 +63,7 @@ class InDashboardScreen extends ConsumerWidget {
               ),
             ),
             SizedBox(
-              height: 136.h,
+              height: 150.h,
               child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: const [
@@ -90,7 +91,7 @@ class InDashboardScreen extends ConsumerWidget {
                 when(
                   data: (industryModel){
                     return  SizedBox(
-                      height: 136.h,
+                      height: 150.h,
                       child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: [
@@ -98,7 +99,7 @@ class InDashboardScreen extends ConsumerWidget {
                               numberOfTrips: industryModel.viajesIds.length.toString(),
                               divideNumber2: industryModel.cargoUnloaded.toString(),
                               divideNumber1: industryModel.cargoAssigned.toString(),
-                              barPercentage: 0,
+                              barPercentage: double.parse((industryModel.cargoUnloaded/industryModel.cargoAssigned).toStringAsFixed(2)),
                               title: industryModel.industryName,
                               deficit: '0',
                             ),

@@ -94,14 +94,17 @@ class _RegisterTruckEnteringScreenState extends ConsumerState<RegisterTruckEnter
                       isLoading: ref.watch(truckRegistrationNotiControllerProvider).isLoading,
                       onPressed: ()async{
                         if(keyPadTextFieldController.text.isNotEmpty){
-                          await ref.read(truckRegistrationNotiControllerProvider).getIndusytryFromGuideNumber(guideNumber: double.parse(keyPadTextFieldController.text));
-                          if(ref.read(truckRegistrationNotiControllerProvider).industryMatched){
-                            Navigator.pushNamed(context, AppRoutes.coTruckInfoScreen, arguments: {
-                              'guideNumber': double.parse(keyPadTextFieldController.text)
-                            });
-                          }else{
-                            showSnackBar(context: context, content: 'No Industry Found!');
-                          }
+                          WidgetsBinding.instance.addPostFrameCallback((timeStamp)async {
+                            await ref.read(truckRegistrationNotiControllerProvider).getIndusytryFromGuideNumber(guideNumber: double.parse(keyPadTextFieldController.text));
+                            if(ref.read(truckRegistrationNotiControllerProvider).industryMatched){
+                              Navigator.pushNamed(context, AppRoutes.coTruckInfoScreen, arguments: {
+                                'guideNumber': double.parse(keyPadTextFieldController.text)
+                              });
+                            }else{
+                              showToast(msg: 'No Industry Found!');
+                              // showSnackBar(context: context, content: 'No Industry Found!');
+                            }
+                          });
                         }
                       },
                     );

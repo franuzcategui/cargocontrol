@@ -25,16 +25,6 @@ class InChoferesScreen extends ConsumerWidget {
         child: Column(
           children: [
             SizedBox(height: 20.h,),
-            CustomTextField(
-                controller: TextEditingController(),
-                hintText: "",
-                onChanged: (val){},
-                onFieldSubmitted: (val){},
-                obscure: false,
-                label: 'Buscar chofer',
-              tailingIcon: Image.asset(AppAssets.searchIcon, scale: 2,),
-            ),
-            SizedBox(height: 13.h,),
             const InChoferesList(),
           ],
         ),

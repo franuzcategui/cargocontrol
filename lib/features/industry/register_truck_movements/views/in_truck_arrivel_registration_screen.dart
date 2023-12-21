@@ -124,15 +124,17 @@ class _InRegisterTruckArrivalScreenState extends State<InRegisterTruckArrivalScr
                           ref: ref,
                           context: context
                         );
-                        await industryNotiCtr.
-                        getMatchedViajesLinkedWithIndustry(
-                          plateNumber: keyPadTextFieldController.text,
-                          viajesStatusEnum: ViajesStatusEnum.portLeft,
-                          pageName: AppRoutes.inTruckArrivalInfoScreen,
-                          context: context,
-                          ref: ref,
-                          industryId: ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel?.industryId ?? ''
-                        );
+                        if(ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel!= null){
+                          await industryNotiCtr.
+                          getMatchedViajesLinkedWithIndustry(
+                              plateNumber: keyPadTextFieldController.text,
+                              viajesStatusEnum: ViajesStatusEnum.portLeft,
+                              pageName: AppRoutes.inTruckArrivalInfoScreen,
+                              context: context,
+                              ref: ref,
+                              industryId: ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel?.industryId ?? ''
+                          );
+                        }
                       },
                     );
                   },

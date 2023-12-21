@@ -52,7 +52,6 @@ class TruckRegistrationNotiController extends ChangeNotifier {
       viajesStatusEnum: viajesStatusEnum
     );
     result.fold((l) {
-      debugPrintStack(stackTrace: l.stackTrace);
       debugPrint( l.message);
       showSnackBar(context: context, content: l.message);
       setLoading(false);

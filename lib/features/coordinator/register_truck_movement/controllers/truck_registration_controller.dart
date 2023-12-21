@@ -100,7 +100,8 @@ class TruckRegistrationController extends StateNotifier<bool> {
       viajesStatusEnum: ViajesStatusEnum.portEntered
     );
     ChoferesModel choferes = choferesModel.copyWith(
-      choferesStatusEnum: ChoferesStatusEnum.portEntered
+      choferesStatusEnum: ChoferesStatusEnum.portEntered,
+      numberOfTrips: choferesModel.numberOfTrips +1,
     );
 
     IndustrySubModel industryModel = industrySubModel.copyWith(
@@ -121,10 +122,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
     }, (r) async{
       state = false;
       await Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
-      ref.read(truckRegistrationNotiControllerProvider).setIndustryMatchedStatus(false);
-      ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(null);
-      showSnackBar(context: context, content: 'Viajes Registered!');
-      await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
+      showToast(msg: 'Viajes Registered!');
     });
     state = false;
   }
@@ -182,9 +180,6 @@ class TruckRegistrationController extends StateNotifier<bool> {
       Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
       state = false;
       showSnackBar(context: context, content: 'Viajes Registered!');
-      await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
-      await ref.read(truckRegistrationNotiControllerProvider).setMatchedViajes(null);
-      ref.read(truckRegistrationNotiControllerProvider).setSelectedIndustry(null);
     });
     state = false;
   }
