@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:cargocontrol/commons/common_functions/search_tags_handler.dart';
+import 'package:cargocontrol/core/enums/choferes_status_enum.dart';
+import 'package:cargocontrol/features/admin/choferes/controllers/choferes_noti_controller.dart';
 import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
-import 'package:cargocontrol/models/industry_models/industries_model.dart';
-import 'package:cargocontrol/models/industry_models/industry_guide_model.dart';
-import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
-import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,6 +36,7 @@ class ChoferesController extends StateNotifier<bool> {
     bool hasSecondName = hasLastName(firstName);
     ChoferesModel choferesModel = ChoferesModel(
         choferId: choferId,
+        choferesStatusEnum: ChoferesStatusEnum.available,
         choferNationalId: choferNationalId,
         averageCargoDeficit: 0.0,
         averageTimeDeficit: DateTime.now(),
@@ -61,6 +60,29 @@ class ChoferesController extends StateNotifier<bool> {
     });
     state = false;
   }
+
+
+  Future<void> deleteChofere({
+    required String choferNationalId,
+    required WidgetRef ref,
+    required BuildContext context,
+  }) async {
+    state = true;
+    final result = await _datasource.deleteChofere(chofereId: choferNationalId);
+
+    result.fold((l) {
+      state = false;
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+      showSnackBar(context: context, content: l.message);
+    }, (r) async{
+      await ref.read(choferesNotiController).firstTime();
+      state = false;
+      showSnackBar(context: context, content: 'Choferes Deleted!');
+    });
+    state = false;
+  }
+
 
   bool hasLastName(String fullName) {
     int num = fullName.split(' ').length;

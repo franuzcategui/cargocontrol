@@ -58,15 +58,22 @@ class _IndustrySectionWidgetState extends ConsumerState<IndustrySectionWidget> {
         widget.endOfGuideWidget,
         CustomDropDown(
           ctr: widget.productNameCtr,
-          list: ref.read(adVesselNotiController).vesselProductNames,
+          list: ref.read(adVesselNotiController).vesselProductNames.map((entry) => entry['name']!).toList(),
           labelText: 'Producto (Variedad)',
           onChange: (String val){
-            ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((cargo) {
-              if(val.split(',')[0] == cargo.productName){
-                widget.cargoIdCtr.text = cargo.cargoId;
-                ref.read(adVesselNotiController).setVesselCargoModelForIndustry(cargo);
+            ref.read(adVesselNotiController).vesselProductNames.forEach((product) {
+              if(product['name'] == val){
+                widget.cargoIdCtr.text = product['cargoId']?? '';
               }
             });
+
+            //
+            // ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((cargo) {
+            //   if(val.split(',')[0] == cargo.productName){
+            //     widget.cargoIdCtr.text = cargo.cargoId;
+            //     ref.read(adVesselNotiController).setVesselCargoModelForIndustry(cargo);
+            //   }
+            // });
           },
         ),
         SizedBox(height: 16.h,),

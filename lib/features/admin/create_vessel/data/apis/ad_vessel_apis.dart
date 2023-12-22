@@ -17,7 +17,7 @@ final adVesselApiProvider = Provider<AdVesselApisImplements>((ref){
 abstract class AdVesselApisImplements {
 
   FutureEitherVoid createVessel({required VesselModel vesselModel});
-  Stream<List<VesselModel>> getVesselsList();
+  Stream<VesselModel> getCurrentVesselStream();
   FutureEither<VesselModel> getCurrentVessel();
 
   FutureEitherVoid uploadProduct({required ProductModel productModel});
@@ -81,14 +81,12 @@ class AdVesselApis implements AdVesselApisImplements{
 
 
   @override
-  Stream<List<VesselModel>> getVesselsList() {
-    return _firestore.collection(FirebaseConstants.vesselCollection).snapshots().map((event) {
-      List<VesselModel> models = [];
-      for (var document in event.docs) {
-        var model = VesselModel.fromMap(document.data());
-        models.add(model);
-      }
-      return models;
+  Stream<VesselModel> getCurrentVesselStream() {
+    return _firestore.collection(FirebaseConstants.vesselCollection).
+    where('isFinishedUnloading', isEqualTo: false).
+    snapshots().map((event) {
+      var model = VesselModel.fromMap(event.docs.first.data());
+      return model;
     });
   }
 

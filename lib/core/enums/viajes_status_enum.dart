@@ -1,7 +1,7 @@
 enum ViajesStatusEnum{
   portEntered('portEntered'),
   portLeft('portLeft'),
-  industryLeft('industryLeft'),
+  industryUnloaded('industryUnloaded'),
   industryEntered('industryEntered');
 
 
@@ -18,8 +18,8 @@ extension ConvertViajesStatusEnum on String{
         return ViajesStatusEnum.portEntered;
       case 'portLeft':
         return ViajesStatusEnum.portLeft;
-      case 'industryLeft':
-        return ViajesStatusEnum.industryLeft;
+      case 'industryUnloaded':
+        return ViajesStatusEnum.industryUnloaded;
       case 'industryEntered':
         return ViajesStatusEnum.industryEntered;
       default:

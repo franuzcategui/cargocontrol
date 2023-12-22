@@ -168,7 +168,7 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                               allGood = false;
                             });
 
-                            showSnackBar(context: context,content:  "Fill All Fields!", duration: const Duration(milliseconds: 700) );
+                            showToast(msg:  "Fill All Fields!",);
                             break;
                           }else{
                             setState(() {
@@ -177,17 +177,81 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                           }
                         }
 
+
+                        if (allGood) {
+                          Map<VesselCargoModel, List<_IndustryControllers>> cargoSectionsMap = {};
+
+                          for (var section in _industryControllers) {
+                            VesselCargoModel? cargo;
+                            ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((model) {
+                              if (section.cargoIdCtr.text == model.cargoId) {
+                                cargo = model;
+                              }
+                            });
+
+                            if (cargo != null) {
+                              // Check if cargo is already in the map
+                              if (cargoSectionsMap.containsKey(cargo!)) {
+                                cargoSectionsMap[cargo!]!.add(section);
+                              } else {
+                                cargoSectionsMap[cargo!] = [section];
+                              }
+                            }
+                            // if (double.parse(section.loadCtr.text) > cargo!.pesoTotal) {
+                            //   setState(() {
+                            //     allGood = false;
+                            //   });
+                            //   showSnackBar(
+                            //     context: context,
+                            //     content: "Cannot Assign more than Cargo weight!",
+                            //     duration: const Duration(milliseconds: 1000),
+                            //   );
+                            //   break;  // Exit the loop if one section exceeds cargo weight
+                            // }
+                          }
+
+                          cargoSectionsMap.forEach((cargo, sections) {
+                            double totalLoad = sections.fold(0, (sum, section) => sum + double.parse(section.loadCtr.text));
+                            if (totalLoad > cargo.pesoTotal) {
+                              setState(() {
+                                allGood = false;
+                              });
+                              showSnackBar(
+                                context: context,
+                                content: "Total load exceeds Assigned Cargo weight! Limit is ${cargo.pesoTotal}",
+                                duration: const Duration(milliseconds: 4000),
+                              );
+                            }
+                          });
+
+                          if (allGood) {
+                            setState(() {
+                              allGood = true;
+                            });
+                          }
+                        }
+
+
+
                         if(allGood){
                           List<IndustrySubModel> industrySubModels = [];
                           for (var section in _industryControllers) {
+                            VesselCargoModel? cargo;
+                            ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((model) {
+                              if (section.cargoIdCtr.text == model.cargoId) {
+                                cargo = model;
+                              }
+                            });
                             final industryId = Uuid().v4();
                             IndustrySubModel model = IndustrySubModel(
                               vesselId: ref.read(adVesselNotiController).vesselModel?.vesselId ?? '',
                               vesselName: ref.read(adVesselNotiController).vesselModel?.vesselName ?? '',
                               usedGuideNumbers: [],
+                              viajesIds: [],
                               industryId: industryId,
+                              realIndustryId: section.industryIdCtr.text,
                               industryName: section.nameCtr.text,
-                              selectedVesselCargo: ref.read(adVesselNotiController).selectedVesselCargoModelForIndustry!,
+                              selectedVesselCargo: cargo!,
                               finishedUnloading: false,
                               cargoAssigned: double.parse(section.loadCtr.text),
                               cargoUnloaded: 0,
@@ -197,7 +261,6 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                             industrySubModels.add(model);
 
                           }
-                          print(industrySubModels.length);
                           Navigator.pushNamed(
                               context,
                               AppRoutes.adminCreateIndustryCompleteDataScreen,
@@ -206,8 +269,6 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                               }
                           );
                         }
-
-                        // Navigator.pushNamed(context, AppRoutes.adminCreateIndustryCompleteDataScreen);
                       },
                       buttonText: "CONTINUAR"
                   ),

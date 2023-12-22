@@ -1,13 +1,11 @@
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
-import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/choferes/widgets/add_choferes_modal.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
+import 'package:cargocontrol/utils/constants/app_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../../../../utils/constants/assets_manager.dart';
 import '../../../../utils/constants/font_manager.dart';
 import '../../../../utils/loading.dart';
 import '../controllers/choferes_noti_controller.dart';
@@ -26,25 +24,18 @@ class AdChoferesScreen extends ConsumerWidget {
           fontSize: MyFonts.size28
         )),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          children: [
-            SizedBox(height: 20.h,),
-            CustomTextField(
-                controller: TextEditingController(),
-                hintText: "",
-                onChanged: (val){},
-                onFieldSubmitted: (val){},
-                obscure: false,
-                label: 'Buscar chofer',
-              tailingIcon: Image.asset(AppAssets.searchIcon, scale: 2,),
-            ),
-            SizedBox(height: 13.h,),
-            const AdChoferesList(),
-            ref.watch(choferesNotiController).isSecondaryLoading?
-            const LoadingWidget(): const SizedBox()
-          ],
+      body: SizedBox(
+        height: AppConstants.screenHeight,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            children: [
+              SizedBox(height: 20.h,),
+              const AdChoferesList(),
+              ref.watch(choferesNotiController).isSecondaryLoading?
+              const LoadingWidget(): const SizedBox()
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

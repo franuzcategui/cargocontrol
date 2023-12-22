@@ -1,11 +1,8 @@
-import 'package:cargocontrol/common_widgets/viajes_card.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:cargocontrol/utils/constants.dart' as constants;
 
-import '../widgets/ad_viajes_card.dart';
 import 'ad_all_viajes_screen.dart';
 import 'ad_completed_viajes_screen.dart';
 import 'ad_inprogress_viajes_screen.dart';

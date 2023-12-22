@@ -5,6 +5,8 @@ import 'package:cargocontrol/core/extensions/color_extension.dart';
 
 import '../../../../utils/constants/assets_manager.dart';
 import '../../../../utils/constants/font_manager.dart';
+import '../../../../utils/loading.dart';
+import '../../../admin/choferes/controllers/choferes_noti_controller.dart';
 import '../widgets/co_choferes_list.dart';
 
 class CoChoferesScreen extends ConsumerWidget {
@@ -25,17 +27,10 @@ class CoChoferesScreen extends ConsumerWidget {
         child: Column(
           children: [
             SizedBox(height: 20.h,),
-            CustomTextField(
-                controller: TextEditingController(),
-                hintText: "",
-                onChanged: (val){},
-                onFieldSubmitted: (val){},
-                obscure: false,
-                label: 'Buscar chofer',
-              tailingIcon: Image.asset(AppAssets.searchIcon, scale: 2,),
-            ),
-            SizedBox(height: 13.h,),
             const CoChoferesList(),
+            SizedBox(height: 20.h,),
+            ref.watch(choferesNotiController).isSecondaryLoading?
+            const LoadingWidget(): const SizedBox()
           ],
         ),
       ),

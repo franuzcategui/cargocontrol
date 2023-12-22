@@ -43,7 +43,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
     return  DropdownButtonFormField<String>(
       validator: (value) =>
       value == null ? 'field required' : null,
-      icon: Image.asset(AppAssets.arrowDown, width: 16.w, height: 8.h,),
+      icon: Image.asset(AppAssets.arrowDown, width: 10.w, height: 8.h,),
       onTap: _requestFocus,
       // isExpanded: false,
       // isDense: true,
@@ -81,7 +81,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
               value: value,
               child: Container(
                 constraints: BoxConstraints(
-                  maxWidth: 250.w
+                  maxWidth: 240.w
                 ),
                 child: Text(
                   value,

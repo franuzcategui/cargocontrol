@@ -4,11 +4,13 @@ import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/commons/common_widgets/show_toast.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/admin/create_industry/controllers/ad_industry_controller.dart';
 import 'package:cargocontrol/features/admin/create_industry/controllers/ad_industry_noti_controller.dart';
 import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_controller.dart';
 import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_noti_controller.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
+import 'package:cargocontrol/utils/loading.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:numeric_keyboard/numeric_keyboard.dart';
@@ -95,30 +97,52 @@ class _CreateIndustryScreenState extends ConsumerState<CreateIndustryScreen> {
               NumericKeyboard(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 onKeyboardTap: (string) {
-                  RegExp digitOneToFourRegExp = RegExp(r'^[1-4]$');
-                  if (digitOneToFourRegExp.hasMatch(string) && keyPadTextFieldController.text.length < 1) {
-                    setState(() {
-                      keyPadTextFieldController.text += string;
-                    });
-                  } else {
-                    showSnackBar(context: context, content: 'You can register max 4 industries!');
-                  }
+                  // RegExp digitOneToFourRegExp = RegExp(r'^[1-4]$');
+                  // if (digitOneToFourRegExp.hasMatch(string) && keyPadTextFieldController.text.length < 1) {
+                  setState(() {
+                    keyPadTextFieldController.text += string;
+                  });
+                  // } else {
+                  //   showSnackBar(context: context, content: 'You can register max 4 industries!');
+                  // }
                 },
                 rightIcon: const Icon(FontAwesomeIcons.deleteLeft),
                 rightButtonFn: () {
                   keyPadTextFieldController.text = '';
                 },
               ),
-              CustomButton(
-                buttonText:  'CONTINUAR',
-                onPressed: (){
-                 if(keyPadTextFieldController.text.isNotEmpty){
-                   Navigator.pushNamed(context, AppRoutes.adminCreateIndustryInformationScreen,
-                       arguments: {
-                         'numberOfIndustries' : int.parse(keyPadTextFieldController.text[0])
-                       }
-                   );
-                 }
+              Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  return ref.watch(fetchgetAllIndustryNamesStream).
+                  when(
+                    data: (indsutryNames){
+                      return CustomButton(
+                        buttonText:  'CONTINUAR',
+                        onPressed: (){
+                          if(keyPadTextFieldController.text.isNotEmpty ){
+                            if(int.parse(keyPadTextFieldController.text) < indsutryNames.length){
+                              Navigator.pushNamed(context, AppRoutes.adminCreateIndustryInformationScreen,
+                                  arguments: {
+                                    'numberOfIndustries' : int.parse(keyPadTextFieldController.text[0])
+                                  }
+                              );
+                            }else{
+                              showSnackBar(context: context, content: 'You can register maximum ${indsutryNames.length} industries!');
+                            }
+                          }
+                        },
+                      );
+                    },
+                    error: (error, st){
+                      debugPrintStack(stackTrace: st);
+                      debugPrint(error.toString());
+                      return SizedBox();
+                    },
+                    loading: (){
+                      return LoadingWidget();
+                    },
+                  );
+
                 },
               ),
               SizedBox(

@@ -1,12 +1,8 @@
-import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
 import 'package:cargocontrol/common_widgets/cargo_bar_chart.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
-import 'package:cargocontrol/features/admin/dashboard/widgets/ad_dashboard_mini_card.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
-import 'package:cargocontrol/features/dashboard/components/dashboard_mini_card.dart';
-import 'package:cargocontrol/common_widgets/progress_indicator_card.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:cargocontrol/utils/loading.dart';
@@ -15,7 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
-import 'package:cargocontrol/features/dashboard/components/dashboard_button_modal.dart';
 
 import '../../../../models/industry_models/industry_sub_model.dart';
 import '../../../../models/viajes_models/viajes_model.dart';
@@ -99,9 +94,11 @@ class CoDashboardScreen extends ConsumerWidget {
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return ref.watch(fetchCurrentIndustry).when(
                     data: (allIndustries){
-
-                      return SizedBox(
-                        height: 136.h,
+                      return Container(
+                        constraints: BoxConstraints(
+                            minHeight:  136.h,
+                            maxHeight: 160.h
+                        ),
                         child: ListView.builder(
                           itemCount: allIndustries.length,
                           scrollDirection: Axis.horizontal,
@@ -112,7 +109,7 @@ class CoDashboardScreen extends ConsumerWidget {
                               divideNumber2: '${model.cargoUnloaded}',
                               divideNumber1: '${model.cargoAssigned}',
                               barPercentage: model.cargoUnloaded!= 0? model.cargoAssigned/model.cargoUnloaded: 0,
-                              title: 'Industria #${index+1}',
+                              title: '${model.industryName}',
                             );
                           },
 

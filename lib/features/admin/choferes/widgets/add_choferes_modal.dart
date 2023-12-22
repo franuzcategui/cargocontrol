@@ -5,6 +5,7 @@ import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/features/admin/choferes/controllers/choferes_controller.dart';
+import 'package:cargocontrol/features/admin/choferes/controllers/choferes_noti_controller.dart';
 import 'package:cargocontrol/features/choferes/components/add_chofer_button.dart';
 import 'package:cargocontrol/features/choferes/components/chofer_text_field.dart';
 import 'package:cargocontrol/features/choferes/components/id_text_field.dart';
@@ -73,15 +74,16 @@ class _AddChoferesModalState extends State<AddChoferesModal> {
                   builder: (BuildContext context, WidgetRef ref, Widget? child) {
                     return CustomButton(
                       isLoading: ref.watch(choferesControllerProvider),
-                      onPressed: (){
+                      onPressed: ()async{
                           if(formKey.currentState!.validate()){
-                            ref.read(choferesControllerProvider.notifier).
+                            await ref.read(choferesControllerProvider.notifier).
                             registerChofere(
                               firstName: nameCtr.text,
                               choferNationalId: identificationCtr.text,
                               context: context,
                               ref: ref,
                             );
+                            await ref.read(choferesNotiController).firstTime();
                           }
                       },
                       buttonText: 'REGISTRAR'

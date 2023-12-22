@@ -78,15 +78,18 @@ class _CoTruckLeavingBriefScreenState extends ConsumerState<CoTruckLeavingBriefS
                       CustomButton(
                           onPressed: ()async{
                             await truckCtr.getCurrentVesselToUpdate(ref: ref, cargoId: truckCtr.matchedViajes!.cargoId);
-                            await ref.read(truckRegistrationControllerProvider.notifier).registerTruckLeavingFromPort(
-                                pureCargoWeight: widget.pureCargoWeight,
-                                totalWeight: widget.fullTruckWeight,
-                                viajesModel: truckCtr.matchedViajes!,
-                                vesselModel: truckCtr.vesselModel!,
-                                newCargoModel: truckCtr.vesselCargoModel!,
-                                ref: ref,
-                                context: context
-                            );
+                            if(truckCtr.vesselModel!= null){
+                              await ref.read(truckRegistrationControllerProvider.notifier).
+                              registerTruckLeavingFromPort(
+                                  pureCargoWeight: widget.pureCargoWeight,
+                                  totalWeight: widget.fullTruckWeight,
+                                  viajesModel: truckCtr.matchedViajes!,
+                                  vesselModel: truckCtr.vesselModel!,
+                                  newCargoModel: truckCtr.vesselCargoModel!,
+                                  ref: ref,
+                                  context: context
+                              );
+                            }
                           },
                           isLoading: ref.watch(truckRegistrationControllerProvider),
                           buttonText: "CONFIRMAR"

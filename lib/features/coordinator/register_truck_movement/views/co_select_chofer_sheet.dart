@@ -2,6 +2,7 @@ import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
+import 'package:cargocontrol/core/enums/choferes_status_enum.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
@@ -77,8 +78,13 @@ class _CoSelectChoferScreenState extends ConsumerState<CoSelectChoferScreen> {
           Consumer(
             builder: (BuildContext context, WidgetRef ref, Widget? child) {
               final choferesNotiCtr = ref.watch(choferesNotiController);
-              return
-              Expanded(
+              List<ChoferesModel> choferModels = [];
+              choferesNotiCtr.choferesModels.forEach((chofere) {
+                if(chofere.choferesStatusEnum.type == ChoferesStatusEnum.available.type){
+                  choferModels.add(chofere);
+                }
+              });
+              return Expanded(
                 child: Column(
                   children: [
                     CustomTextField(
@@ -86,6 +92,9 @@ class _CoSelectChoferScreenState extends ConsumerState<CoSelectChoferScreen> {
                       hintText: "",
                       onChanged: (val){
                         choferesNotiCtr.getAllChoferes(searchWord: searchCtr.text);
+                        if(searchCtr.text.isEmpty){
+                          choferesNotiCtr.firstTime();
+                        }
                         setState(() {
                         });
                       },
@@ -98,16 +107,16 @@ class _CoSelectChoferScreenState extends ConsumerState<CoSelectChoferScreen> {
                     choferesNotiCtr.isLoading ?
                     const LoadingWidget(
                     ):
-                    choferesNotiCtr.choferesModels.isEmpty ?
+                    choferModels.isEmpty ?
                     const Text("No Chores!"):
                     Expanded(
                       child: ListView.builder(
                           controller: _scrollController,
-                          itemCount: choferesNotiCtr.choferesModels.length,
+                          itemCount: choferModels.length,
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            ChoferesModel model = choferesNotiCtr.choferesModels[index];
+                            ChoferesModel model = choferModels[index];
                             return GestureDetector(
                               onTap: (){
                                 ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(model);
@@ -117,7 +126,7 @@ class _CoSelectChoferScreenState extends ConsumerState<CoSelectChoferScreen> {
                               child: CargoCard(
                                   topLeftText: "ID ${model.choferNationalId}",
                                   topRightText: "Viajes ${model.numberOfTrips}",
-                                  titleText: "${model.firstName} ${model.lastName}",
+                                  titleText: "${model.firstName}",
                                   bottomLeftText: "Deficit ${model.averageCargoDeficit}",
                                   bottomRightText: "Retraso Promedio : 2:00H",
 

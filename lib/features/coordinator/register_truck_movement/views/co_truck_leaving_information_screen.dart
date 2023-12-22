@@ -3,16 +3,13 @@ import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/commons/common_widgets/show_toast.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
+import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
-import 'package:cargocontrol/utils/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_header.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
-import '../../../../commons/common_widgets/number_of_cargo_holds.dart';
-import '../controllers/truck_registration_controller.dart';
 import '../widgets/co_preliminary_leaving_info_widget.dart';
 
 class CoTruckLeavingInformationScreen extends StatefulWidget {
@@ -96,16 +93,25 @@ class _CoTruckLeavingInformationScreenState extends State<CoTruckLeavingInformat
                       SizedBox(height: 25.h,),
                       CustomButton(
                           onPressed: (){
-                            if(fullTruckWeightCtr.text.isNotEmpty){
-                              double pureCargoWeight = truckCtr.matchedViajes!.entryTimeTruckWeightToPort - double.parse(fullTruckWeightCtr.text);
-                              Navigator.pushNamed(
-                                context,
-                                AppRoutes.coTruckLeavingBriefScreen,
-                                arguments: {
-                                  'fullTruckWeight': double.parse(fullTruckWeightCtr.text),
-                                  'pureCargoWeight': pureCargoWeight,
-                                }
-                              );
+                            truckCtr.allIndustriesModels.forEach((industry) {
+                              if(industry.industryId == truckCtr.matchedViajes!.industryId){
+                                truckCtr.setSelectedIndustry(industry);
+                              }
+                            });
+                            if(fullTruckWeightCtr.text.isNotEmpty && truckCtr.selectedIndustry != null){
+                              double pureCargoWeight =   double.parse(fullTruckWeightCtr.text) - truckCtr.matchedViajes!.entryTimeTruckWeightToPort;
+                              if(pureCargoWeight <= truckCtr.selectedIndustry!.cargoAssigned){
+                                Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.coTruckLeavingBriefScreen,
+                                    arguments: {
+                                      'fullTruckWeight': double.parse(fullTruckWeightCtr.text),
+                                      'pureCargoWeight': pureCargoWeight,
+                                    }
+                                );
+                              }else{
+                                showSnackBar(context: context, content: 'Peso bruto is more then total carga! Max limit is ${truckCtr.selectedIndustry!.cargoAssigned}');
+                              }
                             }else{
                               showSnackBar(context: context, content: 'Enter Peso bruto!');
                             }

@@ -17,9 +17,9 @@ final adVesselProvider = StateNotifierProvider<AdVesselController, bool>((ref) {
   return AdVesselController(datasource:  adVesselApi, );
 });
 
-final fetchAllVesselsProvider = StreamProvider((ref) {
+final fetchCurrentVesselsProvider = StreamProvider((ref) {
   final categoryPrdr = ref.watch(adVesselProvider.notifier);
-  return categoryPrdr.getVesselsList();
+  return categoryPrdr.getCurrentVesselStream();
 });
 
 
@@ -49,16 +49,16 @@ class AdVesselController extends StateNotifier<bool> {
         vesselId: vesselId,
         isFinishedUnloading: false,
         vesselName: vesselName,
-        exitPort: procedencia,
-        entryPort: '',
+        exitPort: '',
+        entryPort: procedencia,
         shipper: shipper,
         unlcode: unCode,
         totalCargoWeight: totalCargoWeight,
         numberOfCargos: bogedaModels.length,
         cargoModels: bogedaModels,
         cargoUnloadedWeight: 0.0,
-        entryDate: DateTime.now(),
-        exitDate: portDate,
+        entryDate: portDate,
+        exitDate: DateTime.now(),
         searchTags: vesselSearchTags(unlcode: unCode, shipperName: shipper ,name: vesselName)
     );
     final result = await _datasource.createVessel(vesselModel: vesselModel);
@@ -75,8 +75,8 @@ class AdVesselController extends StateNotifier<bool> {
   }
 
 
-  Stream<List<VesselModel>> getVesselsList() {
-    return _datasource.getVesselsList();
+  Stream<VesselModel> getCurrentVesselStream() {
+    return _datasource.getCurrentVesselStream();
   }
 
 

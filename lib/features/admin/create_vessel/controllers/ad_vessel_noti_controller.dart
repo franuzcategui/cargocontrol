@@ -67,14 +67,32 @@ class AdVesselNotiController extends ChangeNotifier {
   VesselModel? get vesselModel => _vesselModel;
   setVesselModel(VesselModel? model) {
     _vesselModel = model;
-    List<String> tempNames = [];
-    _vesselModel?.cargoModels.forEach((cargoModel) {
-      if(!tempNames.contains('${cargoModel.productName }, ${cargoModel.variety }, ${cargoModel.cosecha }, ${cargoModel.tipo } ')){
-        tempNames.add('${cargoModel.productName }, ${cargoModel.variety }, ${cargoModel.cosecha }, ${cargoModel.tipo } ');
-      }
-    });
+    List<Map<String, String>> tempNames = [];
+    for (int i = 0; i < _vesselModel!.cargoModels.length; i++) {
+      VesselCargoModel cargoModel = _vesselModel!.cargoModels[i];
+      String productNameKey =
+          '${cargoModel.productName}, ${cargoModel.variety}, ${cargoModel.cosecha}, ${cargoModel.tipo}';
+      String productNameWithIndex = tempNames.any((map) => map['name'] == productNameKey)
+          ? '$productNameKey ${tempNames.where((map) => map['name'] == productNameKey).length + 1}'
+          : productNameKey;
+
+      tempNames.add({
+        'name': productNameWithIndex,
+        'cargoId': cargoModel.cargoId,
+      });
+    }
+
+
     setVesselProductNames(tempNames);
   }
+
+
+  List<Map<String, String>>  _vesselProductNames = [];
+  List<Map<String, String>>  get vesselProductNames => _vesselProductNames;
+  setVesselProductNames(List<Map<String, String>>  names) {
+    _vesselProductNames = names;
+  }
+
 
   Future getCurrentVessel()async{
     final result = await  _datasource.getCurrentVessel();
@@ -86,11 +104,6 @@ class AdVesselNotiController extends ChangeNotifier {
     });
   }
 
-  List<String> _vesselProductNames = [];
-  List<String> get vesselProductNames => _vesselProductNames;
-  setVesselProductNames(List<String> names) {
-    _vesselProductNames = names;
-  }
   VesselCargoModel? _selectedVesselCargoModelForIndustry;
   VesselCargoModel? get selectedVesselCargoModelForIndustry => _selectedVesselCargoModelForIndustry;
   setVesselCargoModelForIndustry(VesselCargoModel? model) {

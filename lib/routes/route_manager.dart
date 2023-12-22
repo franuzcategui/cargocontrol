@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 
 import '../features/admin/create_industry/widgets/industries_for_all_data.dart';
 import '../features/admin/create_vessel/views/create_vessle_bodega_info_screen.dart';
+import '../features/admin/dashboard/views/ad_all_recenties_screen.dart';
 import '../features/admin/manage_ships/views/manage_ships_screen.dart';
 import '../features/coordinator/register_truck_movement/views/co_select_chofer_sheet.dart';
 import '../features/coordinator/register_truck_movement/views/co_truck_brief_screen.dart';
@@ -31,9 +32,9 @@ import '../features/industry/manage_report/views/in_all_reports_screen.dart';
 import '../features/industry/register_truck_movements/views/in_registration_success_screen.dart';
 import '../features/industry/register_truck_movements/views/in_truck_arrival_info_sccreen.dart';
 import '../features/industry/register_truck_movements/views/in_truck_arrivel_registration_screen.dart';
-import '../features/industry/register_truck_movements/views/in_truck_leaving_brief_screen.dart';
-import '../features/industry/register_truck_movements/views/in_truck_leaving_info_screen.dart';
-import '../features/industry/register_truck_movements/views/in_truck_leaving_registery_screen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_unloading_brief_screen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_unloading_info_screen.dart';
+import '../features/industry/register_truck_movements/views/in_truck_unloading_registery_screen.dart';
 import '../features/industry/viajes/views/in_viajes_details_screen.dart';
 import 'navigation.dart';
 
@@ -55,6 +56,8 @@ class AppRoutes {
   static const String adminViajesEditScreen = '/adminViajesEditScreen';
 
   static const String adManageShipsScreen = '/adManageShipsScreen';
+  static const String adAllRecentiesScreen = '/adAllRecentiesScreen';
+
 
   // Coordinator Section
   static const String coMainMenuScreen = '/coMainMenuScreen';
@@ -73,9 +76,9 @@ class AppRoutes {
   static const String inMainMenuScreen = '/inMainMenuScreen';
   static const String inRegisterTruckArrivalScreen = '/inRegisterTruckArrivalScreen';
   static const String inTruckArrivalInfoScreen = '/inTruckArrivalInfoScreen';
-  static const String inRegisterTruckLeavingScreen = '/inRegisterTruckLeavingScreen';
-  static const String inTruckLeavingInfoScreen = '/inTruckLeavingInfoScreen';
-  static const String inTruckLeavingBriefScreen = '/inTruckLeavingBriefScreen';
+  static const String inRegisterTruckUnloadingScreen = '/inRegisterTruckUnloadingScreen';
+  static const String inTruckUnloadingInfoScreen = '/inTruckUnloadingInfoScreen';
+  static const String inTruckUnlaodingBriefScreen = '/inTruckUnlaodingBriefScreen';
   static const String inRegistrationSuccessFullScreen = '/inRegistrationSuccessFullScreen';
   static const String inViajesDetailsScreen = '/inViajesDetailsScreen';
   static const String inAllReportsScreen = '/inAllReportsScreen';
@@ -150,6 +153,8 @@ class AppRoutes {
 
       case adManageShipsScreen:
         return _buildRoute(const AdManageShipsScreen());
+      case adAllRecentiesScreen:
+        return _buildRoute(const AdAllRecentiesScreen());
 
     // Coordinator Screens
       case coMainMenuScreen:
@@ -197,12 +202,17 @@ class AppRoutes {
         return _buildRoute(const InRegisterTruckArrivalScreen());
       case inTruckArrivalInfoScreen:
         return _buildRoute(const InTruckArrivalInfoScreen());
-      case inRegisterTruckLeavingScreen:
-        return _buildRoute(const InRegisterTruckLeavingScreen());
-      case inTruckLeavingInfoScreen:
-        return _buildRoute(const InTruckLeavingInfoScreen());
-      case inTruckLeavingBriefScreen:
-        return _buildRoute(const InTruckLeavingBriefScreen());
+      case inRegisterTruckUnloadingScreen:
+        return _buildRoute(const InRegisterTruckUnlaodingScreen());
+      case inTruckUnloadingInfoScreen:
+        return _buildRoute(const InTruckUnlaodingInfoScreen());
+      case inTruckUnlaodingBriefScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            InTruckUnlaodingBriefScreen(
+              cargoUnloadWeight: args['cargoUnloadWeight'],
+            ),
+        );
       case inRegistrationSuccessFullScreen:
         return _buildRoute(const InRegistrationSuccessFullScreen());
       case inViajesDetailsScreen:

@@ -5,7 +5,7 @@ class VesselCargoModel{
   final String origen;
   final String variety;
   final String cosecha;
-  final double pesoTotal;
+  final dynamic pesoTotal;
   final dynamic pesoUnloaded;
 
 //<editor-fold desc="Data Methods">
@@ -68,7 +68,7 @@ class VesselCargoModel{
     String? origen,
     String? variety,
     String? cosecha,
-    double? pesoTotal,
+    dynamic pesoTotal,
     dynamic pesoUnloaded,
   }) {
     return VesselCargoModel(
@@ -104,7 +104,7 @@ class VesselCargoModel{
       origen: map['origen'] as String,
       variety: map['variety'] as String,
       cosecha: map['cosecha'] as String,
-      pesoTotal: map['pesoTotal'] as double,
+      pesoTotal: map['pesoTotal'] as dynamic,
       pesoUnloaded: map['pesoUnloaded'] as dynamic,
     );
   }

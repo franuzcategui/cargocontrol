@@ -28,9 +28,14 @@ class AdProgressIndicatorCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(
-                  title,
-                  style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 280.w
+                  ),
+                  child: Text(
+                    title,
+                    style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
+                  ),
                 ),
               ],
             ),

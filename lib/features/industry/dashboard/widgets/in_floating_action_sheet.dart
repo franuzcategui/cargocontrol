@@ -29,7 +29,7 @@ class InFloadtingActionSheet extends ConsumerWidget {
           subtitle: 'Registrar camión entrando a la romana con carga',
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, AppRoutes.inRegisterTruckLeavingScreen);
+            Navigator.pushNamed(context, AppRoutes.inRegisterTruckUnloadingScreen);
           },
         ),
 

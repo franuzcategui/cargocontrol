@@ -1,7 +1,9 @@
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
+import 'package:cargocontrol/core/enums/choferes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_type.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
+import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
@@ -38,6 +40,14 @@ final getAllViajesList = StreamProvider((ref) {
   }
 );
 
+// Industria Section
+
+final getIndustriaIndustry = StreamProvider.family((ref, String realIndustryId) {
+  final truckProvider = ref.watch(truckRegistrationControllerProvider.notifier);
+  return truckProvider.getIndustriaIndustry(realIndustryId: realIndustryId);
+  }
+);
+
 
 class TruckRegistrationController extends StateNotifier<bool> {
   final TruckRegistrationApisImplements _datasource;
@@ -57,7 +67,9 @@ class TruckRegistrationController extends StateNotifier<bool> {
     required String cargoId,
     required String choferesId,
     required String choferesname,
+    required String productName,
     required IndustrySubModel industrySubModel,
+    required ChoferesModel choferesModel,
     required WidgetRef ref,
     required BuildContext context,
   }) async {
@@ -82,9 +94,14 @@ class TruckRegistrationController extends StateNotifier<bool> {
         chofereName: choferesname,
         licensePlate: plateNumber,
         cargoId: cargoId,
+        productName: productName,
         viajesId: viajesId,
         viajesTypeEnum: ViajesTypeEnum.inProgress,
       viajesStatusEnum: ViajesStatusEnum.portEntered
+    );
+    ChoferesModel choferes = choferesModel.copyWith(
+      choferesStatusEnum: ChoferesStatusEnum.portEntered,
+      numberOfTrips: choferesModel.numberOfTrips +1,
     );
 
     IndustrySubModel industryModel = industrySubModel.copyWith(
@@ -92,8 +109,9 @@ class TruckRegistrationController extends StateNotifier<bool> {
     );
 
     final result = await _datasource.registerTruckEnteringToPort(
-        viajesModel: viajesModel,
-      industrySubModel: industryModel
+      viajesModel: viajesModel,
+      industrySubModel: industryModel,
+        choferesModel: choferes
     );
 
     result.fold((l) {
@@ -103,11 +121,8 @@ class TruckRegistrationController extends StateNotifier<bool> {
       debugPrint(l.message);
     }, (r) async{
       state = false;
-      Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
-      ref.read(truckRegistrationNotiControllerProvider).setIndustryMatchedStatus(false);
-      ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(null);
-      showSnackBar(context: context, content: 'Viajes Registered!');
-      await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
+      await Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
+      showToast(msg: 'Viajes Registered!');
     });
     state = false;
   }
@@ -162,22 +177,14 @@ class TruckRegistrationController extends StateNotifier<bool> {
       debugPrintStack(stackTrace: l.stackTrace);
       debugPrint(l.message);
     }, (r) async{
-      state = false;
       Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
+      state = false;
       showSnackBar(context: context, content: 'Viajes Registered!');
-      await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
     });
     state = false;
   }
 
 
-  // Stream<IndustrySubModel> getCurrentIndusry() {
-  //   return _datasource.getCurrentIndustry().
-  //   map((event) {
-  //     IndustrySubModel models = IndustrySubModel.fromMap(event.docs.first.data());
-  //     return models;
-  //   });
-  // }
 
 
   Stream<List<ViajesModel>> getPortEnteringViajesList() {
@@ -223,6 +230,14 @@ class TruckRegistrationController extends StateNotifier<bool> {
         models.add(ViajesModel.fromMap(element.data()));
       });
       return models;
+    });
+  }
+
+  // For Industria Section
+  Stream<IndustrySubModel> getIndustriaIndustry({required String realIndustryId}) {
+    return _datasource.getIndustriaIndustry(realIndustryId: realIndustryId).
+    map((event) {
+      return IndustrySubModel.fromMap(event.docs.first.data());
     });
   }
 

@@ -1,3 +1,4 @@
+import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
@@ -9,12 +10,12 @@ class ProgressIndicatorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.sp),
       child: Container(
         decoration: constants.DecorationStyles.shadow2,
-        padding: const EdgeInsets.all(20),
-        height: 100,
-        width: 320,
+        padding: EdgeInsets.all(20.sp),
+        height: 100.h,
+        width: 320.w,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -22,8 +23,8 @@ class ProgressIndicatorCard extends StatelessWidget {
               'Descarga total',
               style: const constants.TextStyles().cardTitle1,
             ),
-            const SizedBox(
-              height: 4,
+            SizedBox(
+              height: 4.h,
             ),
             Text(
               '0/0',

@@ -3,6 +3,8 @@ import 'package:cargocontrol/features/dashboard/components/dashboard_modal_butto
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../create_vessel/controllers/ad_vessel_controller.dart';
+
 class AdFloadtingActionSheet extends ConsumerWidget {
   const AdFloadtingActionSheet({
     super.key,
@@ -13,13 +15,39 @@ class AdFloadtingActionSheet extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        DashboardModalButton(
-          title1: 'Registro de',
-          title2: 'nuevo buque',
-          subtitle: 'Registro de buque a puerto',
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, AppRoutes.adminCreateVesselScreen);
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            return ref.watch(fetchCurrentVesselsProvider).
+            when(
+              data: (vessel){
+                return DashboardModalButton(
+                  title1: 'Registro de',
+                  isDisable: true,
+                  title2: 'nuevo buque',
+                  subtitle: 'Registro de buque a puerto',
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, AppRoutes.adminCreateVesselScreen);
+                  },
+                );
+              },
+              error: (error, st){
+                return DashboardModalButton(
+                  title1: 'Registro de',
+                  isDisable: false,
+                  title2: 'nuevo buque',
+                  subtitle: 'Registro de buque a puerto',
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, AppRoutes.adminCreateVesselScreen);
+                  },
+                );
+                // return SizedBox();
+              },
+              loading: (){
+                return SizedBox();
+              }
+            );
           },
         ),
         DashboardModalButton(

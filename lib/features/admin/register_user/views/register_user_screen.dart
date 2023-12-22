@@ -6,6 +6,7 @@ import 'package:cargocontrol/commons/common_widgets/custom_appbar.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/enums/account_type.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/admin/create_industry/controllers/ad_industry_noti_controller.dart';
 import 'package:cargocontrol/features/auth/controllers/auth_controller.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:cargocontrol/common_widgets/main_text_button.dart';
@@ -32,6 +33,20 @@ class _RegisterUserScreenState extends ConsumerState<RegisterUserScreen> {
   String? industryName;
   String? industryId;
 
+
+
+  
+  @override
+  void initState() {
+    super.initState();
+    initiallization();
+  }
+  
+  initiallization(){
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp)async {
+      await ref.read(adIndustryNotiController).getAllIndustriesModel();
+    });
+  }
 
   @override
   void dispose() {
@@ -113,24 +128,34 @@ class _RegisterUserScreenState extends ConsumerState<RegisterUserScreen> {
                     height: 13.h,
                   ),
                   isIndustry ?
-                  Column(
-                    children: [
-                      CustomDropDown(
-                        ctr: industryNameCtr,
-                        list: const [
-                          "intra Industry",
-                          "Hoal Industry",
-                          "Kapito Industry",
+                  Consumer(
+                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                      return Column(
+                        children: [
+                          CustomDropDown(
+                            ctr: industryNameCtr,
+                            list: ref.read(adIndustryNotiController).industryNames,
+                            labelText: "Industrias",
+                            onChange: (String val){
+                              if(val != ''){
+                                ref.read(adIndustryNotiController).allIndustriesModels.forEach((element) {
+                                  if(element.industryName == val){
+                                    setState(() {
+                                      industryName = element.industryName;
+                                      industryId = element.industryId;
+                                    });
+                                  }
+                                });
+                              }
+                            },
+                          ),
+                          SizedBox(
+                            height: 13.h,
+                          ),
                         ],
-                        labelText: "Industrias",
-                        onChange: (val){
+                      );
+                    },
 
-                        },
-                      ),
-                      SizedBox(
-                        height: 13.h,
-                      ),
-                    ],
                   ): const SizedBox.shrink(),
 
                   CustomTextField(
@@ -167,6 +192,8 @@ class _RegisterUserScreenState extends ConsumerState<RegisterUserScreen> {
                         await ref.read(authControllerProvider.notifier).registerWithEmailAndPassword(
                             email: emailCtr.text,
                             password: passCtr.text ,
+                            industryName: industryName,
+                            industryId: industryId,
                             accountTypeEnum: accountTypeEnum ?? AccountTypeEnum.administrador,
                             context: context
                         );
