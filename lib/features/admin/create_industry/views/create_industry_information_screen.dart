@@ -5,6 +5,8 @@ import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_noti_controller.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
+import 'package:cargocontrol/utils/constants/font_manager.dart';
+import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_header.dart';
@@ -12,11 +14,12 @@ import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../../../../commons/common_widgets/custom_dropdown.dart';
 import '../../../../commons/common_widgets/show_toast.dart';
 import '../../../../models/vessel_models/vessel_cargo_model.dart';
+import '../controllers/ad_industry_noti_controller.dart';
 import '../widgets/industry_section_widget.dart';
 
 class CreateIndustryInformationScreen extends ConsumerStatefulWidget {
-  final int numberOfIndustries;
-  const CreateIndustryInformationScreen({Key? key, required this.numberOfIndustries}) : super(key: key);
+  // final int numberOfIndustries;
+  const CreateIndustryInformationScreen({Key? key,}) : super(key: key);
 
   @override
   ConsumerState<CreateIndustryInformationScreen> createState() => _CreateIndustryInformationScreenState();
@@ -125,12 +128,13 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
     "Veggie"
   ];
 
+  double totalCargoLoad = 0.0;
+  double totalIndustryLoads = 0.0;
+
   @override
   void initState() {
     super.initState();
-    for(int i = 1; i <= widget.numberOfIndustries; i++){
-      createIndustrySection();
-    }
+    createIndustrySection();
   }
 
   @override
@@ -148,129 +152,229 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 60.h,),
                   _industrySections(),
-                  SizedBox(height: 15.h,),
-                  CustomButton(
-                    onPressed: createIndustrySection,
-                    buttonText: "Generate New Section",
-                    backColor: context.scaffoldBackgroundColor,
-                    textColor: context.mainColor,
+                  Consumer(
+                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Peso total en bodegas: ${totalCargoLoad}',
+                            style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size14),
+                          ),
+                          Text(
+                            'Peso total : ${totalIndustryLoads}',
+                            style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size14),
+                          ),
+                        ],
+                      );
+                    },
                   ),
-                  CustomButton(
+                  SizedBox(height: 15.h,),
+                  Center(
+                    child: CustomButton(
                       onPressed: (){
+                        Map<VesselCargoModel, List<_IndustryControllers>> cargoSectionsMap = {};
+                        totalCargoLoad = 0;
+                        totalIndustryLoads = 0;
                         for (var section in _industryControllers) {
-                          if(section.productCtr.text == "" || section.nameCtr.text == "" ||
-                              section.endOfGuideCtr.text == "" || section.comienzeCtr.text == "" ||
-                              section.loadCtr.text == "" ){
-                            setState(() {
-                              allGood = false;
-                            });
-
-                            showToast(msg:  "Fill All Fields!",);
-                            break;
-                          }else{
-                            setState(() {
-                              allGood = true;
-                            });
-                          }
-                        }
-
-
-                        if (allGood) {
-                          Map<VesselCargoModel, List<_IndustryControllers>> cargoSectionsMap = {};
-
-                          for (var section in _industryControllers) {
-                            VesselCargoModel? cargo;
-                            ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((model) {
-                              if (section.cargoIdCtr.text == model.cargoId) {
-                                cargo = model;
-                              }
-                            });
-
-                            if (cargo != null) {
-                              // Check if cargo is already in the map
-                              if (cargoSectionsMap.containsKey(cargo!)) {
-                                cargoSectionsMap[cargo!]!.add(section);
-                              } else {
-                                cargoSectionsMap[cargo!] = [section];
-                              }
-                            }
-                            // if (double.parse(section.loadCtr.text) > cargo!.pesoTotal) {
-                            //   setState(() {
-                            //     allGood = false;
-                            //   });
-                            //   showSnackBar(
-                            //     context: context,
-                            //     content: "Cannot Assign more than Cargo weight!",
-                            //     duration: const Duration(milliseconds: 1000),
-                            //   );
-                            //   break;  // Exit the loop if one section exceeds cargo weight
-                            // }
-                          }
-
-                          cargoSectionsMap.forEach((cargo, sections) {
-                            double totalLoad = sections.fold(0, (sum, section) => sum + double.parse(section.loadCtr.text));
-                            if (totalLoad > cargo.pesoTotal) {
-                              setState(() {
-                                allGood = false;
-                              });
-                              showSnackBar(
-                                context: context,
-                                content: "Total load exceeds Assigned Cargo weight! Limit is ${cargo.pesoTotal}",
-                                duration: const Duration(milliseconds: 4000),
-                              );
+                          VesselCargoModel? cargo;
+                          ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((model) {
+                            if (section.cargoIdCtr.text == model.cargoId) {
+                              cargo = model;
                             }
                           });
 
-                          if (allGood) {
-                            setState(() {
-                              allGood = true;
-                            });
+                          if (cargo != null) {
+                            if (cargoSectionsMap.containsKey(cargo!)) {
+                              cargoSectionsMap[cargo!]!.add(section);
+                            } else {
+                              cargoSectionsMap[cargo!] = [section];
+                            }
                           }
                         }
 
+                        cargoSectionsMap.forEach((cargo, sections) {
+                          double totalLoad = sections.fold(0, (sum, section) => sum + double.parse(section.loadCtr.text));
+                          double cargoWeight = cargo.pesoTotal;
 
-
-                        if(allGood){
-                          List<IndustrySubModel> industrySubModels = [];
-                          for (var section in _industryControllers) {
-                            VesselCargoModel? cargo;
-                            ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((model) {
-                              if (section.cargoIdCtr.text == model.cargoId) {
-                                cargo = model;
-                              }
-                            });
-                            final industryId = Uuid().v4();
-                            IndustrySubModel model = IndustrySubModel(
-                              vesselId: ref.read(adVesselNotiController).vesselModel?.vesselId ?? '',
-                              vesselName: ref.read(adVesselNotiController).vesselModel?.vesselName ?? '',
-                              usedGuideNumbers: [],
-                              viajesIds: [],
-                              industryId: industryId,
-                              realIndustryId: section.industryIdCtr.text,
-                              industryName: section.nameCtr.text,
-                              selectedVesselCargo: cargo!,
-                              finishedUnloading: false,
-                              cargoAssigned: double.parse(section.loadCtr.text),
-                              cargoUnloaded: 0,
-                              initialGuide: double.parse(section.comienzeCtr.text),
-                              lastGuide: double.parse(section.endOfGuideCtr.text),
-                            );
-                            industrySubModels.add(model);
-
-                          }
-                          Navigator.pushNamed(
-                              context,
-                              AppRoutes.adminCreateIndustryCompleteDataScreen,
-                              arguments: {
-                                'industrySubModels' : industrySubModels,
-                              }
-                          );
-                        }
+                          totalCargoLoad = totalCargoLoad + cargoWeight;
+                          totalIndustryLoads = totalIndustryLoads + totalLoad;
+                        });
+                        createIndustrySection();
                       },
-                      buttonText: "CONTINUAR"
+                      buttonText: "Generate New Section",
+                      backColor: context.scaffoldBackgroundColor,
+                      textColor: context.mainColor,
+                    ),
+                  ),
+                  Center(
+                    child: CustomButton(
+                        onPressed: (){
+                          for (var section in _industryControllers) {
+                            if(section.productCtr.text == "" || section.nameCtr.text == "" ||
+                                section.endOfGuideCtr.text == "" || section.comienzeCtr.text == "" ||
+                                section.loadCtr.text == "" ){
+                              setState(() {
+                                allGood = false;
+                              });
+
+                              showToast(msg:  "Fill All Fields!",);
+                              break;
+                            }else{
+                              setState(() {
+                                allGood = true;
+                              });
+                            }
+                          }
+                          if (allGood) {
+                            for (int i = 0; i < _industryControllers.length - 1; i++) {
+                              _IndustryControllers section1 = _industryControllers[i];
+                              _IndustryControllers section2 = _industryControllers[i + 1];
+
+                              double endOfGuideCtrValue1 = double.parse(section1.endOfGuideCtr.text);
+                              double endOfGuideCtrValue2 = double.parse(section2.endOfGuideCtr.text);
+                              double comienzeCtrValue1 = double.parse(section1.comienzeCtr.text);
+                              double comienzeCtrValue2 = double.parse(section2.comienzeCtr.text);
+
+                              if (endOfGuideCtrValue1 < comienzeCtrValue2 &&
+                                  endOfGuideCtrValue1 != endOfGuideCtrValue2 &&
+                                  comienzeCtrValue1 != comienzeCtrValue2
+                              ) {
+                                setState(() {
+                                  allGood = true;
+                                });
+                              }else{
+                                setState(() {
+                                  allGood = false;
+                                });
+                                showSnackBar(
+                                  context: context,
+                                  content: "Industry guides cannot be same, and first guide should start after the second guide! ",
+                                  duration: const Duration(milliseconds: 4000),
+                                );
+                              }
+                            }
+                          }
+
+                          if (allGood) {
+                            for (int i = 0; i < _industryControllers.length - 1; i++) {
+                              _IndustryControllers section1 = _industryControllers[i];
+                              _IndustryControllers section2 = _industryControllers[i + 1];
+
+                              String industry1 = section1.industryIdCtr.text;
+                              String industry2 = section2.industryIdCtr.text;
+
+                              if (industry1 != industry2) {
+                                setState(() {
+                                  allGood = true;
+                                });
+                              }else{
+                                setState(() {
+                                  allGood = false;
+                                });
+                                showSnackBar(
+                                  context: context,
+                                  content: "Cannot select same Industry Multiple Times!",
+                                  duration: const Duration(milliseconds: 4000),
+                                );
+                              }
+                            }
+                          }
+
+
+                          if (allGood) {
+                            totalCargoLoad = 0;
+                            totalIndustryLoads = 0;
+                            Map<VesselCargoModel, List<_IndustryControllers>> cargoSectionsMap = {};
+
+                            for (var section in _industryControllers) {
+                              VesselCargoModel? cargo;
+                              ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((model) {
+                                if (section.cargoIdCtr.text == model.cargoId) {
+                                  cargo = model;
+                                }
+                              });
+
+                              if (cargo != null) {
+                                if (cargoSectionsMap.containsKey(cargo!)) {
+                                  cargoSectionsMap[cargo!]!.add(section);
+                                } else {
+                                  cargoSectionsMap[cargo!] = [section];
+                                }
+                              }
+                            }
+
+                            cargoSectionsMap.forEach((cargo, sections) {
+                              double totalLoad = sections.fold(0, (sum, section) => sum + double.parse(section.loadCtr.text));
+                              double cargoWeight = cargo.pesoTotal;
+
+                              totalCargoLoad = totalCargoLoad + cargoWeight;
+                              totalIndustryLoads = totalIndustryLoads + totalLoad;
+                              if (totalLoad > cargo.pesoTotal) {
+                                setState(() {
+                                  allGood = false;
+                                });
+                                showSnackBar(
+                                  context: context,
+                                  content: "Total load exceeds Assigned Cargo weight! Limit is ${cargo.pesoTotal}",
+                                  duration: const Duration(milliseconds: 4000),
+                                );
+                              }
+                            });
+
+                            if (allGood) {
+                              setState(() {
+                                allGood = true;
+                              });
+                            }
+                          }
+
+
+
+                          if(allGood){
+                            List<IndustrySubModel> industrySubModels = [];
+                            for (var section in _industryControllers) {
+                              VesselCargoModel? cargo;
+                              ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((model) {
+                                if (section.cargoIdCtr.text == model.cargoId) {
+                                  cargo = model;
+                                }
+                              });
+                              final industryId = Uuid().v4();
+                              IndustrySubModel model = IndustrySubModel(
+                                vesselId: ref.read(adVesselNotiController).vesselModel?.vesselId ?? '',
+                                vesselName: ref.read(adVesselNotiController).vesselModel?.vesselName ?? '',
+                                usedGuideNumbers: [],
+                                viajesIds: [],
+                                industryId: industryId,
+                                realIndustryId: section.industryIdCtr.text,
+                                industryName: section.nameCtr.text,
+                                selectedVesselCargo: cargo!,
+                                finishedUnloading: false,
+                                cargoAssigned: double.parse(section.loadCtr.text),
+                                cargoUnloaded: 0,
+                                initialGuide: double.parse(section.comienzeCtr.text),
+                                lastGuide: double.parse(section.endOfGuideCtr.text),
+                              );
+                              industrySubModels.add(model);
+
+                            }
+                            Navigator.pushNamed(
+                                context,
+                                AppRoutes.adminCreateIndustryCompleteDataScreen,
+                                arguments: {
+                                  'industrySubModels' : industrySubModels,
+                                }
+                            );
+                          }
+                        },
+                        buttonText: "CONTINUAR"
+                    ),
                   ),
                 ],
               ),
