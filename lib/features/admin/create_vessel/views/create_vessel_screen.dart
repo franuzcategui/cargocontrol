@@ -1,15 +1,10 @@
 import 'package:cargocontrol/commons/common_functions/validator.dart';
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
-import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
-import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/enums/weight_unit_enum.dart';
-import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
-import 'package:cargocontrol/utils/constants/font_manager.dart';
 
-import '../../../../common_widgets/title_header.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_datpicker.dart';
 import '../../../../commons/common_widgets/common_header.dart';
@@ -145,17 +140,17 @@ class _CreateVesselScreenState extends ConsumerState<CreateVesselScreen> {
                        },
                      ),
                      SizedBox(height: 14.h,),
-                     NumberOfCargoHoldsWidget(
-                       seletedCargosNumber: (int selectedValue){
-                         numberOfCargos = selectedValue;
-                         print(numberOfCargos);
-                       },
-                     ),
+                     // NumberOfCargoHoldsWidget(
+                     //   seletedCargosNumber: (int selectedValue){
+                     //     numberOfCargos = selectedValue;
+                     //     print(numberOfCargos);
+                     //   },
+                     // ),
                      SizedBox(height: 45.h,),
                      CustomButton(
                          onPressed: (){
                            if(formKey.currentState!.validate()){
-                             if(numberOfCargos != null){
+                             // if(numberOfCargos != null){
                                Navigator.pushNamed(
                                  context,
                                  AppRoutes.adminCreateVesselBodegaInfoScreen,
@@ -165,11 +160,10 @@ class _CreateVesselScreenState extends ConsumerState<CreateVesselScreen> {
                                    'shipper' : shipperCtr.text,
                                    'unCode' : unCodeCtr.text,
                                    'portDate' : portDate,
-                                   'numberOfCargos' : numberOfCargos,
                                    'weightUnitEnum' : weightUnitEnum,
                                  }
                                );
-                             }
+                             // }
                            }
                          },
                          buttonText: "CONTINUAR"

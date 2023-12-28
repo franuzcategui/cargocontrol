@@ -35,11 +35,27 @@ class AdIndustryApis implements AdIndustryApisImplements{
   @override
   FutureEitherVoid createIndustryGuideModel({required List<IndustrySubModel> industrySubModels}) async{
     try{
-      industrySubModels.forEach((industrySubModel) async{
-        await _firestore.collection(FirebaseConstants.industryGuideCollection).
-        doc(industrySubModel.industryId).
-        set(industrySubModel.toMap());
+      // await _firestore.runTransaction((Transaction transaction) async {
+        industrySubModels.forEach((industrySubModel) async{
+          // transaction.set(
+          //   await _firestore.collection(FirebaseConstants.industryGuideCollection).
+          //   doc(industrySubModel.industryId),
+          //   industrySubModel.toMap()
+          // );
+          await _firestore.collection(FirebaseConstants.industryGuideCollection).
+          doc(industrySubModel.industryId).
+          set(industrySubModel.toMap());
+
+          // transaction.update(
+          //   _firestore.collection(FirebaseConstants.industryGuideCollection).
+          //   doc(industrySubModel.industryId),
+          //   industrySubModel.toMap(),
+          // );
+        // });
+
       });
+
+
       return const Right(null);
     }on FirebaseException catch(e, stackTrace){
       return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));

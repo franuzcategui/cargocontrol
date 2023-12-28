@@ -24,11 +24,12 @@ void showToast(
     {required String msg,
     Color? textColor,
     Color? backgroundColor,
+    bool isTop = false,
     bool long = false}) {
   Fluttertoast.showToast(
     msg: msg,
     toastLength: long ? Toast.LENGTH_LONG : Toast.LENGTH_LONG,
-    gravity: ToastGravity.SNACKBAR,
+    gravity: isTop ? ToastGravity.TOP: ToastGravity.SNACKBAR,
     timeInSecForIosWeb: 1,
     backgroundColor: backgroundColor ?? Colors.white,
     textColor: textColor ?? Colors.black,
