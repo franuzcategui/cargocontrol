@@ -86,6 +86,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
   }) async {
     state = true;
 
+    // TODO Usman: Need to check calculations
     DateTime unloadingTimeInIndustry= DateTime.now();
     ViajesModel model = viajesModel.copyWith(
       cargoDeficitWeight: viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight,

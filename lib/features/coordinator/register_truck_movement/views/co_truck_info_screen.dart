@@ -179,6 +179,7 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                             child: CustomButton(
                                 onPressed: (){
                                   if(formKey.currentState!.validate()){
+
                                     Navigator.pushNamed(
                                         context,
                                         AppRoutes.coTruckBriefScreen,
@@ -190,7 +191,6 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                                         }
                                     );
                                   }
-
                                 },
                                 buttonText: 'CONTINUAR'
                             ),
