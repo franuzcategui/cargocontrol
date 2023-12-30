@@ -4,18 +4,23 @@ import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
+import 'package:intl/intl.dart';
 
 import '../../../../core/enums/viajes_type.dart';
+import '../../../../models/viajes_models/viajes_model.dart';
 
 class AdViajesCard extends StatelessWidget {
   final ViajesTypeEnum viajesEnum;
-  const AdViajesCard({super.key, required this.viajesEnum});
+  final ViajesModel model;
+  const AdViajesCard({super.key, required this.viajesEnum, required this.model});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, AppRoutes.adminViajesDetailsScreen);
+        Navigator.pushNamed(context, AppRoutes.adminViajesDetailsScreen,arguments: {
+          'viajesModel':model
+        });
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -37,7 +42,7 @@ class AdViajesCard extends StatelessWidget {
                         style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                       ),
                       Text(
-                        ' Juan Perez - 135526',
+                        " C - ${model.licensePlate}",
                         style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                       ),
                     ],
@@ -68,7 +73,7 @@ class AdViajesCard extends StatelessWidget {
                     style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                   ),
                   Text(
-                    ' 40,340 - Paddy Rice',
+                    ' ${model.pureCargoWeight} - ${model.productName}',
                     style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                   ),
                 ],
@@ -79,11 +84,11 @@ class AdViajesCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'No Guia',
+                        'No Guia ',
                         style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                       ),
                       Text(
-                        ' 10701',
+                        model.guideNumber.toStringAsFixed(0),
                         style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                       ),
                     ],
@@ -91,11 +96,11 @@ class AdViajesCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'Hora de salida',
+                        viajesEnum.type == ViajesTypeEnum.inProgress.type ? 'Hora de salida ': "Hora de llegada ",
                         style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                       ),
                       Text(
-                        ' 20:55:12',
+                        viajesEnum.type == ViajesTypeEnum.inProgress.type ?DateFormat('HH:mm:ss').format(model.entryTimeToPort):DateFormat('HH:mm:ss').format(model.unloadingTimeInIndustry),
                         style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                       ),
                     ],

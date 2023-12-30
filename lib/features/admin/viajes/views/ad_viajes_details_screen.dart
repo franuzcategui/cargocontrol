@@ -1,6 +1,7 @@
 import 'package:cargocontrol/common_widgets/title_header.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import '../../../../commons/common_imports/common_libs.dart';
@@ -10,7 +11,8 @@ import '../widgets/ad_datos_generales_widget.dart';
 import '../widgets/ad_tiempo_widget.dart';
 
 class AdViajesDetailsScreen extends StatelessWidget {
-  const AdViajesDetailsScreen({Key? key}) : super(key: key);
+  final ViajesModel viajesModel;
+  const AdViajesDetailsScreen({Key? key, required this.viajesModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

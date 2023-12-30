@@ -35,6 +35,7 @@ Future<void> initAuth() async {
   await Hive.initFlutter();
   final authService = AuthService();
 
+
 }
 
 

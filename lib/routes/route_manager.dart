@@ -147,7 +147,10 @@ class AppRoutes {
         return _buildRoute(const RegisterUserScreen());
 
       case adminViajesDetailsScreen:
-        return _buildRoute(const AdViajesDetailsScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute( AdViajesDetailsScreen(
+          viajesModel: args['viajesModel'],
+        ));
       case adminViajesEditScreen:
         return _buildRoute(const AdViajesEditScreen());
 
