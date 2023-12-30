@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
+import '../../../../common_widgets/dashboard_top_widget.dart';
 import '../../../../core/enums/viajes_status_enum.dart';
 import '../../../../models/industry_models/industry_sub_model.dart';
 import '../../../../models/viajes_models/viajes_model.dart';
@@ -55,130 +56,7 @@ class AdDashboardScreen extends ConsumerWidget {
                 },
               ),
             ),
-            SizedBox(
-              height: (0.2 * MediaQuery.of(context).size.height).h,
-              width: (0.9 * MediaQuery.of(context).size.width).w,
-              child: Stack(
-                children: [
-                  Image.asset(constants.Images.ship),
-                  Positioned(
-                    left: (0.04 * MediaQuery.of(context).size.width).w,
-                    bottom: (0.02 * MediaQuery.of(context).size.height).h,
-                    child: const CargoBarChart(),
-                  ),
-                ],
-              ),
-            ),
-            ///Vessel Data
-            Consumer(
-              builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                return ref.watch(fetchCurrentVesselsProvider).when(
-                    data: (vesselModel) {
-                      return Container(
-                        constraints:
-                        BoxConstraints(minHeight: 136.h, maxHeight: 160.h),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              ///Total Vessel data
-                              ref.watch(fetchCurrentVesselViajesDeficit(vesselModel.vesselId)).
-                              when(
-                              data: (viajesDeficitModel){
-                                return  AdProgressIndicatorCard(
-                                  numberOfTrips:viajesDeficitModel.viajesCount,
-                                  divideNumber2: (vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight).toString(),
-                                  divideNumber1: vesselModel.totalCargoWeight.toString(),
-                                  barPercentage: double.parse(
-                                      ((vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight) / vesselModel.totalCargoWeight)
-                                          .toStringAsFixed(2)),
-                                  title: 'Descarga total',
-                                  deficit: viajesDeficitModel.totalDeficit,
-                                );
-                              },
-                              error: (error, st){
-                                return  AdProgressIndicatorCard(
-                                  numberOfTrips: '0',
-                                  divideNumber2: (vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight).toString(),
-                                  divideNumber1: vesselModel.totalCargoWeight.toString(),
-                                  barPercentage: double.parse(
-                                      ((vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight) / vesselModel.totalCargoWeight)
-                                          .toStringAsFixed(2)),
-                                  title: 'Descarga total',
-                                );
-                              },
-                              loading: (){
-                                return  AdProgressIndicatorCard(
-                                  numberOfTrips: '0',
-                                  divideNumber2: (vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight).toString(),
-                                  divideNumber1: vesselModel.totalCargoWeight.toString(),
-                                  barPercentage: double.parse(
-                                      ((vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight) / vesselModel.totalCargoWeight)
-                                          .toStringAsFixed(2)),
-                                  title: 'Descarga total',
-                                );
-                              }
-                               ),
-
-                              ListView.builder(
-                                itemCount: vesselModel.cargoModels.length,
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  VesselCargoModel model =  vesselModel.cargoModels[index];
-                                  return    ref.watch(fetchCargoHoldViajesDeficit(model.cargoId)).
-                                  when(
-                                      data: (viajesDeficitModel){
-                                        return  AdProgressIndicatorCard(
-                                          numberOfTrips:viajesDeficitModel.viajesCount,
-                                          divideNumber2: model.pesoUnloaded.toString(),
-                                          divideNumber1: model.pesoTotal.toString(),
-                                          barPercentage: double.parse(
-                                              (model.pesoUnloaded/ model.pesoTotal)
-                                                  .toStringAsFixed(2)),
-                                          title: 'Bodega # ${index+1}',
-                                          deficit: viajesDeficitModel.totalDeficit,
-                                        );
-                                      },
-                                      error: (error, st){
-                                        return  AdProgressIndicatorCard(
-                                          numberOfTrips: '0',
-                                          divideNumber2: model.pesoUnloaded.toString(),
-                                          divideNumber1: model.pesoTotal.toString(),
-                                          barPercentage: double.parse(
-                                              (model.pesoUnloaded/ model.pesoTotal)
-                                                  .toStringAsFixed(2)),
-                                          title: 'Bodega # ${index+1}',
-                                        );
-                                      },
-                                      loading: (){
-                                        return  AdProgressIndicatorCard(
-                                          numberOfTrips: '0',
-                                          divideNumber2: model.pesoUnloaded.toString(),
-                                          divideNumber1: model.pesoTotal.toString(),
-                                          barPercentage: double.parse(
-                                              (model.pesoUnloaded/ model.pesoTotal)
-                                                  .toStringAsFixed(2)),
-                                          title: 'Bodega # ${index+1}',
-                                        );
-                                      }
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }, error: (error, st) {
-                  debugPrintStack(stackTrace: st);
-                  debugPrint(error.toString());
-                  return const SizedBox();
-                }, loading: () {
-                  return const SizedBox();
-                });
-              },
-            ),
-
+            DashBoardTopWidget(),
 
             ///Industries
             Consumer(
@@ -219,34 +97,32 @@ class AdDashboardScreen extends ConsumerWidget {
 
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                return ref.watch(getPortEnteringViajesList).
-                when(
-                  data: (viajes){
-                    return Row(
-                      children: [
-                        AdDashboardMiniCard(
+                return Row(
+                  children: [
+                    ref.watch(getAllViajesList).when(data: (viajes) {
+                      return AdDashboardMiniCard(
                           title: 'Descarga total',
-                          value: "${viajes.fold(0, (sum, viaje) => (sum + viaje.cargoDeficitWeight).toInt())}"
-                        ),
-                        AdDashboardMiniCard(
-                          title: 'Viajes en camino',
-                          value: "${viajes.length}"
-                        ),
-                      ],
-                    );
-                  },
-                  error: (error, st){
-                    return Row(
-                      children: [
-                        AdDashboardMiniCard(title: 'Descarga total', value: "0"),
-                        AdDashboardMiniCard(title: 'Viajes en camino', value: "0"),
-                      ],
-                    );
-                  },
-                  loading: (){
-                    return const SizedBox();
-                  }
+                          value:
+                              "${viajes.fold(0, (sum, viaje) => (sum + viaje.cargoDeficitWeight).toInt())}");
+                    }, error: (error, st) {
+                      return AdDashboardMiniCard(
+                          title: 'Descarga total', value: "0");
+                    }, loading: () {
+                      return const SizedBox();
+                    }),
+                    ref.watch(getPortEnteringViajesList).when(data: (viajes) {
+                      return AdDashboardMiniCard(
+                       title: 'Viajes en camino',
+                       value: "${viajes.length}");
+                    }, error: (error, st) {
+                      return AdDashboardMiniCard(
+                          title: 'Viajes en camino', value: "0");
+                    }, loading: () {
+                      return const SizedBox();
+                    }),
+                  ],
                 );
+
               },
             ),
             SizedBox(

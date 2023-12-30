@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
+import '../../../../common_widgets/dashboard_top_widget.dart';
 import '../../../../utils/loading.dart';
 import '../../../auth/controllers/auth_notifier_controller.dart';
 import '../../../coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
@@ -49,42 +50,7 @@ class InDashboardScreen extends ConsumerWidget {
                 },
               ),
             ),
-            SizedBox(
-              height: (0.2 * MediaQuery.of(context).size.height).h,
-              width: (0.9 * MediaQuery.of(context).size.width).w,
-              child: Stack(
-                children: [
-                  Image.asset(constants.Images.ship),
-                  Positioned(
-                    left: (0.04 * MediaQuery.of(context).size.width).w,
-                    bottom: (0.02 * MediaQuery.of(context).size.height).h,
-                    child: const CargoBarChart(),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 150.h,
-              child:
-                  ListView(scrollDirection: Axis.horizontal, children: const [
-                InProgressIndicatorCard(
-                  numberOfTrips: '0',
-                  divideNumber2: '0',
-                  divideNumber1: '0',
-                  barPercentage: 0,
-                  title: 'Descarga total',
-                  deficit: '',
-                ),
-                InProgressIndicatorCard(
-                  numberOfTrips: '0',
-                  divideNumber2: '0',
-                  divideNumber1: '0',
-                  barPercentage: 0,
-                  title: 'Bodega # 1 ',
-                  deficit: '',
-                ),
-              ]),
-            ),
+            DashBoardTopWidget(),
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return ref
@@ -124,20 +90,24 @@ class InDashboardScreen extends ConsumerWidget {
             ),
             SizedBox(
               height: 116.h,
-              child: ListView(scrollDirection: Axis.horizontal, children: [
-                InDashboardMiniCard(
-                    title: 'Saldo', subTitle: ' total', value: "0"),
+              child:
 
                 Consumer(
                   builder:
                       (BuildContext context, WidgetRef ref, Widget? child) {
-                    return ref
+                        return
+
+                    ref
                         .watch(getIndustriaIndustry(
                             ref.read(authNotifierCtr).userModel?.industryId ??
                                 ""))
                         .when(
                       data: (industryModel) {
-                        return ref
+                        return ListView(scrollDirection: Axis.horizontal, children: [
+                            InDashboardMiniCard(
+                            title: 'Saldo', subTitle: ' total', value: industryModel.deficit.toString()),
+
+                          ref
                             .watch(getAllInProgressViajesList(
                                 industryModel.industryId))
                             .when(
@@ -146,7 +116,7 @@ class InDashboardScreen extends ConsumerWidget {
                                 title: 'Viajes',
                                 subTitle: ' en camino',
                                 value: viajesList.length.toString());
-                            ;
+
                           },
                           error: (error, st) {
                             debugPrintStack(stackTrace: st);
@@ -156,8 +126,8 @@ class InDashboardScreen extends ConsumerWidget {
                           loading: () {
                             return const LoadingWidget();
                           },
-                        );
-                        ;
+                        ),  ]);
+
                       },
                       error: (error, st) {
                         debugPrintStack(stackTrace: st);
@@ -168,10 +138,10 @@ class InDashboardScreen extends ConsumerWidget {
                         return const SizedBox();
                       },
                     );
+
                   },
-                ),
-              ]),
-            ),
+                ),),
+
             SizedBox(
               height: 36.h,
             ),

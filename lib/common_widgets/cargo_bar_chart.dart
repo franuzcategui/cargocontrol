@@ -3,7 +3,10 @@ import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/admin/create_vessel/controllers/ad_vessel_controller.dart';
+import '../models/vessel_models/vessel_cargo_model.dart';
 import '../utils/constants/font_manager.dart';
 
 class CargoBarChart extends StatelessWidget {
@@ -14,11 +17,37 @@ class CargoBarChart extends StatelessWidget {
     return SizedBox(
       height: 0.07 * MediaQuery.of(context).size.height,
       width: 0.8 * MediaQuery.of(context).size.width,
-      child: Row(
-        children: [
-       VerticalPercentageBar(percentage: 0.7,index: 1,),
-        ],
+      child: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          return ref.watch(fetchCurrentVesselsProvider).when(
+              data: (vesselModel) {
+                return ListView.builder(
+                  itemCount: vesselModel.cargoModels.length,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    VesselCargoModel model =  vesselModel.cargoModels[index];
+                  return VerticalPercentageBar(percentage:
+                    (model.pesoUnloaded/ model.pesoTotal),index: index+1,);
+
+                  },
+                );
+              }, error: (error, st) {
+            debugPrintStack(stackTrace: st);
+            debugPrint(error.toString());
+            return const SizedBox();
+          }, loading: () {
+            return const SizedBox();
+          });
+        },
       ),
+
+
+      // Row(
+      //   children: [
+      //  VerticalPercentageBar(percentage: 0.7,index: 1,),
+      //   ],
+      // ),
     );
   }
 }
@@ -62,7 +91,7 @@ class VerticalPercentageBar extends StatelessWidget {
           Center(
             child: Text(
               "${(percentage*100).toStringAsFixed(0)}%",
-              style: getBoldStyle(color:percentage<0.3? context.mainColor:context.textFieldColor, fontSize: MyFonts.size14),
+              style: getBoldStyle(color:percentage<0.3? context.mainColor:Colors.black, fontSize: MyFonts.size14),
             ),
           ),),
           Positioned(

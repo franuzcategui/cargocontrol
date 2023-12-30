@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
+import '../../../../common_widgets/dashboard_top_widget.dart';
 import '../../../../models/industry_models/industry_sub_model.dart';
 import '../../../../models/viajes_models/viajes_model.dart';
 import '../../../admin/create_industry/controllers/ad_industry_controller.dart';
@@ -55,42 +56,7 @@ class CoDashboardScreen extends ConsumerWidget {
 
               ),
             ),
-            SizedBox(
-              height: (0.2 * MediaQuery.of(context).size.height).h,
-              width: (0.9 * MediaQuery.of(context).size.width).w,
-              child: Stack(
-                children: [
-                  Image.asset(constants.Images.ship),
-                  Positioned(
-                    left: (0.04 * MediaQuery.of(context).size.width).w,
-                    bottom: (0.02 * MediaQuery.of(context).size.height).h,
-                    child: const CargoBarChart(),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 136.h,
-              child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: const [
-                    CoProgressIndicatorCard(
-                      numberOfTrips: '0',
-                      divideNumber2: '0',
-                      divideNumber1: '0',
-                      barPercentage: 0,
-                      title: 'Descarga total',
-                    ),
-                    CoProgressIndicatorCard(
-                      numberOfTrips: '0',
-                      divideNumber2: '0',
-                      divideNumber1: '0',
-                      barPercentage: 0,
-                      title: 'Bodega # 1 ',
-
-                    ),
-                  ]),
-            ),
+            DashBoardTopWidget(),
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return ref.watch(fetchCurrentIndustry).when(
