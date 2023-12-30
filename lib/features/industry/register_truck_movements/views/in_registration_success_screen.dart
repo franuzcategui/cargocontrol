@@ -39,6 +39,8 @@ class InRegistrationSuccessFullScreen extends StatelessWidget {
                     await ref.read(inTruckRegistrationNotiControllerProvider).setCurrentIndustry(null);
                     await ref.read(inTruckRegistrationNotiControllerProvider).setViajesCargoModel(null);
                     await ref.read(inTruckRegistrationNotiControllerProvider).setViajesChoferesModel(null);
+                    await ref.read(inTruckRegistrationNotiControllerProvider).setCurrentVessel(null);
+
                     Navigator.pushNamedAndRemoveUntil(context, AppRoutes.inMainMenuScreen, (route) => false);
                   },
                   buttonText: "CONTINUAR",

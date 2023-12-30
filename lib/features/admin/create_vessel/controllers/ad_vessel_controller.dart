@@ -11,6 +11,7 @@ import 'package:uuid/uuid.dart';
 import '../../../../commons/common_widgets/show_toast.dart';
 import '../../../../core/enums/weight_unit_enum.dart';
 import '../../../../models/vessel_models/vessel_cargo_model.dart';
+import '../data/models/deficit_viejes_model.dart';
 
 final adVesselProvider = StateNotifierProvider<AdVesselController, bool>((ref) {
   final adVesselApi = ref.watch(adVesselApiProvider);
@@ -21,6 +22,16 @@ final fetchCurrentVesselsProvider = StreamProvider((ref) {
   final categoryPrdr = ref.watch(adVesselProvider.notifier);
   return categoryPrdr.getCurrentVesselStream();
 });
+
+final fetchCurrentVesselViajesDeficit = StreamProvider.family((ref,String vesselId) {
+  final categoryPrdr = ref.watch(adVesselProvider.notifier);
+  return categoryPrdr.getCurrentVesselViajesDeficit(vesselId: vesselId);
+});
+final fetchCargoHoldViajesDeficit = StreamProvider.family((ref,String cargoHoldId) {
+  final categoryPrdr = ref.watch(adVesselProvider.notifier);
+  return categoryPrdr.getCargoHoldViajesDeficit(cargoHoldId: cargoHoldId);
+});
+
 
 
 class AdVesselController extends StateNotifier<bool> {
@@ -80,6 +91,15 @@ class AdVesselController extends StateNotifier<bool> {
   }
 
 
+
+  Stream<DeficitViajesModel> getCurrentVesselViajesDeficit({required String vesselId}){
+    return _datasource.getCurrentVesselViajesDeficit(vesselId: vesselId);
+  }
+
+
+  Stream<DeficitViajesModel> getCargoHoldViajesDeficit({required String cargoHoldId}){
+    return _datasource.getCargoHoldViajesDeficit(CargoHoldId: cargoHoldId);
+  }
 
 
   Future productsUpload()async{

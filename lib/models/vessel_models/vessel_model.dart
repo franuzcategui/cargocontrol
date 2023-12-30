@@ -16,7 +16,6 @@ class VesselModel {
   final bool isFinishedUnloading;
   final Map<String, dynamic> searchTags;
 
-
   const VesselModel({
     required this.vesselId,
     required this.vesselName,

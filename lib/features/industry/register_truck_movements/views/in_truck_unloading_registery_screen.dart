@@ -128,6 +128,8 @@ class _InRegisterTruckUnlaodingScreenState extends State<InRegisterTruckUnlaodin
                               ref: ref,
                               industryId: ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel?.industryId ?? ''
                           );
+                          await ref.read(inTruckRegistrationNotiControllerProvider).
+                          getCurrentVessel(ref: ref);
                         }else{
                           await truckCtr.getCurrentIndustry(
                               realIndustryId: ref.read(authNotifierCtr).userModel?.industryId?? '',
@@ -143,6 +145,8 @@ class _InRegisterTruckUnlaodingScreenState extends State<InRegisterTruckUnlaodin
                               ref: ref,
                               industryId: ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel?.industryId ?? ''
                           );
+                          await ref.read(inTruckRegistrationNotiControllerProvider).
+                          getCurrentVessel(ref: ref);
                         }
 
                       },

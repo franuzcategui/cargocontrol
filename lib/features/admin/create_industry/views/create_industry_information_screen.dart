@@ -359,7 +359,7 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                                 cargoAssigned: double.parse(section.loadCtr.text),
                                 cargoUnloaded: 0,
                                 initialGuide: double.parse(section.comienzeCtr.text),
-                                lastGuide: double.parse(section.endOfGuideCtr.text),
+                                lastGuide: double.parse(section.endOfGuideCtr.text), deficit: 0, cargoHoldId: cargo!.cargoId,
                               );
                               industrySubModels.add(model);
 

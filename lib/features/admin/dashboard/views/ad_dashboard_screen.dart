@@ -3,6 +3,7 @@ import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/dashboard/widgets/ad_dashboard_mini_card.dart';
 import 'package:cargocontrol/features/auth/controllers/auth_notifier_controller.dart';
+import 'package:cargocontrol/models/vessel_models/vessel_cargo_model.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +18,7 @@ import '../../../../routes/route_manager.dart';
 import '../../../../utils/loading.dart';
 import '../../../coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
 import '../../create_industry/controllers/ad_industry_controller.dart';
+import '../../create_vessel/controllers/ad_vessel_controller.dart';
 import '../widgets/ad_floating_action_sheet.dart';
 import '../widgets/ad_progress_dashboard_card.dart';
 import '../widgets/ad_recent_record_widget.dart';
@@ -67,26 +69,118 @@ class AdDashboardScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            SizedBox(
-              height: 136.h,
-              child:
-                  ListView(scrollDirection: Axis.horizontal, children: const [
-                AdProgressIndicatorCard(
-                  numberOfTrips: '0',
-                  divideNumber2: '0',
-                  divideNumber1: '0',
-                  barPercentage: 0,
-                  title: 'Descarga total',
-                ),
-                AdProgressIndicatorCard(
-                  numberOfTrips: '0',
-                  divideNumber2: '0',
-                  divideNumber1: '0',
-                  barPercentage: 0,
-                  title: 'Bodega # 1 ',
-                ),
-              ]),
+            ///Vessel Data
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return ref.watch(fetchCurrentVesselsProvider).when(
+                    data: (vesselModel) {
+                      return Container(
+                        constraints:
+                        BoxConstraints(minHeight: 136.h, maxHeight: 160.h),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              ///Total Vessel data
+                              ref.watch(fetchCurrentVesselViajesDeficit(vesselModel.vesselId)).
+                              when(
+                              data: (viajesDeficitModel){
+                                return  AdProgressIndicatorCard(
+                                  numberOfTrips:viajesDeficitModel.viajesCount,
+                                  divideNumber2: (vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight).toString(),
+                                  divideNumber1: vesselModel.totalCargoWeight.toString(),
+                                  barPercentage: double.parse(
+                                      ((vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight) / vesselModel.totalCargoWeight)
+                                          .toStringAsFixed(2)),
+                                  title: 'Descarga total',
+                                  deficit: viajesDeficitModel.totalDeficit,
+                                );
+                              },
+                              error: (error, st){
+                                return  AdProgressIndicatorCard(
+                                  numberOfTrips: '0',
+                                  divideNumber2: (vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight).toString(),
+                                  divideNumber1: vesselModel.totalCargoWeight.toString(),
+                                  barPercentage: double.parse(
+                                      ((vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight) / vesselModel.totalCargoWeight)
+                                          .toStringAsFixed(2)),
+                                  title: 'Descarga total',
+                                );
+                              },
+                              loading: (){
+                                return  AdProgressIndicatorCard(
+                                  numberOfTrips: '0',
+                                  divideNumber2: (vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight).toString(),
+                                  divideNumber1: vesselModel.totalCargoWeight.toString(),
+                                  barPercentage: double.parse(
+                                      ((vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight) / vesselModel.totalCargoWeight)
+                                          .toStringAsFixed(2)),
+                                  title: 'Descarga total',
+                                );
+                              }
+                               ),
+
+                              ListView.builder(
+                                itemCount: vesselModel.cargoModels.length,
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  VesselCargoModel model =  vesselModel.cargoModels[index];
+                                  return    ref.watch(fetchCargoHoldViajesDeficit(model.cargoId)).
+                                  when(
+                                      data: (viajesDeficitModel){
+                                        return  AdProgressIndicatorCard(
+                                          numberOfTrips:viajesDeficitModel.viajesCount,
+                                          divideNumber2: model.pesoUnloaded.toString(),
+                                          divideNumber1: model.pesoTotal.toString(),
+                                          barPercentage: double.parse(
+                                              (model.pesoUnloaded/ model.pesoTotal)
+                                                  .toStringAsFixed(2)),
+                                          title: 'Bodega # ${index+1}',
+                                          deficit: viajesDeficitModel.totalDeficit,
+                                        );
+                                      },
+                                      error: (error, st){
+                                        return  AdProgressIndicatorCard(
+                                          numberOfTrips: '0',
+                                          divideNumber2: model.pesoUnloaded.toString(),
+                                          divideNumber1: model.pesoTotal.toString(),
+                                          barPercentage: double.parse(
+                                              (model.pesoUnloaded/ model.pesoTotal)
+                                                  .toStringAsFixed(2)),
+                                          title: 'Bodega # ${index+1}',
+                                        );
+                                      },
+                                      loading: (){
+                                        return  AdProgressIndicatorCard(
+                                          numberOfTrips: '0',
+                                          divideNumber2: model.pesoUnloaded.toString(),
+                                          divideNumber1: model.pesoTotal.toString(),
+                                          barPercentage: double.parse(
+                                              (model.pesoUnloaded/ model.pesoTotal)
+                                                  .toStringAsFixed(2)),
+                                          title: 'Bodega # ${index+1}',
+                                        );
+                                      }
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }, error: (error, st) {
+                  debugPrintStack(stackTrace: st);
+                  debugPrint(error.toString());
+                  return const SizedBox();
+                }, loading: () {
+                  return const SizedBox();
+                });
+              },
             ),
+
+
+            ///Industries
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return ref.watch(fetchCurrentIndustry).when(
@@ -108,6 +202,7 @@ class AdDashboardScreen extends ConsumerWidget {
                               (model.cargoUnloaded / model.cargoAssigned)
                                   .toStringAsFixed(2)),
                           title: '${model.industryName}',
+                          deficit: model.deficit.toString(),
                         );
                       },
                     ),
@@ -121,6 +216,7 @@ class AdDashboardScreen extends ConsumerWidget {
                 });
               },
             ),
+
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return ref.watch(getPortEnteringViajesList).

@@ -4,6 +4,7 @@ import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_controller.dart';
 import 'package:cargocontrol/features/industry/register_truck_movements/controllers/in_truck_registration_controller.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
@@ -84,6 +85,7 @@ class _InTruckUnlaodingBriefScreenState extends ConsumerState<InTruckUnlaodingBr
                               context: context,
                               nationalIdNumber: ref.read(inTruckRegistrationNotiControllerProvider).matchedViajes!.chofereId
                             );
+                            //ref.read(fetchCurrentVesselsProvider).
 
                             if(ref.read(inTruckRegistrationNotiControllerProvider).viajesChoferesModel!= null){
                               await ref.read(inTruckRegistrationControllerProvider.notifier).registerTruckUnloadingInIndustry(
@@ -91,6 +93,7 @@ class _InTruckUnlaodingBriefScreenState extends ConsumerState<InTruckUnlaodingBr
                                 cargoUnloadWeight: widget.cargoUnloadWeight,
                                 industrySubModel: ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel!,
                                 viajesModel: ref.read(inTruckRegistrationNotiControllerProvider).matchedViajes!,
+                                vesselModel: ref.read(inTruckRegistrationNotiControllerProvider).vesselModel!,
                                 context: context,
                                 ref: ref,
                               );

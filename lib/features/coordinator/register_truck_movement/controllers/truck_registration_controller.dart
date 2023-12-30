@@ -28,6 +28,12 @@ final getPortEnteringViajesList = StreamProvider((ref) {
   }
 );
 
+
+final getAllInProgressViajesList = StreamProvider.family((ref, String industryId)  {
+  final truckProvider = ref.watch(truckRegistrationControllerProvider.notifier);
+  return truckProvider.getAllInProgressViajesList(industryId: industryId);
+}
+);
 final getPortLeavingViajesList = StreamProvider((ref) {
   final truckProvider = ref.watch(truckRegistrationControllerProvider.notifier);
   return truckProvider.getPortLeavingViajesList();
@@ -131,7 +137,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
     int cargoModelIndex = originalModel.cargoModels.indexWhere((cargoModel) => cargoModel.cargoId == updatedCargoModel.cargoId);
     if (cargoModelIndex != -1) {
       List<VesselCargoModel> updatedCargoModels = List.from(originalModel.cargoModels);
-      updatedCargoModels[cargoModelIndex] = updatedCargoModel;
+      updatedCargoModels[cargoModelIndex] = updatedCargoModel.copyWith(pesoUnloaded:updatedCargoModels[cargoModelIndex].pesoUnloaded +updatedCargoModel.pesoUnloaded);
       return originalModel.copyWith(cargoModels: updatedCargoModels);
     } else {
       return originalModel;
@@ -163,7 +169,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
 
     VesselModel vessel = updateCargoModel(originalModel: vesselModel, updatedCargoModel: vesselCargo);
     VesselModel vesselUpdate = vessel.copyWith(
-      cargoUnloadedWeight: vessel.totalCargoWeight-pureCargoWeight
+      cargoUnloadedWeight: vessel.cargoUnloadedWeight-pureCargoWeight
     );
 
     final result = await _datasource.registerTruckLeavingFromPort(
@@ -190,6 +196,20 @@ class TruckRegistrationController extends StateNotifier<bool> {
   Stream<List<ViajesModel>> getPortEnteringViajesList() {
     return _datasource.getPortEnteringViajesList().
     map((event) {
+      List<ViajesModel> models = [];
+      event.docs.forEach((element) {
+        models.add(ViajesModel.fromMap(element.data()));
+      });
+      return models;
+    });
+  }
+
+
+  Stream<List<ViajesModel>> getAllInProgressViajesList({required String industryId}) {
+    return _datasource.getPortAllInProgressViajesList(industryId: industryId).
+    map((event) {
+      print(industryId);
+      print(event.docs.length);
       List<ViajesModel> models = [];
       event.docs.forEach((element) {
         models.add(ViajesModel.fromMap(element.data()));
@@ -240,5 +260,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
       return IndustrySubModel.fromMap(event.docs.first.data());
     });
   }
+
+
 
 }

@@ -10,8 +10,10 @@ class AdProgressIndicatorCard extends StatelessWidget {
   final String divideNumber1;
   final String divideNumber2;
   final String numberOfTrips;
+  final String deficit;
+
   const AdProgressIndicatorCard({
-    super.key, required this.title, required this.barPercentage, required this.divideNumber1, required this.divideNumber2, required this.numberOfTrips,
+    super.key, required this.title, required this.barPercentage, required this.divideNumber1, required this.divideNumber2, required this.numberOfTrips, this.deficit='',
   });
 
   @override
@@ -27,16 +29,29 @@ class AdProgressIndicatorCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   constraints: BoxConstraints(
-                    maxWidth: 280.w
+                      maxWidth: 220.w
                   ),
                   child: Text(
                     title,
                     style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                   ),
                 ),
+                SizedBox(width: 10.w,),
+                deficit == ''  || deficit == "0"?const SizedBox():
+                Container(
+                  constraints: BoxConstraints(
+                      maxWidth: 50.w
+                  ),
+                  child:Text(
+                    'Deficit: $deficit',
+                    style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
+                  ),
+                ),
+
               ],
             ),
             SizedBox(

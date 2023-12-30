@@ -1,4 +1,5 @@
 import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
+import 'package:cargocontrol/core/enums/viajes_type.dart';
 import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
@@ -34,6 +35,7 @@ abstract class TruckRegistrationApisImplements {
   Stream<QuerySnapshot<Map<String, dynamic>>> getLAllViajesModels();
   Stream<QuerySnapshot<Map<String, dynamic>>> getPortEnteringViajesList();
   Stream<QuerySnapshot<Map<String, dynamic>>> getPortLeavingViajesList();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPortAllInProgressViajesList({required String industryId});
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustryEnteringViajesList();
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesList();
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required String realIndustryId});
@@ -180,6 +182,13 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
   Stream<QuerySnapshot<Map<String, dynamic>>> getPortEnteringViajesList(){
     return _firestore.collection(FirebaseConstants.viajesCollection).
     where('viajesStatusEnum', isEqualTo: ViajesStatusEnum.portEntered.type).
+    snapshots();
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPortAllInProgressViajesList({required String industryId}){
+    return _firestore.collection(FirebaseConstants.viajesCollection).where("industryId",isEqualTo: industryId).
+    where('viajesTypeEnum', isEqualTo: ViajesTypeEnum.inProgress.type).
     snapshots();
   }
 

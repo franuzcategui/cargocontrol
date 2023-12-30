@@ -5,6 +5,7 @@ class IndustrySubModel{
   final String realIndustryId;
   final String industryName;
   final String vesselId;
+  final String cargoHoldId;
   final String vesselName;
   final VesselCargoModel selectedVesselCargo;
   final bool finishedUnloading;
@@ -12,6 +13,7 @@ class IndustrySubModel{
   final List<dynamic> viajesIds;
   final dynamic cargoAssigned;
   final dynamic cargoUnloaded;
+  final dynamic deficit;
   final dynamic initialGuide;
   final dynamic lastGuide;
 
@@ -20,15 +22,17 @@ class IndustrySubModel{
     required this.industryId,
     required this.realIndustryId,
     required this.industryName,
-    required this.vesselName,
     required this.vesselId,
+    required this.cargoHoldId,
+    required this.vesselName,
     required this.selectedVesselCargo,
     required this.finishedUnloading,
+    required this.usedGuideNumbers,
+    required this.viajesIds,
     required this.cargoAssigned,
     required this.cargoUnloaded,
+    required this.deficit,
     required this.initialGuide,
-    required this.viajesIds,
-    required this.usedGuideNumbers,
     required this.lastGuide,
   });
 
@@ -37,51 +41,57 @@ class IndustrySubModel{
       identical(this, other) ||
       (other is IndustrySubModel &&
           runtimeType == other.runtimeType &&
-          realIndustryId == other.realIndustryId &&
           industryId == other.industryId &&
-          vesselId == other.vesselId &&
-          vesselName == other.vesselName &&
+          realIndustryId == other.realIndustryId &&
           industryName == other.industryName &&
+          vesselId == other.vesselId &&
+          cargoHoldId == other.cargoHoldId &&
+          vesselName == other.vesselName &&
           selectedVesselCargo == other.selectedVesselCargo &&
           finishedUnloading == other.finishedUnloading &&
+          usedGuideNumbers == other.usedGuideNumbers &&
+          viajesIds == other.viajesIds &&
           cargoAssigned == other.cargoAssigned &&
           cargoUnloaded == other.cargoUnloaded &&
-          viajesIds == other.viajesIds &&
+          deficit == other.deficit &&
           initialGuide == other.initialGuide &&
-          usedGuideNumbers == other.usedGuideNumbers &&
           lastGuide == other.lastGuide);
 
   @override
   int get hashCode =>
       industryId.hashCode ^
-      vesselId.hashCode ^
       realIndustryId.hashCode ^
       industryName.hashCode ^
+      vesselId.hashCode ^
+      cargoHoldId.hashCode ^
       vesselName.hashCode ^
       selectedVesselCargo.hashCode ^
       finishedUnloading.hashCode ^
+      usedGuideNumbers.hashCode ^
+      viajesIds.hashCode ^
       cargoAssigned.hashCode ^
       cargoUnloaded.hashCode ^
+      deficit.hashCode ^
       initialGuide.hashCode ^
-      viajesIds.hashCode ^
-      usedGuideNumbers.hashCode ^
       lastGuide.hashCode;
 
   @override
   String toString() {
     return 'IndustrySubModel{' +
         ' industryId: $industryId,' +
-        ' vesselId: $vesselId,' +
-        ' vesselName: $vesselName,' +
+        ' realIndustryId: $realIndustryId,' +
         ' industryName: $industryName,' +
+        ' vesselId: $vesselId,' +
+        ' cargoHoldId: $cargoHoldId,' +
+        ' vesselName: $vesselName,' +
         ' selectedVesselCargo: $selectedVesselCargo,' +
         ' finishedUnloading: $finishedUnloading,' +
+        ' usedGuideNumbers: $usedGuideNumbers,' +
+        ' viajesIds: $viajesIds,' +
         ' cargoAssigned: $cargoAssigned,' +
         ' cargoUnloaded: $cargoUnloaded,' +
-        ' realIndustryId: $realIndustryId,' +
+        ' deficit: $deficit,' +
         ' initialGuide: $initialGuide,' +
-        ' viajesIds: $viajesIds,' +
-        ' usedGuideNumbers: $usedGuideNumbers,' +
         ' lastGuide: $lastGuide,' +
         '}';
   }
@@ -89,31 +99,35 @@ class IndustrySubModel{
   IndustrySubModel copyWith({
     String? industryId,
     String? realIndustryId,
-    String? vesselId,
     String? industryName,
+    String? vesselId,
+    String? cargoHoldId,
     String? vesselName,
     VesselCargoModel? selectedVesselCargo,
     bool? finishedUnloading,
     List<dynamic>? usedGuideNumbers,
     List<dynamic>? viajesIds,
-    dynamic cargoAssigned,
-    dynamic cargoUnloaded,
-    dynamic initialGuide,
-    dynamic lastGuide,
+    dynamic? cargoAssigned,
+    dynamic? cargoUnloaded,
+    dynamic? deficit,
+    dynamic? initialGuide,
+    dynamic? lastGuide,
   }) {
     return IndustrySubModel(
       industryId: industryId ?? this.industryId,
       realIndustryId: realIndustryId ?? this.realIndustryId,
-      vesselId: vesselId ?? this.vesselId,
       industryName: industryName ?? this.industryName,
+      vesselId: vesselId ?? this.vesselId,
+      cargoHoldId: cargoHoldId ?? this.cargoHoldId,
       vesselName: vesselName ?? this.vesselName,
-      viajesIds: viajesIds ?? this.viajesIds,
       selectedVesselCargo: selectedVesselCargo ?? this.selectedVesselCargo,
       finishedUnloading: finishedUnloading ?? this.finishedUnloading,
+      usedGuideNumbers: usedGuideNumbers ?? this.usedGuideNumbers,
+      viajesIds: viajesIds ?? this.viajesIds,
       cargoAssigned: cargoAssigned ?? this.cargoAssigned,
       cargoUnloaded: cargoUnloaded ?? this.cargoUnloaded,
+      deficit: deficit ?? this.deficit,
       initialGuide: initialGuide ?? this.initialGuide,
-      usedGuideNumbers: usedGuideNumbers ?? this.usedGuideNumbers,
       lastGuide: lastGuide ?? this.lastGuide,
     );
   }
@@ -124,34 +138,39 @@ class IndustrySubModel{
       'realIndustryId': this.realIndustryId,
       'industryName': this.industryName,
       'vesselId': this.vesselId,
-      'viajesIds': this.viajesIds,
+      'cargoHoldId': this.cargoHoldId,
       'vesselName': this.vesselName,
       'selectedVesselCargo': this.selectedVesselCargo.toMap(),
       'finishedUnloading': this.finishedUnloading,
+      'usedGuideNumbers': this.usedGuideNumbers,
+      'viajesIds': this.viajesIds,
       'cargoAssigned': this.cargoAssigned,
       'cargoUnloaded': this.cargoUnloaded,
+      'deficit': this.deficit,
       'initialGuide': this.initialGuide,
-      'usedGuideNumbers': this.usedGuideNumbers,
       'lastGuide': this.lastGuide,
     };
   }
 
   factory IndustrySubModel.fromMap(Map<String, dynamic> map) {
     return IndustrySubModel(
-      vesselId: map['vesselId'] as String,
-      realIndustryId: map['realIndustryId'] as String,
       industryId: map['industryId'] as String,
-      vesselName: map['vesselName'] as String,
+      realIndustryId: map['realIndustryId'] as String,
       industryName: map['industryName'] as String,
-      usedGuideNumbers: map['usedGuideNumbers'] as List<dynamic>,
-      viajesIds: map['viajesIds'] as List<dynamic>,
+      vesselId: map['vesselId'] as String,
+      cargoHoldId: map['cargoHoldId'] as String,
+      vesselName: map['vesselName'] as String,
       selectedVesselCargo: VesselCargoModel.fromMap(map['selectedVesselCargo'] as Map<String, dynamic>),
       finishedUnloading: map['finishedUnloading'] as bool,
+      usedGuideNumbers: map['usedGuideNumbers'] as List<dynamic>,
+      viajesIds: map['viajesIds'] as List<dynamic>,
       cargoAssigned: map['cargoAssigned'] as dynamic,
       cargoUnloaded: map['cargoUnloaded'] as dynamic,
+      deficit: map['deficit'] as dynamic,
       initialGuide: map['initialGuide'] as dynamic,
       lastGuide: map['lastGuide'] as dynamic,
     );
   }
+
 //</editor-fold>
 }

@@ -10,8 +10,9 @@ class CoProgressIndicatorCard extends StatelessWidget {
   final String divideNumber1;
   final String divideNumber2;
   final String numberOfTrips;
+  final String deficit;
   const CoProgressIndicatorCard({
-    super.key, required this.title, required this.barPercentage, required this.divideNumber1, required this.divideNumber2, required this.numberOfTrips,
+    super.key, required this.title, required this.barPercentage, required this.divideNumber1, required this.divideNumber2, required this.numberOfTrips, this.deficit='',
   });
 
   @override
@@ -27,14 +28,23 @@ class CoProgressIndicatorCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   constraints: BoxConstraints(
-                      maxWidth: 280.w
+                      maxWidth: 220.w
                   ),
                   child: Text(
                     title,
                     style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
+                  ),
+                ),
+                SizedBox(width: 10.w,),
+                deficit == ''  || deficit == "0"?const SizedBox():
+                Expanded(
+                  child: Text(
+                    'Deficit: $deficit',
+                    style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                   ),
                 ),
               ],
@@ -63,7 +73,7 @@ class CoProgressIndicatorCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${barPercentage*100}%',
+                  '${(barPercentage*100).toStringAsFixed(3)}%',
                   style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                 ),
                 Text(

@@ -81,6 +81,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
     required ViajesModel viajesModel,
     required IndustrySubModel industrySubModel,
     required ChoferesModel choferesModel,
+    required VesselModel vesselModel,
     required WidgetRef ref,
     required BuildContext context,
   }) async {
@@ -89,22 +90,25 @@ class TruckRegistrationController extends StateNotifier<bool> {
     // TODO Usman: Need to check calculations
     DateTime unloadingTimeInIndustry= DateTime.now();
     ViajesModel model = viajesModel.copyWith(
-      cargoDeficitWeight: viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight,
-      cargoUnloadWeight: cargoUnloadWeight,
+      cargoDeficitWeight: viajesModel.cargoDeficitWeight +viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight,
+      cargoUnloadWeight: viajesModel.cargoUnloadWeight + cargoUnloadWeight,
       unloadingTimeInIndustry: unloadingTimeInIndustry,
       viajesTypeEnum: ViajesTypeEnum.completed,
       viajesStatusEnum: ViajesStatusEnum.industryUnloaded
     );
 
     IndustrySubModel industry = industrySubModel.copyWith(
-      cargoUnloaded: (viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ) - cargoUnloadWeight,
+      deficit: industrySubModel.deficit + (viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight),
+      cargoUnloaded:industrySubModel.cargoUnloaded + cargoUnloadWeight - viajesModel.entryTimeTruckWeightToPort,
       selectedVesselCargo: industrySubModel.selectedVesselCargo.copyWith(
-            pesoUnloaded: (viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ) - cargoUnloadWeight,
+            pesoUnloaded: industrySubModel.selectedVesselCargo.pesoUnloaded + viajesModel.exitTimeTruckWeightToPort  - cargoUnloadWeight,
           ),
     );
 
+    // todo usman: vessel model update
+
     ChoferesModel chofere  = choferesModel.copyWith(
-      averageCargoDeficit: choferesModel.averageCargoDeficit + ((viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ) - cargoUnloadWeight) /choferesModel.numberOfTrips +1,
+      averageCargoDeficit: choferesModel.averageCargoDeficit + (viajesModel.exitTimeTruckWeightToPort- cargoUnloadWeight) /choferesModel.numberOfTrips +1,
       choferesStatusEnum: ChoferesStatusEnum.available
     );
 

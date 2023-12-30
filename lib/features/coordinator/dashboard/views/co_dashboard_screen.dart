@@ -87,6 +87,7 @@ class CoDashboardScreen extends ConsumerWidget {
                       divideNumber1: '0',
                       barPercentage: 0,
                       title: 'Bodega # 1 ',
+
                     ),
                   ]),
             ),
@@ -105,11 +106,14 @@ class CoDashboardScreen extends ConsumerWidget {
                           itemBuilder: (BuildContext context, int index) {
                             IndustrySubModel model = allIndustries[index];
                             return CoProgressIndicatorCard(
-                              numberOfTrips: '0',
+                              numberOfTrips: model.viajesIds.length.toString(),
                               divideNumber2: '${model.cargoUnloaded}',
                               divideNumber1: '${model.cargoAssigned}',
-                              barPercentage: model.cargoUnloaded!= 0? model.cargoAssigned/model.cargoUnloaded: 0,
+                              barPercentage: model.cargoUnloaded!= 0? (model.cargoUnloaded/model.cargoAssigned): 0,
                               title: '${model.industryName}',
+                              deficit: model.deficit.toString(),
+
+
                             );
                           },
 

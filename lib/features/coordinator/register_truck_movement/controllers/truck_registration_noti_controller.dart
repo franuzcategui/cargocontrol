@@ -183,4 +183,6 @@ class TruckRegistrationNotiController extends ChangeNotifier {
     }
     );
   }
+
+
 }

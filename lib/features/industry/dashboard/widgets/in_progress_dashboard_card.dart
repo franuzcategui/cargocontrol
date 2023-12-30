@@ -39,10 +39,13 @@ class InProgressIndicatorCard extends StatelessWidget {
                     style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                   ),
                 ),
-                deficit == '' ?const SizedBox():
-                Text(
-                  'Deficit: $deficit',
-                  style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
+                SizedBox(width: 10.w,),
+                deficit == '' || deficit == "0"?const SizedBox():
+                Expanded(
+                  child: Text(
+                    'Deficit: $deficit',
+                    style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
+                  ),
                 ),
               ],
             ),
@@ -70,7 +73,7 @@ class InProgressIndicatorCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${barPercentage*100}%',
+                  '${(barPercentage*100).toStringAsFixed(3)}%',
                   style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                 ),
                 Text(

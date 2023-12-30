@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
+import '../../../../utils/loading.dart';
 import '../../../auth/controllers/auth_notifier_controller.dart';
 import '../../../coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
 import '../widgets/in_dashboard_mini_card.dart';
@@ -20,7 +21,6 @@ class InDashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -31,7 +31,8 @@ class InDashboardScreen extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 15),
               child: Text(
                 'Bienvenido',
-                style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size18),
+                style: getBoldStyle(
+                    color: context.textColor, fontSize: MyFonts.size18),
               ),
             ),
             Padding(
@@ -40,12 +41,12 @@ class InDashboardScreen extends ConsumerWidget {
                 builder: (BuildContext context, WidgetRef ref, Widget? child) {
                   final userModel = ref.read(authNotifierCtr).userModel;
                   print(userModel?.uid);
-                  return Text(userModel!.accountType.type,
-                    style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size36),
+                  return Text(
+                    userModel!.accountType.type,
+                    style: getBoldStyle(
+                        color: context.textColor, fontSize: MyFonts.size36),
                   );
-
                 },
-
               ),
             ),
             SizedBox(
@@ -64,54 +65,58 @@ class InDashboardScreen extends ConsumerWidget {
             ),
             SizedBox(
               height: 150.h,
-              child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: const [
-                    InProgressIndicatorCard(
-                      numberOfTrips: '0',
-                      divideNumber2: '0',
-                      divideNumber1: '0',
-                      barPercentage: 0,
-                      title: 'Descarga total',
-                      deficit: '',
-                    ),
-                    InProgressIndicatorCard(
-                      numberOfTrips: '0',
-                      divideNumber2: '0',
-                      divideNumber1: '0',
-                      barPercentage: 0,
-                      title: 'Bodega # 1 ',
-                      deficit: '',
-                    ),
-                  ]),
+              child:
+                  ListView(scrollDirection: Axis.horizontal, children: const [
+                InProgressIndicatorCard(
+                  numberOfTrips: '0',
+                  divideNumber2: '0',
+                  divideNumber1: '0',
+                  barPercentage: 0,
+                  title: 'Descarga total',
+                  deficit: '',
+                ),
+                InProgressIndicatorCard(
+                  numberOfTrips: '0',
+                  divideNumber2: '0',
+                  divideNumber1: '0',
+                  barPercentage: 0,
+                  title: 'Bodega # 1 ',
+                  deficit: '',
+                ),
+              ]),
             ),
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                return ref.watch(getIndustriaIndustry( ref.read(authNotifierCtr).userModel?.industryId?? "")).
-                when(
-                  data: (industryModel){
-                    return  SizedBox(
+                return ref
+                    .watch(getIndustriaIndustry(
+                        ref.read(authNotifierCtr).userModel?.industryId ?? ""))
+                    .when(
+                  data: (industryModel) {
+                    return SizedBox(
                       height: 150.h,
-                      child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            InProgressIndicatorCard(
-                              numberOfTrips: industryModel.viajesIds.length.toString(),
-                              divideNumber2: industryModel.cargoUnloaded.toString(),
-                              divideNumber1: industryModel.cargoAssigned.toString(),
-                              barPercentage: double.parse((industryModel.cargoUnloaded/industryModel.cargoAssigned).toStringAsFixed(2)),
-                              title: industryModel.industryName,
-                              deficit: '0',
-                            ),
-                          ]),
+                      child:
+                          ListView(scrollDirection: Axis.horizontal, children: [
+                        InProgressIndicatorCard(
+                          numberOfTrips:
+                              industryModel.viajesIds.length.toString(),
+                          divideNumber2: industryModel.cargoUnloaded.toString(),
+                          divideNumber1: industryModel.cargoAssigned.toString(),
+                          barPercentage: double.parse(
+                              (industryModel.cargoUnloaded /
+                                      industryModel.cargoAssigned)
+                                  .toStringAsFixed(2)),
+                          title: industryModel.industryName,
+                          deficit: industryModel.deficit.toString(),
+                        ),
+                      ]),
                     );
                   },
-                  error: (error, st){
+                  error: (error, st) {
                     debugPrintStack(stackTrace: st);
                     debugPrint(error.toString());
                     return const SizedBox();
                   },
-                  loading: (){
+                  loading: () {
                     return const SizedBox();
                   },
                 );
@@ -119,21 +124,57 @@ class InDashboardScreen extends ConsumerWidget {
             ),
             SizedBox(
               height: 116.h,
-              child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children:  const [
-                    InDashboardMiniCard(
-                        title: 'Saldo',
-                        subTitle: ' total',
-                        value: "0"),
-                    InDashboardMiniCard(
-                        title: 'Viajes',
-                        subTitle: ' en camino',
-                        value: "0"),
+              child: ListView(scrollDirection: Axis.horizontal, children: [
+                InDashboardMiniCard(
+                    title: 'Saldo', subTitle: ' total', value: "0"),
 
-                  ]),
+                Consumer(
+                  builder:
+                      (BuildContext context, WidgetRef ref, Widget? child) {
+                    return ref
+                        .watch(getIndustriaIndustry(
+                            ref.read(authNotifierCtr).userModel?.industryId ??
+                                ""))
+                        .when(
+                      data: (industryModel) {
+                        return ref
+                            .watch(getAllInProgressViajesList(
+                                industryModel.industryId))
+                            .when(
+                          data: (viajesList) {
+                            return InDashboardMiniCard(
+                                title: 'Viajes',
+                                subTitle: ' en camino',
+                                value: viajesList.length.toString());
+                            ;
+                          },
+                          error: (error, st) {
+                            debugPrintStack(stackTrace: st);
+                            debugPrint(error.toString());
+                            return const SizedBox.shrink();
+                          },
+                          loading: () {
+                            return const LoadingWidget();
+                          },
+                        );
+                        ;
+                      },
+                      error: (error, st) {
+                        debugPrintStack(stackTrace: st);
+                        debugPrint(error.toString());
+                        return const SizedBox();
+                      },
+                      loading: () {
+                        return const SizedBox();
+                      },
+                    );
+                  },
+                ),
+              ]),
             ),
-            SizedBox(height: 36.h,),
+            SizedBox(
+              height: 36.h,
+            ),
           ],
         ),
       ),
