@@ -1,13 +1,14 @@
 import 'package:cargocontrol/core/enums/viajes_type.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/viajes/controllers/viajes_noti_controller.dart';
-import 'package:cargocontrol/features/admin/viajes/widgets/ad_viajes_card.dart';
+import 'package:cargocontrol/common_widgets/viajes_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../common_widgets/cargo_card.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../models/choferes_models/choferes_model.dart';
 import '../../../../models/viajes_models/viajes_model.dart';
+import '../../../../routes/route_manager.dart';
 import '../../../../utils/constants/assets_manager.dart';
 import '../../../../utils/loading.dart';
 import '../../choferes/controllers/choferes_controller.dart';
@@ -74,9 +75,14 @@ class _AdAllViajesSreenState extends ConsumerState<AdAllViajesSreen> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     ViajesModel model = viajesNotiCtr.viajesModels[index];
-                    return  AdViajesCard(
+                    return  ViajesCard(
                       viajesEnum: model.viajesTypeEnum,
                       model: model,
+                      onTap: (){
+                        Navigator.pushNamed(context, AppRoutes.adminViajesDetailsScreen,arguments: {
+                          'viajesModel':model
+                        });
+                      },
                     );
 
                   }),

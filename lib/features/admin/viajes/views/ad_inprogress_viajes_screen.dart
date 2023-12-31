@@ -1,10 +1,11 @@
 import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/features/admin/viajes/controllers/viajes_inprogess_noti_controller.dart';
-import 'package:cargocontrol/features/admin/viajes/widgets/ad_viajes_card.dart';
+import 'package:cargocontrol/common_widgets/viajes_card.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../core/enums/viajes_type.dart';
 import '../../../../models/viajes_models/viajes_model.dart';
+import '../../../../routes/route_manager.dart';
 import '../../../../utils/loading.dart';
 
 class AdInProgressViajesSreen extends ConsumerStatefulWidget {
@@ -68,9 +69,13 @@ class _AdInProgressViajesSreenState extends ConsumerState<AdInProgressViajesSree
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     ViajesModel model = viajesNotiCtr.viajesModels[index];
-                    return  AdViajesCard(
+                    return  ViajesCard(
                       viajesEnum: model.viajesTypeEnum,
-                      model: model,
+                      model: model, onTap:(){
+                      Navigator.pushNamed(context, AppRoutes.adminViajesDetailsScreen,arguments: {
+                        'viajesModel':model
+                      });
+                    },
                     );
 
                   }),

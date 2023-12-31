@@ -1,9 +1,10 @@
-import 'package:cargocontrol/features/admin/viajes/widgets/ad_viajes_card.dart';
+import 'package:cargocontrol/common_widgets/viajes_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../core/enums/viajes_type.dart';
 import '../../../../models/viajes_models/viajes_model.dart';
+import '../../../../routes/route_manager.dart';
 import '../../../../utils/loading.dart';
 import '../controllers/viajes_completed_noti_controller.dart';
 
@@ -68,9 +69,14 @@ class _AdCompletedViajesSreenState extends ConsumerState<AdCompletedViajesSreen>
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     ViajesModel model = viajesNotiCtr.viajesModels[index];
-                    return  AdViajesCard(
+                    return  ViajesCard(
                       viajesEnum: model.viajesTypeEnum,
                       model: model,
+                      onTap: (){
+                        Navigator.pushNamed(context, AppRoutes.adminViajesDetailsScreen,arguments: {
+                          'viajesModel':model
+                        });
+                      },
                     );
 
                   }),
