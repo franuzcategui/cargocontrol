@@ -68,6 +68,8 @@ class TruckRegistrationController extends StateNotifier<bool> {
     required double marchamo,
     required double emptyTruckWeight,
     required String vesselName,
+    required String vesselId,
+    required int vesselCargoHoldCount,
     required String industryName,
     required String industryId,
     required String cargoId,
@@ -103,7 +105,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
         productName: productName,
         viajesId: viajesId,
         viajesTypeEnum: ViajesTypeEnum.inProgress,
-      viajesStatusEnum: ViajesStatusEnum.portEntered
+      viajesStatusEnum: ViajesStatusEnum.portEntered, industryName: industryName, vesselId: vesselId,vesselName:vesselName, cargoHoldCount: vesselCargoHoldCount,
     );
     ChoferesModel choferes = choferesModel.copyWith(
       choferesStatusEnum: ChoferesStatusEnum.portEntered,
@@ -161,6 +163,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
       exitTimeToPort: exitTimeFromPort,
       exitTimeTruckWeightToPort: totalWeight,
       pureCargoWeight: pureCargoWeight,
+      cargoHoldCount: vesselModel.numberOfCargos,
       viajesStatusEnum: ViajesStatusEnum.portLeft
     );
     VesselCargoModel vesselCargo = newCargoModel.copyWith(

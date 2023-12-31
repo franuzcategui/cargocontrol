@@ -36,7 +36,7 @@ class AdViajesDetailsScreen extends StatelessWidget {
                   SizedBox(height: 14.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const AdDatosGeneralesWidget(),
+                   AdDatosGeneralesWidget(viajesModel: viajesModel,),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),

@@ -77,7 +77,6 @@ class _CoTruckLeavingBriefScreenState extends ConsumerState<CoTruckLeavingBriefS
                       SizedBox(height: 26.h,),
                       CustomButton(
                           onPressed: ()async{
-                            //todo usman: check cakculation
                             await truckCtr.getCurrentVesselToUpdate(ref: ref, cargoId: truckCtr.matchedViajes!.cargoId);
                             if(truckCtr.vesselModel!= null){
                               await ref.read(truckRegistrationControllerProvider.notifier).

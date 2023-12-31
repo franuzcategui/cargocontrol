@@ -80,6 +80,8 @@ class _CoTruckBriefScreenState extends ConsumerState<CoTruckBriefScreen> {
                                         plateNumber: widget.plateNumber,
                                         marchamo: widget.marchamo,
                                         emptyTruckWeight: widget.emptyTruckWeight,
+                                        vesselCargoHoldCount:truckNotiCtr.vesselModel?.numberOfCargos ?? 0 ,
+                                        vesselId:truckNotiCtr.selectedIndustry?.vesselId ?? '' ,
                                         vesselName: truckNotiCtr.selectedIndustry?.vesselName ?? '',
                                         industryName: truckNotiCtr.selectedIndustry?.industryName ?? '',
                                         industryId: truckNotiCtr.selectedIndustry?.industryId ?? '',
