@@ -8,6 +8,7 @@ import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
+import 'package:cargocontrol/utils/constants/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -55,6 +56,14 @@ final getIndustriaIndustry = StreamProvider.family((ref, String realIndustryId) 
 );
 
 
+final getIndustriaIndustryByIndustryId = StreamProvider.family((ref, String industryId) {
+  final truckProvider = ref.watch(truckRegistrationControllerProvider.notifier);
+  return truckProvider.getIndustriaIndustryByIndustryId(industryId: industryId);
+}
+);
+
+
+
 class TruckRegistrationController extends StateNotifier<bool> {
   final TruckRegistrationApisImplements _datasource;
 
@@ -88,14 +97,14 @@ class TruckRegistrationController extends StateNotifier<bool> {
     ViajesModel viajesModel = ViajesModel(
         entryTimeToPort: entryTimeToPort,
         entryTimeTruckWeightToPort: emptyTruckWeight,
-        exitTimeToPort: DateTime.now(),
+        exitTimeToPort: AppConstants.constantDateTime,
         exitTimeTruckWeightToPort: 0.0,
-        uploadingTime: DateTime.now(),
+        uploadingTime: AppConstants.constantDateTime,
         pureCargoWeight: 0.0,
         cargoUnloadWeight: 0.0,
         cargoDeficitWeight: 0.0,
-        timeToIndustry: DateTime.now(),
-        unloadingTimeInIndustry: DateTime.now(),
+        timeToIndustry:AppConstants.constantDateTime,
+        unloadingTimeInIndustry: AppConstants.constantDateTime,
         guideNumber: guideNumber,
         industryId: industryId,
         chofereId: choferesId,
@@ -263,6 +272,13 @@ class TruckRegistrationController extends StateNotifier<bool> {
       return IndustrySubModel.fromMap(event.docs.first.data());
     });
   }
+  Stream<IndustrySubModel> getIndustriaIndustryByIndustryId({required String industryId}) {
+    return _datasource.getIndustriaIndustryByIndustryId(industryId: industryId).
+    map((event) {
+      return IndustrySubModel.fromMap(event.docs.first.data());
+    });
+  }
+
 
 
 

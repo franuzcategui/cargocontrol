@@ -30,6 +30,11 @@ final getIndustriaIndustry = StreamProvider.family((ref, String realIndustryId) 
   }
 );
 
+final getChoferModelByNationalId= StreamProvider.family((ref, String nationalId) {
+  final truckProvider = ref.watch(inTruckRegistrationControllerProvider.notifier);
+  return truckProvider.getChoferModelByNationalId(nationalId: nationalId);
+}
+);
 
 class TruckRegistrationController extends StateNotifier<bool> {
   final TruckRegistrationApisImplements _datasource;
@@ -101,14 +106,12 @@ class TruckRegistrationController extends StateNotifier<bool> {
       deficit: industrySubModel.deficit + (viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight),
       cargoUnloaded:industrySubModel.cargoUnloaded + cargoUnloadWeight - viajesModel.entryTimeTruckWeightToPort,
       selectedVesselCargo: industrySubModel.selectedVesselCargo.copyWith(
-            pesoUnloaded: industrySubModel.selectedVesselCargo.pesoUnloaded + viajesModel.exitTimeTruckWeightToPort  - cargoUnloadWeight,
+            pesoUnloaded: industrySubModel.selectedVesselCargo.pesoUnloaded + cargoUnloadWeight- viajesModel.entryTimeTruckWeightToPort,
           ),
     );
-
-    // todo usman: vessel model update
-
+    double updatedChoferesDeficit=((choferesModel.averageCargoDeficit*(choferesModel.numberOfTrips-1) + (viajesModel.exitTimeTruckWeightToPort- cargoUnloadWeight))/choferesModel.numberOfTrips).ceilToDouble();
     ChoferesModel chofere  = choferesModel.copyWith(
-      averageCargoDeficit: choferesModel.averageCargoDeficit + (viajesModel.exitTimeTruckWeightToPort- cargoUnloadWeight) /choferesModel.numberOfTrips +1,
+      averageCargoDeficit: updatedChoferesDeficit,
       choferesStatusEnum: ChoferesStatusEnum.available
     );
 
@@ -141,5 +144,13 @@ class TruckRegistrationController extends StateNotifier<bool> {
       return IndustrySubModel.fromMap(event.docs.first.data());
     });
   }
+
+  Stream<ChoferesModel> getChoferModelByNationalId({required String nationalId}) {
+    return _datasource.getChoferModelByNationalId(nationalId: nationalId).
+    map((event) {
+      return ChoferesModel.fromMap(event.docs.first.data());
+    });
+  }
+
 
 }

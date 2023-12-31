@@ -15,9 +15,9 @@ final viajesApisProvider = Provider<ViajesApisImplements>((ref){
 
 abstract class ViajesApisImplements {
 
-  Future<QuerySnapshot> getAllViajes({int limit = 10, DocumentSnapshot? snapshot});
-  Future<QuerySnapshot> getCompletedViajes({int limit = 10, DocumentSnapshot? snapshot});
-  Future<QuerySnapshot> getInprogressViajes({int limit = 10, DocumentSnapshot? snapshot});
+  Future<QuerySnapshot> getAllViajes({int limit = 10, DocumentSnapshot? snapshot,required String vesselId});
+  Future<QuerySnapshot> getCompletedViajes({int limit = 10, DocumentSnapshot? snapshot,required String vesselId});
+  Future<QuerySnapshot> getInprogressViajes({int limit = 10, DocumentSnapshot? snapshot,required String vesselId});
 
 }
 
@@ -30,8 +30,8 @@ class ViajesApis implements ViajesApisImplements{
 
 
   @override
-  Future<QuerySnapshot> getAllViajes({int limit = 10, DocumentSnapshot? snapshot}) async {
-    Query query = _firestore.collection(FirebaseConstants.viajesCollection);
+  Future<QuerySnapshot> getAllViajes({int limit = 10, DocumentSnapshot? snapshot,required String vesselId}) async {
+    Query query = _firestore.collection(FirebaseConstants.viajesCollection).where('vesselId',isEqualTo: vesselId);
 
     if (snapshot != null) {
       query = query.limit(limit).startAfterDocument(snapshot);
@@ -43,8 +43,8 @@ class ViajesApis implements ViajesApisImplements{
   }
 
   @override
-  Future<QuerySnapshot> getInprogressViajes({int limit = 10, DocumentSnapshot? snapshot}) async {
-    Query query = _firestore.collection(FirebaseConstants.viajesCollection).where('viajesTypeEnum',isEqualTo: ViajesTypeEnum.inProgress.type);
+  Future<QuerySnapshot> getInprogressViajes({int limit = 10, DocumentSnapshot? snapshot,required String vesselId}) async {
+    Query query = _firestore.collection(FirebaseConstants.viajesCollection).where('viajesTypeEnum',isEqualTo: ViajesTypeEnum.inProgress.type).where('vesselId',isEqualTo: vesselId);
 
     if (snapshot != null) {
       query = query.limit(limit).startAfterDocument(snapshot);
@@ -55,8 +55,8 @@ class ViajesApis implements ViajesApisImplements{
     return await query.get();
   }
   @override
-  Future<QuerySnapshot> getCompletedViajes({int limit = 10, DocumentSnapshot? snapshot}) async {
-    Query query = _firestore.collection(FirebaseConstants.viajesCollection).where('viajesTypeEnum',isEqualTo: ViajesTypeEnum.completed.type);
+  Future<QuerySnapshot> getCompletedViajes({int limit = 10, DocumentSnapshot? snapshot,required String vesselId}) async {
+    Query query = _firestore.collection(FirebaseConstants.viajesCollection).where('viajesTypeEnum',isEqualTo: ViajesTypeEnum.completed.type).where('vesselId',isEqualTo: vesselId);
 
     if (snapshot != null) {
       query = query.limit(limit).startAfterDocument(snapshot);

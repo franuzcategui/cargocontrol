@@ -39,6 +39,8 @@ abstract class TruckRegistrationApisImplements {
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustryEnteringViajesList();
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesList();
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required String realIndustryId});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustryByIndustryId({required String industryId});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getChoferModelByNationalId({required String nationalId});
 
   FutureEither<List<IndustrySubModel>> getAllIndustries();
   FutureEither<ViajesModel> getMatchedViajes({required String plateNumber});
@@ -216,6 +218,20 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required String realIndustryId}){
     return _firestore.collection(FirebaseConstants.industryGuideCollection).
     where('realIndustryId', isEqualTo: realIndustryId).
+    snapshots();
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getChoferModelByNationalId({required String nationalId}){
+    return _firestore.collection(FirebaseConstants.choferesCollection).
+    where('choferNationalId', isEqualTo:nationalId).
+    snapshots();
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustryByIndustryId({required String industryId}){
+    return _firestore.collection(FirebaseConstants.industryGuideCollection).
+    where('industryId', isEqualTo: industryId).
     snapshots();
   }
 

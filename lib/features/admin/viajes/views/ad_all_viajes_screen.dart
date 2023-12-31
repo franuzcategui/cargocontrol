@@ -33,14 +33,14 @@ class _AdAllViajesSreenState extends ConsumerState<AdAllViajesSreen> {
 
   initiallization(){
     WidgetsBinding.instance.addPostFrameCallback((timeStamp)async{
-      await ref.read(viajesNotiController).firstTime();
+      await ref.read(viajesNotiController).firstTime(ref: ref);
     });
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
       final notiCtr = ref.read(viajesNotiController);
-      notiCtr.getAllViajes();
+      notiCtr.getAllViajes(ref: ref);
     }
   }
 

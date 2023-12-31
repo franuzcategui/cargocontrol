@@ -29,23 +29,4 @@ class ViajesController extends StateNotifier<bool> {
   DocumentSnapshot? get lastSnapshot=> _lastSnapshot;
 
 
-  Future<List<ChoferesModel>> getAllViajes({int limit = 10}) async {
-    QuerySnapshot querySnapshot = await _datasource.getAllViajes(limit: limit, snapshot: _lastSnapshot);
-
-    List<ChoferesModel> models = [];
-    for (var document in querySnapshot.docs) {
-      var model = ChoferesModel.fromMap(document.data() as Map<String, dynamic>);
-      models.add(model);
-    }
-
-    if (querySnapshot.docs.isNotEmpty) {
-      _lastSnapshot = querySnapshot.docs.last;
-    }
-
-    print('Length: ${querySnapshot.docs.length}');
-    return models;
-  }
-
-
-
 }

@@ -33,6 +33,24 @@ class VesselModel {
     required this.searchTags,
   });
 
+
+  // Empty constructor with default values
+  VesselModel.empty()
+      : vesselId = '',
+        vesselName = '',
+        exitPort = '',
+        entryPort = '',
+        shipper = '',
+        unlcode = '',
+        totalCargoWeight = 0.0,
+        numberOfCargos = 0,
+        cargoModels = [],
+        cargoUnloadedWeight = 0.0,
+        entryDate = DateTime.now(),
+        exitDate = DateTime.now(),
+        isFinishedUnloading = false,
+        searchTags = {};
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

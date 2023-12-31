@@ -42,7 +42,7 @@ class AdViajesCard extends StatelessWidget {
                         style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                       ),
                       Text(
-                        " C - ${model.licensePlate}",
+                        " ${model.chofereName} - ${model.chofereId}",
                         style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                       ),
                     ],

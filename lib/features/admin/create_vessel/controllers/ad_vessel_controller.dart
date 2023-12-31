@@ -90,7 +90,17 @@ class AdVesselController extends StateNotifier<bool> {
     return _datasource.getCurrentVesselStream();
   }
 
-
+  Future<String> getCurrentVesselId()async{
+    String vesselId='';
+    final result = await  _datasource.getCurrentVessel();
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint( l.message);
+    }, (r) {
+      vesselId=r.vesselId;
+    });
+    return vesselId;
+  }
 
   Stream<DeficitViajesModel> getCurrentVesselViajesDeficit({required String vesselId}){
     return _datasource.getCurrentVesselViajesDeficit(vesselId: vesselId);

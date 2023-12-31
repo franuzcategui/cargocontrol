@@ -32,7 +32,7 @@ class AdViajesDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 14.h,),
-                  Text("Datos del viaje de Juan Perez", style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size16),),
+                  Text("Datos del viaje de ${viajesModel.chofereName}", style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size16),),
                   SizedBox(height: 14.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
@@ -40,11 +40,11 @@ class AdViajesDetailsScreen extends StatelessWidget {
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const AdTiempoWidget(),
+                  AdTiempoWidget(viajesModel: viajesModel,),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const AdCargaWidget(),
+                  AdCargaWidget(viajesModel: viajesModel),
                   SizedBox(height: 26.h,),
                   
                   CustomButton(

@@ -27,14 +27,14 @@ class _AdCompletedViajesSreenState extends ConsumerState<AdCompletedViajesSreen>
 
   initiallization(){
     WidgetsBinding.instance.addPostFrameCallback((timeStamp)async{
-      await ref.read(viajesCompletedNotiController).firstTime();
+      await ref.read(viajesCompletedNotiController).firstTime(ref: ref);
     });
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
       final notiCtr = ref.read(viajesCompletedNotiController);
-      notiCtr.getCompletedViajes();
+      notiCtr.getCompletedViajes(ref: ref);
     }
   }
 

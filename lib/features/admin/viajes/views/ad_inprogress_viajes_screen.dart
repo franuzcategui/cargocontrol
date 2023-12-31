@@ -27,14 +27,14 @@ class _AdInProgressViajesSreenState extends ConsumerState<AdInProgressViajesSree
 
   initiallization(){
     WidgetsBinding.instance.addPostFrameCallback((timeStamp)async{
-      await ref.read(viajesInprogessNotiController).firstTime();
+      await ref.read(viajesInprogessNotiController).firstTime(ref: ref);
     });
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
       final notiCtr = ref.read(viajesInprogessNotiController);
-      notiCtr.getInprogessViajes();
+      notiCtr.getInprogessViajes(ref: ref);
     }
   }
 

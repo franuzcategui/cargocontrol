@@ -24,19 +24,17 @@ class AdDatosGeneralesWidget extends StatelessWidget {
             title: "Número de guía",
             subText:viajesModel.guideNumber.toStringAsFixed(0),
         ),
-        // todo usman: fetch vessel name by vessel Id
-        const CustomTile(
+        CustomTile(
             title: "Nombre de buque",
-            subText: 'M.V. Patient Lake'
+            subText: viajesModel.vesselName
         ),
-        // todo usman: fetch industry name by id
-        const CustomTile(
+       CustomTile(
             title: "Industria",
-            subText: "C.A.C.S.A."
+            subText: viajesModel.industryName
         ),
-        const CustomTile(
+       CustomTile(
             title: "Bodega",
-            subText: "5"
+            subText: viajesModel.cargoHoldCount.toString()
         ),
        CustomTile(
             title: "Placa",

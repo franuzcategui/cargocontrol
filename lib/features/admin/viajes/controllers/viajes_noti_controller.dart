@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../models/choferes_models/choferes_model.dart';
+import '../../create_vessel/controllers/ad_vessel_controller.dart';
 import '../data/apis/viajes_apis.dart';
 
 final viajesNotiController = ChangeNotifierProvider((ref) {
@@ -58,11 +59,14 @@ class ViajesNotiController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future getAllViajes() async {
+  Future getAllViajes({required WidgetRef ref}) async {
     setSecondaryLoading(true);
+    String vesselId= await ref.read(adVesselProvider.notifier).getCurrentVesselId();
+
     QuerySnapshot querySnapshot = await _datasource.getAllViajes(
       limit: limit,
       snapshot: _lastSnapshot,
+      vesselId: vesselId
     );
 
     List<ViajesModel> models = [];
@@ -80,16 +84,16 @@ class ViajesNotiController extends ChangeNotifier {
     return models;
   }
 
-  Future firstTime() async {
+  Future firstTime({required WidgetRef ref}) async {
     _limit = 10;
     _lastSnapshot = null;
     _viajesModels = [];
 
     _isLoading = true;
     notifyListeners();
-
+    String vesselId= await ref.read(adVesselProvider.notifier).getCurrentVesselId();
     QuerySnapshot querySnapshot =
-        await _datasource.getAllViajes(limit: limit, snapshot: _lastSnapshot);
+        await _datasource.getAllViajes(limit: limit, snapshot: _lastSnapshot,vesselId: vesselId);
 
     List<ViajesModel> models = [];
     for (var document in querySnapshot.docs) {

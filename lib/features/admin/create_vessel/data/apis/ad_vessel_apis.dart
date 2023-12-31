@@ -92,6 +92,11 @@ class AdVesselApis implements AdVesselApisImplements{
     snapshots().map((event) {
       var model = VesselModel.fromMap(event.docs.first.data());
       return model;
+      // if(event.docs.isNotEmpty){
+      //   var model = VesselModel.fromMap(event.docs.first.data());
+      //   return model;
+      // }
+      // return VesselModel.empty();
     });
   }
 
@@ -134,8 +139,11 @@ class AdVesselApis implements AdVesselApisImplements{
     try {
       var querySnapshot =
       await _firestore.collection(FirebaseConstants.vesselCollection). where('isFinishedUnloading', isEqualTo: false).get();
-      var model = VesselModel.fromMap(querySnapshot.docs.first.data());
-      return Right(model);
+      if(querySnapshot.docs.isNotEmpty){
+        var model = VesselModel.fromMap(querySnapshot.docs.first.data());
+        return Right(model);
+      }
+      return const Left(Failure('Vessel Not Found', StackTrace.empty));
     } on FirebaseAuthException catch (e, stackTrace) {
       return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
     } catch (e, stackTrace) {
