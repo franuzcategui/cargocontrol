@@ -56,33 +56,33 @@ class _CoMainMenuScreenState extends ConsumerState<CoMainMenuScreen> {
         ],
       ),
       body: ref.read(coMainMenuProvider).screens[ref.watch(coMainMenuProvider).index],
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (value) {
-          ref.read(coMainMenuProvider).setIndex(value);
-        },
-        iconSize: 22,
-        currentIndex:  ref.read(coMainMenuProvider).index,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              FontAwesomeIcons.house,
-            ),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              FontAwesomeIcons.truck,
-            ),
-            label: 'Viajes',
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              FontAwesomeIcons.person,
-            ),
-            label: 'Choferes',
-          ),
-        ],
-      )
+      // bottomNavigationBar: BottomNavigationBar(
+      //   onTap: (value) {
+      //     ref.read(coMainMenuProvider).setIndex(value);
+      //   },
+      //   iconSize: 22,
+      //   currentIndex:  ref.read(coMainMenuProvider).index,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: FaIcon(
+      //         FontAwesomeIcons.house,
+      //       ),
+      //       label: 'Dashboard',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: FaIcon(
+      //         FontAwesomeIcons.truck,
+      //       ),
+      //       label: 'Viajes',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: FaIcon(
+      //         FontAwesomeIcons.person,
+      //       ),
+      //       label: 'Choferes',
+      //     ),
+      //   ],
+      // )
     );
   }
 }
