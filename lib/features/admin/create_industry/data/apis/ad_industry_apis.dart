@@ -23,7 +23,7 @@ abstract class AdIndustryApisImplements {
   FutureEitherVoid uploadIndustries({required IndustriesModel industryModell});
   FutureEither<List<IndustriesModel>> getAllIndustries();
   Stream<List<IndustriesModel>> getAllIndustriesStream();
-  Stream<List<IndustrySubModel>> getAllIndustrySubModels();
+  Stream<List<IndustrySubModel>> getAllIndustrySubModels({required String vesselId});
   FutureEither<List<IndustrySubModel>> numberOfIndustriesCheck() ;
 }
 
@@ -65,8 +65,8 @@ class AdIndustryApis implements AdIndustryApisImplements{
   }
 
   @override
-  Stream<List<IndustrySubModel>> getAllIndustrySubModels(){
-    return _firestore.collection(FirebaseConstants.industryGuideCollection).
+  Stream<List<IndustrySubModel>> getAllIndustrySubModels({required String vesselId}){
+    return _firestore.collection(FirebaseConstants.industryGuideCollection).where("vesselId",isEqualTo: vesselId).
     snapshots().
     map((event) {
       List<IndustrySubModel> models = [];

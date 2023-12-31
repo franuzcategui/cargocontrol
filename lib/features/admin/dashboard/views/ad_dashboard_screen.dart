@@ -58,150 +58,169 @@ class AdDashboardScreen extends ConsumerWidget {
             ),
             DashBoardTopWidget(),
 
-            ///Industries
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                return ref.watch(fetchCurrentIndustry).when(
-                    data: (allIndustries) {
-                  return Container(
-                    constraints:
-                        BoxConstraints(minHeight: 136.h, maxHeight: 160.h),
-                    child: ListView.builder(
-                      itemCount: allIndustries.length,
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        IndustrySubModel model = allIndustries[index];
-                        return AdProgressIndicatorCard(
-                          numberOfTrips: '${model.viajesIds.length}',
-                          divideNumber2: '${model.cargoUnloaded}',
-                          divideNumber1: '${model.cargoAssigned}',
-                          barPercentage: double.parse(
-                              (model.cargoUnloaded / model.cargoAssigned)
-                                  .toStringAsFixed(2)),
-                          title: '${model.industryName}',
-                          deficit: model.deficit.toString(),
-                        );
-                      },
-                    ),
-                  );
-                }, error: (error, st) {
-                  debugPrintStack(stackTrace: st);
-                  debugPrint(error.toString());
+                return ref.watch(fetchCurrentVesselsProvider).when(
+                    data: (vesselModel) {
+                      return   Column(
+                        children: [
+                          ///Industries
+                          Consumer(
+                            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                              return ref.watch(fetchCurrentVesselIndustries(vesselModel.vesselId)).when(
+                                  data: (allIndustries) {
+                                    return Container(
+                                      constraints:
+                                      BoxConstraints(minHeight: 136.h, maxHeight: 160.h),
+                                      child: ListView.builder(
+                                        itemCount: allIndustries.length,
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          IndustrySubModel model = allIndustries[index];
+                                          return AdProgressIndicatorCard(
+                                            numberOfTrips: '${model.viajesIds.length}',
+                                            divideNumber2: '${model.cargoUnloaded}',
+                                            divideNumber1: '${model.cargoAssigned}',
+                                            barPercentage: double.parse(
+                                                (model.cargoUnloaded / model.cargoAssigned)
+                                                    .toStringAsFixed(2)),
+                                            title: '${model.industryName}',
+                                            deficit: model.deficit.toString(),
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  }, error: (error, st) {
+                                debugPrintStack(stackTrace: st);
+                                debugPrint(error.toString());
+                                return const SizedBox();
+                              }, loading: () {
+                                return const SizedBox();
+                              });
+                            },
+                          ),
+                          Consumer(
+                            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                              return Row(
+                                children: [
+                                  ref.watch(getAllViajesList(vesselModel.vesselId)).when(data: (viajes) {
+                                    return AdDashboardMiniCard(
+                                        title: 'Descarga total',
+                                        value:
+                                        "${viajes.fold(0, (sum, viaje) => (sum + viaje.cargoDeficitWeight).toInt())}");
+                                  }, error: (error, st) {
+                                    return AdDashboardMiniCard(
+                                        title: 'Descarga total', value: "0");
+                                  }, loading: () {
+                                    return const SizedBox();
+                                  }),
+                                  ref.watch(getAllCurrentVesselInProgressViajesList(vesselModel.vesselId)).when(data: (viajes) {
+                                    return AdDashboardMiniCard(
+                                        title: 'Viajes en camino',
+                                        value: "${viajes.length}");
+                                  }, error: (error, st) {
+                                    return AdDashboardMiniCard(
+                                        title: 'Viajes en camino', value: "0");
+                                  }, loading: () {
+                                    return const SizedBox();
+                                  }),
+                                ],
+                              );
+
+                            },
+                          ),
+                          SizedBox(
+                            height: 36.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Registros recientes',
+                                      style: getBoldStyle(
+                                          color: context.textColor, fontSize: MyFonts.size18),
+                                    ),
+                                    GestureDetector(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context, AppRoutes.adAllRecentiesScreen);
+                                        },
+                                        child: Text(
+                                          'Ver todos',
+                                          style: getExtraBoldStyle(
+                                              color: context.mainColor,
+                                              fontSize: MyFonts.size12),
+                                        ))
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 28.h,
+                                ),
+                                Consumer(
+                                  builder:
+                                      (BuildContext context, WidgetRef ref, Widget? child) {
+                                    return ref.watch(getAllViajesList(vesselModel.vesselId)).when(
+                                      data: (viajesList) {
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          itemCount:
+                                          viajesList.length > 5 ? 5 : viajesList.length,
+                                          itemBuilder: (BuildContext context, int index) {
+                                            ViajesModel model = viajesList[index];
+                                            return GestureDetector(
+                                              onTap: () {},
+                                              child: AdRecentRecordCard(
+                                                isEntered: model.viajesStatusEnum.type ==
+                                                    ViajesStatusEnum.portEntered.type
+                                                    ? true
+                                                    : false,
+                                                isLeaving: model.viajesStatusEnum.type ==
+                                                    ViajesStatusEnum.portLeft.type
+                                                    ? true
+                                                    : false,
+                                                guideNumber: model.guideNumber.toString(),
+                                                driverName: model.chofereName,
+                                                portEntryTime: model.entryTimeToPort,
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      error: (error, st) {
+                                        debugPrintStack(stackTrace: st);
+                                        debugPrint(error.toString());
+                                        return const SizedBox.shrink();
+                                      },
+                                      loading: () {
+                                        return const LoadingWidget();
+                                      },
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }, error: (error, st) {
+                  //debugPrintStack(stackTrace: st);
+                  //debugPrint(error.toString());
                   return const SizedBox();
                 }, loading: () {
                   return const SizedBox();
                 });
               },
-            ),
+            )
+            ,
 
-            Consumer(
-              builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                return Row(
-                  children: [
-                    ref.watch(getAllViajesList).when(data: (viajes) {
-                      return AdDashboardMiniCard(
-                          title: 'Descarga total',
-                          value:
-                              "${viajes.fold(0, (sum, viaje) => (sum + viaje.cargoDeficitWeight).toInt())}");
-                    }, error: (error, st) {
-                      return AdDashboardMiniCard(
-                          title: 'Descarga total', value: "0");
-                    }, loading: () {
-                      return const SizedBox();
-                    }),
-                    ref.watch(getPortEnteringViajesList).when(data: (viajes) {
-                      return AdDashboardMiniCard(
-                       title: 'Viajes en camino',
-                       value: "${viajes.length}");
-                    }, error: (error, st) {
-                      return AdDashboardMiniCard(
-                          title: 'Viajes en camino', value: "0");
-                    }, loading: () {
-                      return const SizedBox();
-                    }),
-                  ],
-                );
 
-              },
-            ),
-            SizedBox(
-              height: 36.h,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Registros recientes',
-                        style: getBoldStyle(
-                            color: context.textColor, fontSize: MyFonts.size18),
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, AppRoutes.adAllRecentiesScreen);
-                          },
-                          child: Text(
-                            'Ver todos',
-                            style: getExtraBoldStyle(
-                                color: context.mainColor,
-                                fontSize: MyFonts.size12),
-                          ))
-                    ],
-                  ),
-                  SizedBox(
-                    height: 28.h,
-                  ),
-                  Consumer(
-                    builder:
-                        (BuildContext context, WidgetRef ref, Widget? child) {
-                      return ref.watch(getAllViajesList).when(
-                        data: (viajesList) {
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount:
-                                viajesList.length > 5 ? 5 : viajesList.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              ViajesModel model = viajesList[index];
-                              return GestureDetector(
-                                onTap: () {},
-                                child: AdRecentRecordCard(
-                                  isEntered: model.viajesStatusEnum.type ==
-                                          ViajesStatusEnum.portEntered.type
-                                      ? true
-                                      : false,
-                                  isLeaving: model.viajesStatusEnum.type ==
-                                          ViajesStatusEnum.portLeft.type
-                                      ? true
-                                      : false,
-                                  guideNumber: model.guideNumber.toString(),
-                                  driverName: model.chofereName,
-                                  portEntryTime: model.entryTimeToPort,
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        error: (error, st) {
-                          debugPrintStack(stackTrace: st);
-                          debugPrint(error.toString());
-                          return const SizedBox.shrink();
-                        },
-                        loading: () {
-                          return const LoadingWidget();
-                        },
-                      );
-                    },
-                  )
-                ],
-              ),
-            ),
             SizedBox(
               height: 100.h,
             )

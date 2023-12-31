@@ -5,11 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../utils/constants/font_manager.dart';
-import '../../../coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
-import '../../../industry/register_truck_movements/controllers/in_truck_registration_controller.dart';
+import '../features/coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
+import '../features/industry/register_truck_movements/controllers/in_truck_registration_controller.dart';
 
-class AdCargaWidget extends StatelessWidget {
-  const AdCargaWidget({Key? key, required this.viajesModel}) : super(key: key);
+class CargaWidget extends StatelessWidget {
+  const CargaWidget({Key? key, required this.viajesModel}) : super(key: key);
   final ViajesModel viajesModel;
 
   @override

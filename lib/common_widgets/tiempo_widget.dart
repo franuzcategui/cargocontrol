@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../utils/constants/font_manager.dart';
 
-class AdTiempoWidget extends StatelessWidget {
-  const AdTiempoWidget({Key? key, required this.viajesModel}) : super(key: key);
+class TiempoWidget extends StatelessWidget {
+  const TiempoWidget({Key? key, required this.viajesModel}) : super(key: key);
   final ViajesModel viajesModel;
 
   String formatDuration(Duration duration) {

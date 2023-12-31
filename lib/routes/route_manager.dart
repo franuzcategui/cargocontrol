@@ -42,13 +42,18 @@ class AppRoutes {
   // Admin Section
   static const String adminMainMenuScreen = '/adminMainMenuScreen';
   static const String adminCreateVesselScreen = '/adminCreateVesselScreen';
-  static const String adminCreateVesselBodegaInfoScreen = '/adminCreateVesselBodegaInfoScreen';
-  static const String adminCreateVesselCompleteDataScreen = '/adminCreateVesselCompleteDataScreen';
-  static const String registrationSuccessFullScreen = '/registrationSuccessFullScreen';
+  static const String adminCreateVesselBodegaInfoScreen =
+      '/adminCreateVesselBodegaInfoScreen';
+  static const String adminCreateVesselCompleteDataScreen =
+      '/adminCreateVesselCompleteDataScreen';
+  static const String registrationSuccessFullScreen =
+      '/registrationSuccessFullScreen';
 
   static const String adminCreateIndustryScreen = '/adminCreateIndustryScreen';
-  static const String adminCreateIndustryInformationScreen = '/adminCreateIndustryInformationScreen';
-  static const String adminCreateIndustryCompleteDataScreen = '/adminCreateIndustryCompleteDataScreen';
+  static const String adminCreateIndustryInformationScreen =
+      '/adminCreateIndustryInformationScreen';
+  static const String adminCreateIndustryCompleteDataScreen =
+      '/adminCreateIndustryCompleteDataScreen';
 
   static const String adminRegisterUserScreen = '/adminRegisterUserScreen';
 
@@ -58,33 +63,37 @@ class AppRoutes {
   static const String adManageShipsScreen = '/adManageShipsScreen';
   static const String adAllRecentiesScreen = '/adAllRecentiesScreen';
 
-
   // Coordinator Section
   static const String coMainMenuScreen = '/coMainMenuScreen';
-  static const String registerTruckEnteringScreen = '/registerTruckEnteringScreen';
+  static const String registerTruckEnteringScreen =
+      '/registerTruckEnteringScreen';
   static const String coTruckInfoScreen = '/coTruckInfoScreen';
   static const String coTruckBriefScreen = '/coTruckBriefScreen';
   static const String coTruckLeavingBriefScreen = '/coTruckLeavingBriefScreen';
-  static const String coRegistrationSuccessFullScreen = '/coRegistrationSuccessFullScreen';
-  static const String registerTruckLeavingScreen = '/registerTruckLeavingScreen';
-  static const String coTruckLeavingInformationScreen = '/coTruckLeavingInformationScreen';
+  static const String coRegistrationSuccessFullScreen =
+      '/coRegistrationSuccessFullScreen';
+  static const String registerTruckLeavingScreen =
+      '/registerTruckLeavingScreen';
+  static const String coTruckLeavingInformationScreen =
+      '/coTruckLeavingInformationScreen';
   static const String coAllRecentiesScreen = '/coAllRecentiesScreen';
-
 
   // Industria Section
   static const String inDashboardScreen = '/inDashboardScreen';
   static const String inMainMenuScreen = '/inMainMenuScreen';
-  static const String inRegisterTruckArrivalScreen = '/inRegisterTruckArrivalScreen';
+  static const String inRegisterTruckArrivalScreen =
+      '/inRegisterTruckArrivalScreen';
   static const String inTruckArrivalInfoScreen = '/inTruckArrivalInfoScreen';
-  static const String inRegisterTruckUnloadingScreen = '/inRegisterTruckUnloadingScreen';
-  static const String inTruckUnloadingInfoScreen = '/inTruckUnloadingInfoScreen';
-  static const String inTruckUnlaodingBriefScreen = '/inTruckUnlaodingBriefScreen';
-  static const String inRegistrationSuccessFullScreen = '/inRegistrationSuccessFullScreen';
+  static const String inRegisterTruckUnloadingScreen =
+      '/inRegisterTruckUnloadingScreen';
+  static const String inTruckUnloadingInfoScreen =
+      '/inTruckUnloadingInfoScreen';
+  static const String inTruckUnlaodingBriefScreen =
+      '/inTruckUnlaodingBriefScreen';
+  static const String inRegistrationSuccessFullScreen =
+      '/inRegistrationSuccessFullScreen';
   static const String inViajesDetailsScreen = '/inViajesDetailsScreen';
   static const String inAllReportsScreen = '/inAllReportsScreen';
-
-
-
 
   static const String loginScreen = '/loginScreen';
   static const String dashboardScreen = '/dashboardScreen';
@@ -99,29 +108,29 @@ class AppRoutes {
       case adminCreateVesselBodegaInfoScreen:
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(
-            CreateVesselBodegaInfoScreen(
-                vesselName : args['vesselName'],
-                procedencia : args['procedencia'],
-                shipper :args['shipper'],
-                unCode : args['unCode'],
-                portDate : args['portDate'],
-                // numberOfCargos : args['numberOfCargos'],
-                weightUnitEnum : args['weightUnitEnum'],
-            ),
+          CreateVesselBodegaInfoScreen(
+            vesselName: args['vesselName'],
+            procedencia: args['procedencia'],
+            shipper: args['shipper'],
+            unCode: args['unCode'],
+            portDate: args['portDate'],
+            // numberOfCargos : args['numberOfCargos'],
+            weightUnitEnum: args['weightUnitEnum'],
+          ),
         );
       case adminCreateVesselCompleteDataScreen:
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(
-            CreateVesselCompleteDataScreen(
-                vesselName : args['vesselName'],
-                procedencia : args['procedencia'],
-                shipper :args['shipper'],
-                unCode : args['unCode'],
-                portDate : args['portDate'],
-                numberOfWines : args['numberOfWines'],
-                weightUnitEnum : args['weightUnitEnum'],
-                bogedaModels : args['bogedaModels'],
-            ),
+          CreateVesselCompleteDataScreen(
+            vesselName: args['vesselName'],
+            procedencia: args['procedencia'],
+            shipper: args['shipper'],
+            unCode: args['unCode'],
+            portDate: args['portDate'],
+            numberOfWines: args['numberOfWines'],
+            weightUnitEnum: args['weightUnitEnum'],
+            bogedaModels: args['bogedaModels'],
+          ),
         );
       case registrationSuccessFullScreen:
         return _buildRoute(const RegistrationSuccessFullScreen());
@@ -131,16 +140,16 @@ class AppRoutes {
       case adminCreateIndustryInformationScreen:
         // final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(
-            CreateIndustryInformationScreen(
+          CreateIndustryInformationScreen(
               // numberOfIndustries: args['numberOfIndustries'],
-            ),
+              ),
         );
       case adminCreateIndustryCompleteDataScreen:
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(
-            CreateIndustryCompleteDataScreen(
-              industrySubModels: args['industrySubModels'],
-            ),
+          CreateIndustryCompleteDataScreen(
+            industrySubModels: args['industrySubModels'],
+          ),
         );
 
       case adminRegisterUserScreen:
@@ -148,7 +157,7 @@ class AppRoutes {
 
       case adminViajesDetailsScreen:
         final args = settings.arguments as Map<String, dynamic>;
-        return _buildRoute( AdViajesDetailsScreen(
+        return _buildRoute(AdViajesDetailsScreen(
           viajesModel: args['viajesModel'],
         ));
       case adminViajesEditScreen:
@@ -159,7 +168,7 @@ class AppRoutes {
       case adAllRecentiesScreen:
         return _buildRoute(const AdAllRecentiesScreen());
 
-    // Coordinator Screens
+      // Coordinator Screens
       case coMainMenuScreen:
         return _buildRoute(const CoMainMenuScreen());
       case registerTruckEnteringScreen:
@@ -167,19 +176,19 @@ class AppRoutes {
       case coTruckInfoScreen:
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(
-        CoTruckInfoScreen(
-          guideNumber: args['guideNumber'],
-        ),
+          CoTruckInfoScreen(
+            guideNumber: args['guideNumber'],
+          ),
         );
       case coTruckBriefScreen:
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(
-            CoTruckBriefScreen(
-              guideNumber: args['guideNumber'],
-              plateNumber: args['plateNumber'],
-              marchamo: args['marchamo'],
-              emptyTruckWeight: args['emptyTruckWeight'],
-            ),
+          CoTruckBriefScreen(
+            guideNumber: args['guideNumber'],
+            plateNumber: args['plateNumber'],
+            marchamo: args['marchamo'],
+            emptyTruckWeight: args['emptyTruckWeight'],
+          ),
         );
       case coTruckLeavingBriefScreen:
         final args = settings.arguments as Map<String, dynamic>;
@@ -212,21 +221,22 @@ class AppRoutes {
       case inTruckUnlaodingBriefScreen:
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(
-            InTruckUnlaodingBriefScreen(
-              cargoUnloadWeight: args['cargoUnloadWeight'],
-            ),
+          InTruckUnlaodingBriefScreen(
+            cargoUnloadWeight: args['cargoUnloadWeight'],
+          ),
         );
       case inRegistrationSuccessFullScreen:
         return _buildRoute(const InRegistrationSuccessFullScreen());
       case inViajesDetailsScreen:
-        return _buildRoute(const InViajesDetailsScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(InViajesDetailsScreen(
+          viajesModel: args['viajesModel'],
+        ));
       case inAllReportsScreen:
         return _buildRoute(const InAllReportsScreen());
 
       case loginScreen:
         return _buildRoute(const LoginScreen());
-
-
 
       default:
         return unDefinedRoute();

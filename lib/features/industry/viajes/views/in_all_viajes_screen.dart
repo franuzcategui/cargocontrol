@@ -6,12 +6,14 @@ import '../../../../common_widgets/viajes_card.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../models/choferes_models/choferes_model.dart';
 import '../../../../models/viajes_models/viajes_model.dart';
+import '../../../../routes/route_manager.dart';
 import '../../../../utils/constants/assets_manager.dart';
 import '../../../../utils/loading.dart';
 import '../controllers/in_viajes_noti_controller.dart';
 
 class InAllViajesSreen extends ConsumerStatefulWidget {
-  const InAllViajesSreen({required this.industryId, Key? key}) : super(key: key);
+  const InAllViajesSreen({required this.industryId, Key? key})
+      : super(key: key);
   final String industryId;
 
   @override
@@ -19,7 +21,6 @@ class InAllViajesSreen extends ConsumerStatefulWidget {
 }
 
 class _AdAllViajesSreenState extends ConsumerState<InAllViajesSreen> {
-
   late ScrollController _scrollController;
 
   @override
@@ -30,16 +31,19 @@ class _AdAllViajesSreenState extends ConsumerState<InAllViajesSreen> {
     initiallization();
   }
 
-  initiallization(){
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp)async{
-      await ref.read(inViajesNotiController).firstTime(ref: ref,industryId: widget.industryId);
+  initiallization() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await ref
+          .read(inViajesNotiController)
+          .firstTime(ref: ref, industryId: widget.industryId);
     });
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
       final notiCtr = ref.read(inViajesNotiController);
-      notiCtr.getAllViajes(ref: ref,industryId: widget.industryId);
+      notiCtr.getAllViajes(ref: ref, industryId: widget.industryId);
     }
   }
 
@@ -49,44 +53,46 @@ class _AdAllViajesSreenState extends ConsumerState<InAllViajesSreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         final viajesNotiCtr = ref.watch(inViajesNotiController);
         return Column(
           children: [
-            viajesNotiCtr.isLoading ?
-            const LoadingWidget():
-            viajesNotiCtr.viajesModels.isEmpty ?
-            Padding(
-              padding: EdgeInsets.all(32.0.h),
-              child: const Text("No Viajes!"),
-            ):
-            Expanded(
-              child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: viajesNotiCtr.viajesModels.length,
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    ViajesModel model = viajesNotiCtr.viajesModels[index];
-                    return  ViajesCard(
-                      viajesEnum: model.viajesTypeEnum,
-                      model: model, onTap: () {  },
-                    );
-
-                  }),
-            ),
-            ref.watch(inViajesNotiController).isSecondaryLoading?
-            const LoadingWidget(): const SizedBox()
+            viajesNotiCtr.isLoading
+                ? const LoadingWidget()
+                : viajesNotiCtr.viajesModels.isEmpty
+                    ? Padding(
+                        padding: EdgeInsets.all(32.0.h),
+                        child: const Text("No Viajes!"),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: viajesNotiCtr.viajesModels.length,
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              ViajesModel model =
+                                  viajesNotiCtr.viajesModels[index];
+                              return ViajesCard(
+                                viajesEnum: model.viajesTypeEnum,
+                                model: model,
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.inViajesDetailsScreen,
+                                      arguments: {'viajesModel': model});
+                                },
+                              );
+                            }),
+                      ),
+            ref.watch(inViajesNotiController).isSecondaryLoading
+                ? const LoadingWidget()
+                : const SizedBox()
           ],
         );
       },
-
     );
   }
-
 }

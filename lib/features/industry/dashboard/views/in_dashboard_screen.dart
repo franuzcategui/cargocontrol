@@ -2,6 +2,7 @@ import 'package:cargocontrol/common_widgets/cargo_bar_chart.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/industry/register_truck_movements/controllers/in_truck_registration_noti_controller.dart';
+import 'package:cargocontrol/models/misc_models/industry_vessel_ids_model.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,7 @@ import 'package:cargocontrol/utils/constants.dart' as constants;
 
 import '../../../../common_widgets/dashboard_top_widget.dart';
 import '../../../../utils/loading.dart';
+import '../../../admin/create_vessel/controllers/ad_vessel_controller.dart';
 import '../../../auth/controllers/auth_notifier_controller.dart';
 import '../../../coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
 import '../widgets/in_dashboard_mini_card.dart';
@@ -53,95 +55,130 @@ class InDashboardScreen extends ConsumerWidget {
             DashBoardTopWidget(),
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                return ref
-                    .watch(getIndustriaIndustry(
-                        ref.read(authNotifierCtr).userModel?.industryId ?? ""))
-                    .when(
-                  data: (industryModel) {
-                    return SizedBox(
-                      height: 150.h,
-                      child:
-                          ListView(scrollDirection: Axis.horizontal, children: [
-                        InProgressIndicatorCard(
-                          numberOfTrips:
-                              industryModel.viajesIds.length.toString(),
-                          divideNumber2: industryModel.cargoUnloaded.toString(),
-                          divideNumber1: industryModel.cargoAssigned.toString(),
-                          barPercentage: double.parse(
-                              (industryModel.cargoUnloaded /
-                                      industryModel.cargoAssigned)
-                                  .toStringAsFixed(2)),
-                          title: industryModel.industryName,
-                          deficit: industryModel.deficit.toString(),
+                return ref.watch(fetchCurrentVesselsProvider).when(
+                    data: (vesselModel) {
+                  return Column(
+                    children: [
+                      Consumer(
+                        builder: (BuildContext context, WidgetRef ref,
+                            Widget? child) {
+                          return ref
+                              .watch(getIndustriaIndustry(
+                                  IndustryAndVesselIdsModel(
+                                      industryId: ref
+                                              .read(authNotifierCtr)
+                                              .userModel
+                                              ?.industryId ??
+                                          "",
+                                      vesselId: vesselModel.vesselId)))
+                              .when(
+                            data: (industryModel) {
+                              return SizedBox(
+                                height: 150.h,
+                                child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      InProgressIndicatorCard(
+                                        numberOfTrips: industryModel
+                                            .viajesIds.length
+                                            .toString(),
+                                        divideNumber2: industryModel
+                                            .cargoUnloaded
+                                            .toString(),
+                                        divideNumber1: industryModel
+                                            .cargoAssigned
+                                            .toString(),
+                                        barPercentage: double.parse(
+                                            (industryModel.cargoUnloaded /
+                                                    industryModel.cargoAssigned)
+                                                .toStringAsFixed(2)),
+                                        title: industryModel.industryName,
+                                        deficit:
+                                            industryModel.deficit.toString(),
+                                      ),
+                                    ]),
+                              );
+                            },
+                            error: (error, st) {
+                              debugPrintStack(stackTrace: st);
+                              debugPrint(error.toString());
+                              return const SizedBox();
+                            },
+                            loading: () {
+                              return const SizedBox();
+                            },
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: 116.h,
+                        child: Consumer(
+                          builder: (BuildContext context, WidgetRef ref,
+                              Widget? child) {
+                            return ref
+                                .watch(getIndustriaIndustry(
+                                    IndustryAndVesselIdsModel(
+                                        industryId: ref
+                                                .read(authNotifierCtr)
+                                                .userModel
+                                                ?.industryId ??
+                                            "",
+                                        vesselId: vesselModel.vesselId)))
+                                .when(
+                              data: (industryModel) {
+                                return ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      InDashboardMiniCard(
+                                          title: 'Saldo',
+                                          subTitle: ' total',
+                                          value:
+                                              industryModel.deficit.toString()),
+                                      ref
+                                          .watch(getAllInProgressViajesList(
+                                              industryModel.industryId))
+                                          .when(
+                                        data: (viajesList) {
+                                          return InDashboardMiniCard(
+                                              title: 'Viajes',
+                                              subTitle: ' en camino',
+                                              value:
+                                                  viajesList.length.toString());
+                                        },
+                                        error: (error, st) {
+                                          debugPrintStack(stackTrace: st);
+                                          debugPrint(error.toString());
+                                          return const SizedBox.shrink();
+                                        },
+                                        loading: () {
+                                          return const LoadingWidget();
+                                        },
+                                      ),
+                                    ]);
+                              },
+                              error: (error, st) {
+                                debugPrintStack(stackTrace: st);
+                                debugPrint(error.toString());
+                                return const SizedBox();
+                              },
+                              loading: () {
+                                return const SizedBox();
+                              },
+                            );
+                          },
                         ),
-                      ]),
-                    );
-                  },
-                  error: (error, st) {
-                    debugPrintStack(stackTrace: st);
-                    debugPrint(error.toString());
-                    return const SizedBox();
-                  },
-                  loading: () {
-                    return const SizedBox();
-                  },
-                );
+                      ),
+                    ],
+                  );
+                }, error: (error, st) {
+                  //debugPrintStack(stackTrace: st);
+                  //debugPrint(error.toString());
+                  return const SizedBox();
+                }, loading: () {
+                  return const SizedBox();
+                });
               },
             ),
-            SizedBox(
-              height: 116.h,
-              child:
-
-                Consumer(
-                  builder:
-                      (BuildContext context, WidgetRef ref, Widget? child) {
-                        return
-
-                    ref
-                        .watch(getIndustriaIndustry(
-                            ref.read(authNotifierCtr).userModel?.industryId ??
-                                ""))
-                        .when(
-                      data: (industryModel) {
-                        return ListView(scrollDirection: Axis.horizontal, children: [
-                            InDashboardMiniCard(
-                            title: 'Saldo', subTitle: ' total', value: industryModel.deficit.toString()),
-
-                          ref
-                            .watch(getAllInProgressViajesList(
-                                industryModel.industryId))
-                            .when(
-                          data: (viajesList) {
-                            return InDashboardMiniCard(
-                                title: 'Viajes',
-                                subTitle: ' en camino',
-                                value: viajesList.length.toString());
-
-                          },
-                          error: (error, st) {
-                            debugPrintStack(stackTrace: st);
-                            debugPrint(error.toString());
-                            return const SizedBox.shrink();
-                          },
-                          loading: () {
-                            return const LoadingWidget();
-                          },
-                        ),  ]);
-
-                      },
-                      error: (error, st) {
-                        debugPrintStack(stackTrace: st);
-                        debugPrint(error.toString());
-                        return const SizedBox();
-                      },
-                      loading: () {
-                        return const SizedBox();
-                      },
-                    );
-
-                  },
-                ),),
-
             SizedBox(
               height: 36.h,
             ),

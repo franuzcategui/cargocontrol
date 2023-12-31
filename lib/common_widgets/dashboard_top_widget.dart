@@ -134,8 +134,8 @@ class DashBoardTopWidget extends StatelessWidget {
                     ),
                   );
                 }, error: (error, st) {
-              debugPrintStack(stackTrace: st);
-              debugPrint(error.toString());
+              //debugPrintStack(stackTrace: st);
+              //debugPrint(error.toString());
               return const SizedBox();
             }, loading: () {
               return const SizedBox();

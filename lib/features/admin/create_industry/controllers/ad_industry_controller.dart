@@ -14,9 +14,9 @@ final adIndustryProvider = StateNotifierProvider<AdIndustryController, bool>((re
   return AdIndustryController(datasource:  adIndustryApi, );
 });
 
-final fetchCurrentIndustry = StreamProvider((ref) {
+final fetchCurrentVesselIndustries = StreamProvider.family((ref,String vesselId) {
   final industryProvider = ref.watch(adIndustryProvider.notifier);
-  return industryProvider.getAllIndustrySubModels();
+  return industryProvider.getAllIndustrySubModels(vesselId: vesselId);
 });
 
 final fetchgetAllIndustryNamesStream = StreamProvider((ref) {
@@ -57,8 +57,8 @@ class AdIndustryController extends StateNotifier<bool> {
     });
   }
 
-  Stream<List<IndustrySubModel>> getAllIndustrySubModels() {
-    return _datasource.getAllIndustrySubModels();
+  Stream<List<IndustrySubModel>> getAllIndustrySubModels({required String vesselId}) {
+    return _datasource.getAllIndustrySubModels(vesselId: vesselId);
   }
 
   Stream<List<IndustriesModel>> getAllIndustriesStream() {

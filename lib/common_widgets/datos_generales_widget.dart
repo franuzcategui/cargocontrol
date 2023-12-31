@@ -5,8 +5,8 @@ import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../models/viajes_models/viajes_model.dart';
 import '../../../../utils/constants/font_manager.dart';
 
-class AdDatosGeneralesWidget extends StatelessWidget {
-  const AdDatosGeneralesWidget({Key? key, required this.viajesModel}) : super(key: key);
+class DatosGeneralesWidget extends StatelessWidget {
+  const DatosGeneralesWidget({Key? key, required this.viajesModel}) : super(key: key);
  final ViajesModel viajesModel;
 
 

@@ -4,6 +4,7 @@ import '../../../../common_widgets/viajes_card.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../core/enums/viajes_type.dart';
 import '../../../../models/viajes_models/viajes_model.dart';
+import '../../../../routes/route_manager.dart';
 import '../../../../utils/loading.dart';
 import '../controllers/in_viajes_inprogess_noti_controller.dart';
 
@@ -72,7 +73,9 @@ class _AdInProgressViajesSreenState extends ConsumerState<InInProgressViajesSree
                       viajesEnum: model.viajesTypeEnum,
                       model: model,
                       onTap: (){
-
+                        Navigator.pushNamed(context, AppRoutes.inViajesDetailsScreen,arguments: {
+                          'viajesModel':model
+                        });
                       },
                     );
 

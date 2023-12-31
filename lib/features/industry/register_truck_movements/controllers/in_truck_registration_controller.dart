@@ -24,11 +24,7 @@ final inTruckRegistrationControllerProvider = StateNotifierProvider<TruckRegistr
 
 
 
-final getIndustriaIndustry = StreamProvider.family((ref, String realIndustryId) {
-  final truckProvider = ref.watch(inTruckRegistrationControllerProvider.notifier);
-  return truckProvider.getIndustriaIndustry(realIndustryId: realIndustryId);
-  }
-);
+
 
 final getChoferModelByNationalId= StreamProvider.family((ref, String nationalId) {
   final truckProvider = ref.watch(inTruckRegistrationControllerProvider.notifier);
@@ -92,7 +88,6 @@ class TruckRegistrationController extends StateNotifier<bool> {
   }) async {
     state = true;
 
-    // TODO Usman: Need to check calculations
     DateTime unloadingTimeInIndustry= DateTime.now();
     ViajesModel model = viajesModel.copyWith(
       cargoDeficitWeight: viajesModel.cargoDeficitWeight +viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight,
@@ -136,14 +131,6 @@ class TruckRegistrationController extends StateNotifier<bool> {
   }
 
 
-
-  // For Industria Section
-  Stream<IndustrySubModel> getIndustriaIndustry({required String realIndustryId}) {
-    return _datasource.getIndustriaIndustry(realIndustryId: realIndustryId).
-    map((event) {
-      return IndustrySubModel.fromMap(event.docs.first.data());
-    });
-  }
 
   Stream<ChoferesModel> getChoferModelByNationalId({required String nationalId}) {
     return _datasource.getChoferModelByNationalId(nationalId: nationalId).

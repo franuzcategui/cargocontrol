@@ -4,11 +4,12 @@ import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
+import '../../../../common_widgets/carga_widget.dart';
+import '../../../../common_widgets/datos_generales_widget.dart';
+import '../../../../common_widgets/tiempo_widget.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
-import '../widgets/ad_carga_widget.dart';
-import '../widgets/ad_datos_generales_widget.dart';
-import '../widgets/ad_tiempo_widget.dart';
+
 
 class AdViajesDetailsScreen extends StatelessWidget {
   final ViajesModel viajesModel;
@@ -36,15 +37,15 @@ class AdViajesDetailsScreen extends StatelessWidget {
                   SizedBox(height: 14.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                   AdDatosGeneralesWidget(viajesModel: viajesModel,),
+                  DatosGeneralesWidget(viajesModel: viajesModel,),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  AdTiempoWidget(viajesModel: viajesModel,),
+                  TiempoWidget(viajesModel: viajesModel,),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  AdCargaWidget(viajesModel: viajesModel),
+                  CargaWidget(viajesModel: viajesModel),
                   SizedBox(height: 26.h,),
                   
                   CustomButton(

@@ -2,14 +2,18 @@ import 'package:cargocontrol/common_widgets/title_header.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
+import '../../../../common_widgets/carga_widget.dart';
+import '../../../../common_widgets/datos_generales_widget.dart';
+import '../../../../common_widgets/tiempo_widget.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
-import '../widgets/in_carga_widget.dart';
-import '../widgets/in_datos_generales_widget.dart';
-import '../widgets/in_tiempo_widget.dart';
+import '../../../../models/viajes_models/viajes_model.dart';
+
 
 class InViajesDetailsScreen extends StatelessWidget {
-  const InViajesDetailsScreen({Key? key}) : super(key: key);
+  final ViajesModel viajesModel;
+
+  const InViajesDetailsScreen({Key? key, required this.viajesModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +33,19 @@ class InViajesDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 14.h,),
-                  Text("Datos del viaje de Juan Perez", style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size16),),
+                  Text("Datos del viaje de ${viajesModel.chofereName}", style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size16),),
                   SizedBox(height: 14.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const InDatosGeneralesWidget(),
+                  DatosGeneralesWidget(viajesModel: viajesModel,),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const InTiempoWidget(),
+                  TiempoWidget(viajesModel: viajesModel,),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const InCargaWidget(),
+                  CargaWidget(viajesModel: viajesModel),
                   SizedBox(height: 26.h,),
                   Center(
                     child: CustomButton(

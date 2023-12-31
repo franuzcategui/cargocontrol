@@ -6,11 +6,8 @@ import 'package:cargocontrol/utils/constants/font_manager.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../widgets/ad_carga_edit_widget.dart';
-import '../widgets/ad_carga_widget.dart';
-import '../widgets/ad_datos_generales_widget.dart';
 import '../widgets/ad_generales_edit_widget.dart';
 import '../widgets/ad_tempo_edit_widget.dart';
-import '../widgets/ad_tiempo_widget.dart';
 
 class AdViajesEditScreen extends StatelessWidget {
   const AdViajesEditScreen({Key? key}) : super(key: key);
