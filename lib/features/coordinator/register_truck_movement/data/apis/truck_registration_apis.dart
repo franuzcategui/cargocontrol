@@ -40,6 +40,7 @@ abstract class TruckRegistrationApisImplements {
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllCurrentVesselInProgressViajesList({required String vesselId});
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustryEnteringViajesList();
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesList({required String vesselId});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesForIndustryList({required IndustryAndVesselIdsModel industryAndVesselIdsModel});
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required IndustryAndVesselIdsModel industryAndVesselIdsModel});
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustryByIndustryId({required String industryId});
   Stream<QuerySnapshot<Map<String, dynamic>>> getChoferModelByNationalId({required String nationalId});
@@ -223,6 +224,14 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
     return _firestore.collection(FirebaseConstants.viajesCollection).where('vesselId',isEqualTo: vesselId).
     snapshots();
   }
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesForIndustryList({required IndustryAndVesselIdsModel industryAndVesselIdsModel}){
+    return _firestore.collection(FirebaseConstants.viajesCollection).where('vesselId',isEqualTo: industryAndVesselIdsModel.vesselId).where('industryId',isEqualTo: industryAndVesselIdsModel.industryId).where('viajesTypeEnum', isEqualTo: ViajesTypeEnum.completed.type).
+    snapshots();
+  }
+
+
+
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required IndustryAndVesselIdsModel industryAndVesselIdsModel}){
