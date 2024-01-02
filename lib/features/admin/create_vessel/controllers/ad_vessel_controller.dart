@@ -4,6 +4,7 @@ import 'package:cargocontrol/models/vessel_models/origin_model.dart';
 import 'package:cargocontrol/models/vessel_models/product_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
+import 'package:cargocontrol/utils/constants/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -69,7 +70,7 @@ class AdVesselController extends StateNotifier<bool> {
         cargoModels: bogedaModels,
         cargoUnloadedWeight: 0.0,
         entryDate: portDate,
-        exitDate: DateTime.now(),
+        exitDate: AppConstants.constantDateTime,
         searchTags: vesselSearchTags(unlcode: unCode, shipperName: shipper ,name: vesselName)
     );
     final result = await _datasource.createVessel(vesselModel: vesselModel);

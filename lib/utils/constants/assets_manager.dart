@@ -11,6 +11,8 @@ class AppAssets{
   static const String deleteArrowIcon = '$iconPath/deleteArrow.png';
   static const String deleteIcon = '$iconPath/delete.png';
   static const String scanIcon = '$iconPath/scanIcon.png';
+  static const String dialogCloseIcon= '$iconPath/dialog_close.png';
+
 
 
   // Images Paths
