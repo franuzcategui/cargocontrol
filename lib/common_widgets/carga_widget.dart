@@ -26,6 +26,44 @@ class CargaWidget extends StatelessWidget {
             title: "Producto (Variedad)",
             subText: viajesModel.productName
         ),
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            return ref
+                .watch(getIndustriaIndustryByIndustryId(viajesModel.industryId))
+                .when(
+              data: (industryModel) {
+                return Column(
+                  children: [
+                    CustomTile(
+                      title: "Tipo",
+                      subText: industryModel.selectedVesselCargo.tipo,
+                    ),
+                    CustomTile(
+                      title: "Origen",
+                      subText: industryModel.selectedVesselCargo.origen,
+                    ),
+                    CustomTile(
+                      title: "Variedad",
+                      subText: industryModel.selectedVesselCargo.variety,
+                    ),
+                    CustomTile(
+                      title: "Cosecha",
+                      subText: industryModel.selectedVesselCargo.cosecha,
+                    ),
+                  ],
+                );
+              },
+              error: (error, st) {
+                debugPrintStack(stackTrace: st);
+                debugPrint(error.toString());
+                return const SizedBox();
+              },
+              loading: () {
+                return const SizedBox();
+              },
+            );
+          },
+        ),
         if( viajesModel.exitTimeTruckWeightToPort!=0.0)
         CustomTile(
             title: "Peso bruto de salida",

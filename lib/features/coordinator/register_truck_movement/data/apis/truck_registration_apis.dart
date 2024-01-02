@@ -46,7 +46,7 @@ abstract class TruckRegistrationApisImplements {
   Stream<QuerySnapshot<Map<String, dynamic>>> getChoferModelByNationalId({required String nationalId});
 
   FutureEither<List<IndustrySubModel>> getAllIndustries();
-  FutureEither<ViajesModel> getMatchedViajes({required String plateNumber});
+  FutureEither<ViajesModel> getMatchedViajes({required String plateNumber,required String vesselId});
   FutureEither<ViajesModel> getMatchedViajesLinkedWithIndustry({
     required String plateNumber,
     required String industryId,
@@ -276,9 +276,9 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
 
 
   @override
-  FutureEither<ViajesModel> getMatchedViajes({required String plateNumber})async {
+  FutureEither<ViajesModel> getMatchedViajes({required String plateNumber,required String vesselId})async {
     try{
-      final querySnapshot = await _firestore.collection(FirebaseConstants.viajesCollection).
+      final querySnapshot = await _firestore.collection(FirebaseConstants.viajesCollection).where("vesselId",isEqualTo: vesselId).
       where('licensePlate', isEqualTo: plateNumber).
       get();
       if(querySnapshot.docs.length!=0){

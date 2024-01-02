@@ -69,6 +69,9 @@ class AdDashboardScreen extends ConsumerWidget {
                             builder: (BuildContext context, WidgetRef ref, Widget? child) {
                               return ref.watch(fetchCurrentVesselIndustries(vesselModel.vesselId)).when(
                                   data: (allIndustries) {
+                                    if(allIndustries.isEmpty){
+                                      return SizedBox();
+                                    }
                                     return Container(
                                       constraints:
                                       BoxConstraints(minHeight: 136.h, maxHeight: 160.h),

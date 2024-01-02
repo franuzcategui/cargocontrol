@@ -51,10 +51,10 @@ class DashBoardTopWidget extends StatelessWidget {
                               data: (viajesDeficitModel){
                                 return  AdProgressIndicatorCard(
                                   numberOfTrips:viajesDeficitModel.viajesCount,
-                                  divideNumber2: (vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight).toString(),
+                                  divideNumber2: vesselModel.cargoUnloadedWeight.toString(),
                                   divideNumber1: vesselModel.totalCargoWeight.toString(),
                                   barPercentage: double.parse(
-                                      ((vesselModel.totalCargoWeight-vesselModel.cargoUnloadedWeight) / vesselModel.totalCargoWeight)
+                                      (vesselModel.cargoUnloadedWeight / vesselModel.totalCargoWeight)
                                           .toStringAsFixed(2)),
                                   title: 'Descarga total',
                                   deficit: viajesDeficitModel.totalDeficit,

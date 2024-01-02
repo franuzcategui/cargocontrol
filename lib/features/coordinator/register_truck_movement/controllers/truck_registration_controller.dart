@@ -199,7 +199,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
     VesselModel vessel = updateCargoModel(
         originalModel: vesselModel, updatedCargoModel: vesselCargo);
     VesselModel vesselUpdate = vessel.copyWith(
-        cargoUnloadedWeight: vessel.cargoUnloadedWeight - pureCargoWeight);
+        cargoUnloadedWeight: vessel.cargoUnloadedWeight + pureCargoWeight);
 
     final result = await _datasource.registerTruckLeavingFromPort(
         viajesModel: model, vesselModel: vesselUpdate);

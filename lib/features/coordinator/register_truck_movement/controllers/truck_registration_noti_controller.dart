@@ -52,6 +52,7 @@ class TruckRegistrationNotiController extends ChangeNotifier {
 
   getIndusytryFromGuideNumber({required double guideNumber})async{
     setLoading(true);
+
     if(allIndustriesModels.length != 0){
       for(int index =0; index< _allIndustriesModels.length; index++){
         print(_allIndustriesModels.length);
@@ -59,8 +60,11 @@ class TruckRegistrationNotiController extends ChangeNotifier {
         if(
         guideNumber >= _allIndustriesModels[index].initialGuide &&
             guideNumber <= _allIndustriesModels[index].lastGuide &&
+            vesselModel!.vesselId == _allIndustriesModels[index].vesselId &&
             !_allIndustriesModels[index].usedGuideNumbers.contains(guideNumber)
         ){
+          print("usman1");
+
           _selectedIndustry = _allIndustriesModels[index];
           setIndustryMatchedStatus(true);
           break;
@@ -75,8 +79,10 @@ class TruckRegistrationNotiController extends ChangeNotifier {
         if(
         guideNumber >= _allIndustriesModels[index].initialGuide &&
         guideNumber <= _allIndustriesModels[index].lastGuide &&
-        !_allIndustriesModels[index].usedGuideNumbers.contains(guideNumber)
+            vesselModel!.vesselId == _allIndustriesModels[index].vesselId &&
+            !_allIndustriesModels[index].usedGuideNumbers.contains(guideNumber)
         ){
+          print("usman");
           _selectedIndustry = _allIndustriesModels[index];
           setIndustryMatchedStatus(true);
           break;
@@ -124,12 +130,13 @@ class TruckRegistrationNotiController extends ChangeNotifier {
 
   Future getMatchedViajes({
     required String plateNumber,
+    required String vesselId,
     required BuildContext context,
     required WidgetRef ref,
   })async{
     _matchedViajes = null;
     setLoading(true);
-    final result = await  _datasource.getMatchedViajes(plateNumber: plateNumber);
+    final result = await  _datasource.getMatchedViajes(plateNumber: plateNumber, vesselId: vesselId);
     result.fold((l) {
       debugPrintStack(stackTrace: l.stackTrace);
       debugPrint( l.message);
@@ -179,6 +186,18 @@ class TruckRegistrationNotiController extends ChangeNotifier {
           _vesselCargoModel = cargo;
         }
       });
+      notifyListeners();
+    }
+    );
+  }
+
+  getCurrentVessel({required WidgetRef ref})async{
+    final result = await ref.read(adVesselApiProvider).getCurrentVessel();
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+    }, (r) {
+      _vesselModel = r;
       notifyListeners();
     }
     );

@@ -18,6 +18,7 @@ import '../../../../models/viajes_models/viajes_model.dart';
 import '../../../admin/create_industry/controllers/ad_industry_controller.dart';
 import '../../../admin/create_vessel/controllers/ad_vessel_controller.dart';
 import '../../../auth/controllers/auth_notifier_controller.dart';
+import '../../register_truck_movement/controllers/truck_registration_noti_controller.dart';
 import '../widgets/co_dashboard_mini_card.dart';
 import '../widgets/co_floating_action_sheet.dart';
 import '../widgets/co_progress_dashboard_card.dart';
@@ -25,7 +26,9 @@ import '../widgets/co_recent_record_card.dart';
 
 class CoDashboardScreen extends ConsumerWidget {
   const CoDashboardScreen({super.key});
-
+  initiallize(WidgetRef ref)async{
+    await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
+  }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
@@ -68,6 +71,9 @@ class CoDashboardScreen extends ConsumerWidget {
                             builder: (BuildContext context, WidgetRef ref, Widget? child) {
                               return ref.watch(fetchCurrentVesselIndustries(vesselModel.vesselId)).when(
                                   data: (allIndustries){
+                                    if(allIndustries.isEmpty){
+                                      return SizedBox();
+                                    }
                                     return Container(
                                       constraints: BoxConstraints(
                                           minHeight:  136.h,
@@ -242,7 +248,8 @@ class CoDashboardScreen extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          await  initiallize(ref);
           showModalBottomSheet(
               backgroundColor: Colors.transparent,
               elevation: 0,

@@ -93,6 +93,7 @@ class _CoTruckLeavingInformationScreenState extends State<CoTruckLeavingInformat
                       SizedBox(height: 25.h,),
                       CustomButton(
                           onPressed: (){
+
                             truckCtr.allIndustriesModels.forEach((industry) {
                               if(industry.industryId == truckCtr.matchedViajes!.industryId){
                                 truckCtr.setSelectedIndustry(industry);
