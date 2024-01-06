@@ -95,6 +95,7 @@ class _RegisterTruckEnteringScreenState extends ConsumerState<RegisterTruckEnter
                       onPressed: ()async{
                         if(keyPadTextFieldController.text.isNotEmpty){
                           WidgetsBinding.instance.addPostFrameCallback((timeStamp)async {
+                            await ref.read(truckRegistrationNotiControllerProvider).getCurrentVessel(ref: ref);
                             await ref.read(truckRegistrationNotiControllerProvider).getIndusytryFromGuideNumber(guideNumber: double.parse(keyPadTextFieldController.text));
                             if(ref.read(truckRegistrationNotiControllerProvider).industryMatched){
                               Navigator.pushNamed(context, AppRoutes.coTruckInfoScreen, arguments: {
