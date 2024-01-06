@@ -116,12 +116,15 @@ class _RegisterTruckLeavingScreenState extends State<RegisterTruckLeavingScreen>
                       isLoading: ref.watch(truckRegistrationNotiControllerProvider).isLoading,
                       onPressed: ()async{
                         if(keyPadTextFieldController.text.isNotEmpty){
+                          await ref.read(truckRegistrationNotiControllerProvider).getCurrentVessel(ref: ref);
                           await ref.read(truckRegistrationNotiControllerProvider).
                           getMatchedViajes(
                             plateNumber: keyPadTextFieldController.text,
+                            vesselId: ref.read(truckRegistrationNotiControllerProvider).vesselModel?.vesselId??"",
                             context: context,
                             ref: ref,
                           );
+                          await ref.read(truckRegistrationNotiControllerProvider).getCurrentVessel(ref: ref);
                         }else{
                           showSnackBar(context: context, content: 'Enter Plate Number!');
                         }

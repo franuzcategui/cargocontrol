@@ -93,6 +93,7 @@ class _CoTruckLeavingInformationScreenState extends State<CoTruckLeavingInformat
                       SizedBox(height: 25.h,),
                       CustomButton(
                           onPressed: (){
+
                             truckCtr.allIndustriesModels.forEach((industry) {
                               if(industry.industryId == truckCtr.matchedViajes!.industryId){
                                 truckCtr.setSelectedIndustry(industry);
@@ -100,7 +101,7 @@ class _CoTruckLeavingInformationScreenState extends State<CoTruckLeavingInformat
                             });
                             if(fullTruckWeightCtr.text.isNotEmpty && truckCtr.selectedIndustry != null){
                               double pureCargoWeight =   double.parse(fullTruckWeightCtr.text) - truckCtr.matchedViajes!.entryTimeTruckWeightToPort;
-                              if(pureCargoWeight <= truckCtr.selectedIndustry!.cargoAssigned){
+                              if(pureCargoWeight <= (truckCtr.selectedIndustry!.cargoAssigned-truckCtr.selectedIndustry!.cargoUnloaded)){
                                 Navigator.pushNamed(
                                     context,
                                     AppRoutes.coTruckLeavingBriefScreen,
@@ -110,7 +111,7 @@ class _CoTruckLeavingInformationScreenState extends State<CoTruckLeavingInformat
                                     }
                                 );
                               }else{
-                                showSnackBar(context: context, content: 'Peso bruto is more then total carga! Max limit is ${truckCtr.selectedIndustry!.cargoAssigned}');
+                                showSnackBar(context: context, content: 'Peso bruto is more then total carga! Max is can be ${(truckCtr.selectedIndustry!.cargoAssigned-truckCtr.selectedIndustry!.cargoUnloaded)}');
                               }
                             }else{
                               showSnackBar(context: context, content: 'Enter Peso bruto!');

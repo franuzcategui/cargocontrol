@@ -2,10 +2,13 @@ import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/create_vessel/widgets/preliminatr_tile.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
+import '../../../../models/viajes_models/viajes_model.dart';
 import '../../../../utils/constants/font_manager.dart';
 
-class AdDatosGeneralesWidget extends StatelessWidget {
-  const AdDatosGeneralesWidget({Key? key}) : super(key: key);
+class DatosGeneralesWidget extends StatelessWidget {
+  const DatosGeneralesWidget({Key? key, required this.viajesModel}) : super(key: key);
+ final ViajesModel viajesModel;
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,25 +20,25 @@ class AdDatosGeneralesWidget extends StatelessWidget {
           fontSize: MyFonts.size14,
         ),),
         SizedBox(height: 28.h,),
-        const CustomTile(
+        CustomTile(
             title: "Número de guía",
-            subText: "10701"
+            subText:viajesModel.guideNumber.toStringAsFixed(0),
         ),
-        const CustomTile(
+        CustomTile(
             title: "Nombre de buque",
-            subText: "M.V. Patient Lake"
+            subText: viajesModel.vesselName
         ),
-        const CustomTile(
+       CustomTile(
             title: "Industria",
-            subText: "C.A.C.S.A."
+            subText: viajesModel.industryName
         ),
-        const CustomTile(
+       CustomTile(
             title: "Bodega",
-            subText: "5"
+            subText: viajesModel.cargoHoldCount.toString()
         ),
-        const CustomTile(
+       CustomTile(
             title: "Placa",
-            subText: "160630"
+            subText: viajesModel.licensePlate.toString()
         ),
       ],
     );

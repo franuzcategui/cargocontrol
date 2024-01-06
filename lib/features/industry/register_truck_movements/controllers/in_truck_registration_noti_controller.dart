@@ -8,12 +8,14 @@ import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_cargo_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_cargo_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_cargo_model.dart';
+import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/enums/viajes_status_enum.dart';
 import '../../../../routes/route_manager.dart';
+import '../../../admin/create_vessel/data/apis/ad_vessel_apis.dart';
 import '../../../coordinator/register_truck_movement/data/apis/truck_registration_apis.dart';
 
 final inTruckRegistrationNotiControllerProvider = ChangeNotifierProvider((ref){
@@ -158,6 +160,27 @@ class TruckRegistrationNotiController extends ChangeNotifier {
 
   setViajesChoferesModel(ChoferesModel? model) {
     _viajesChoferesModel = model;
+    notifyListeners();
+  }
+
+
+
+  VesselModel? _vesselModel;
+  VesselModel? get vesselModel=> _vesselModel;
+
+  getCurrentVessel({required WidgetRef ref,})async{
+    final result = await ref.read(adVesselApiProvider).getCurrentVessel();
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+    }, (r) {
+      setCurrentVessel(r);
+      notifyListeners();
+    }
+    );
+  }
+  setCurrentVessel(VesselModel? model) {
+    _vesselModel = model;
     notifyListeners();
   }
 

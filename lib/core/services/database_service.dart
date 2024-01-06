@@ -11,6 +11,7 @@ class AuthService extends ChangeNotifier{
   }
   late final Box<String> authBox;
   bool _isBoxInitialized = false;
+  bool get isReady => _isBoxInitialized;
 
   Future<String> initAuth() async {
     print('Im tapped');

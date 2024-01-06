@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../models/vessel_models/product_model.dart';
 import '../data/apis/ad_vessel_apis.dart';
+import '../data/models/deficit_viejes_model.dart';
 
 final adVesselNotiController = ChangeNotifierProvider((ref){
   final adVesselApi = ref.watch(adVesselApiProvider);
@@ -110,5 +111,13 @@ class AdVesselNotiController extends ChangeNotifier {
     _selectedVesselCargoModelForIndustry = model;
     notifyListeners();
   }
+
+
+  List<DeficitViajesModel> _bogodasDeficitViajesModels=[];
+  List<DeficitViajesModel>  get bogodasDeficitViajesModels=> _bogodasDeficitViajesModels;
+  setBogodasDeficitViajesModels(List<DeficitViajesModel>  bogodasDeficitViajesModels) {
+    _bogodasDeficitViajesModels = bogodasDeficitViajesModels;
+  }
+
 
 }

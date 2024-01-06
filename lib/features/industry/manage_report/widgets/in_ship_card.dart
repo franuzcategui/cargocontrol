@@ -1,10 +1,15 @@
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/admin/manage_ships/widgets/ships_bottom_sheet.dart';
+import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
+import 'package:cargocontrol/utils/constants/app_constants.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
+import 'package:intl/intl.dart';
 
-class InReportCard extends StatelessWidget {
-  const InReportCard({super.key,});
+class InShipCard extends StatelessWidget {
+  const InShipCard({super.key, required this.vesselModel,});
+  final VesselModel vesselModel;
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +26,17 @@ class InReportCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Montevideo',
+                  vesselModel.entryPort,
                   style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                 ),
                 Row(
                   children: [
                     Text(
-                      'Fecha de salida:',
+                      'Fecha de salida: ',
                       style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                     ),
                     Text(
-                      ' En puerto',
+                        vesselModel.isFinishedUnloading?DateFormat('MM/dd/yy').format(vesselModel.exitDate):'En puerto',
                       style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                     ),
                   ],
@@ -40,7 +45,7 @@ class InReportCard extends StatelessWidget {
             ),
             SizedBox(height: 14.h,),
             Text(
-              'MV Ejemplo',
+              vesselModel.vesselName,
               style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size14),
             ),
             SizedBox(height: 14.h,),
@@ -48,7 +53,7 @@ class InReportCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Damboriarena',
+                  vesselModel.shipper,
                   style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                 ),
                 InkWell(

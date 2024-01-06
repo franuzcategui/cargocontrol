@@ -4,6 +4,7 @@ import 'package:cargocontrol/models/vessel_models/origin_model.dart';
 import 'package:cargocontrol/models/vessel_models/product_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
+import 'package:cargocontrol/utils/constants/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -11,6 +12,7 @@ import 'package:uuid/uuid.dart';
 import '../../../../commons/common_widgets/show_toast.dart';
 import '../../../../core/enums/weight_unit_enum.dart';
 import '../../../../models/vessel_models/vessel_cargo_model.dart';
+import '../data/models/deficit_viejes_model.dart';
 
 final adVesselProvider = StateNotifierProvider<AdVesselController, bool>((ref) {
   final adVesselApi = ref.watch(adVesselApiProvider);
@@ -21,6 +23,16 @@ final fetchCurrentVesselsProvider = StreamProvider((ref) {
   final categoryPrdr = ref.watch(adVesselProvider.notifier);
   return categoryPrdr.getCurrentVesselStream();
 });
+
+final fetchCurrentVesselViajesDeficit = StreamProvider.family((ref,String vesselId) {
+  final categoryPrdr = ref.watch(adVesselProvider.notifier);
+  return categoryPrdr.getCurrentVesselViajesDeficit(vesselId: vesselId);
+});
+final fetchCargoHoldViajesDeficit = StreamProvider.family((ref,String cargoHoldId) {
+  final categoryPrdr = ref.watch(adVesselProvider.notifier);
+  return categoryPrdr.getCargoHoldViajesDeficit(cargoHoldId: cargoHoldId);
+});
+
 
 
 class AdVesselController extends StateNotifier<bool> {
@@ -58,7 +70,7 @@ class AdVesselController extends StateNotifier<bool> {
         cargoModels: bogedaModels,
         cargoUnloadedWeight: 0.0,
         entryDate: portDate,
-        exitDate: DateTime.now(),
+        exitDate: AppConstants.constantDateTime,
         searchTags: vesselSearchTags(unlcode: unCode, shipperName: shipper ,name: vesselName)
     );
     final result = await _datasource.createVessel(vesselModel: vesselModel);
@@ -79,7 +91,26 @@ class AdVesselController extends StateNotifier<bool> {
     return _datasource.getCurrentVesselStream();
   }
 
+  Future<String> getCurrentVesselId()async{
+    String vesselId='';
+    final result = await  _datasource.getCurrentVessel();
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint( l.message);
+    }, (r) {
+      vesselId=r.vesselId;
+    });
+    return vesselId;
+  }
 
+  Stream<DeficitViajesModel> getCurrentVesselViajesDeficit({required String vesselId}){
+    return _datasource.getCurrentVesselViajesDeficit(vesselId: vesselId);
+  }
+
+
+  Stream<DeficitViajesModel> getCargoHoldViajesDeficit({required String cargoHoldId}){
+    return _datasource.getCargoHoldViajesDeficit(CargoHoldId: cargoHoldId);
+  }
 
 
   Future productsUpload()async{

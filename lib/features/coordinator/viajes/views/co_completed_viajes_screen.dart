@@ -1,4 +1,4 @@
-import 'package:cargocontrol/features/admin/viajes/widgets/ad_viajes_card.dart';
+import 'package:cargocontrol/common_widgets/viajes_card.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../core/enums/viajes_type.dart';

@@ -1,16 +1,19 @@
 import 'package:cargocontrol/common_widgets/title_header.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
+import '../../../../common_widgets/carga_widget.dart';
+import '../../../../common_widgets/datos_generales_widget.dart';
+import '../../../../common_widgets/tiempo_widget.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
-import '../widgets/ad_carga_widget.dart';
-import '../widgets/ad_datos_generales_widget.dart';
-import '../widgets/ad_tiempo_widget.dart';
+
 
 class AdViajesDetailsScreen extends StatelessWidget {
-  const AdViajesDetailsScreen({Key? key}) : super(key: key);
+  final ViajesModel viajesModel;
+  const AdViajesDetailsScreen({Key? key, required this.viajesModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +33,19 @@ class AdViajesDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 14.h,),
-                  Text("Datos del viaje de Juan Perez", style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size16),),
+                  Text("Datos del viaje de ${viajesModel.chofereName}", style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size16),),
                   SizedBox(height: 14.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const AdDatosGeneralesWidget(),
+                  DatosGeneralesWidget(viajesModel: viajesModel,),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const AdTiempoWidget(),
+                  TiempoWidget(viajesModel: viajesModel,),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  const AdCargaWidget(),
+                  CargaWidget(viajesModel: viajesModel),
                   SizedBox(height: 26.h,),
                   
                   CustomButton(

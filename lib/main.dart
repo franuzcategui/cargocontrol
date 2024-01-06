@@ -35,6 +35,7 @@ Future<void> initAuth() async {
   await Hive.initFlutter();
   final authService = AuthService();
 
+
 }
 
 
@@ -88,7 +89,7 @@ class MyApp extends ConsumerWidget {
             final MediaQueryData data = MediaQuery.of(context);
             return MediaQuery(
               data: data.copyWith(
-                  textScaleFactor: Theme.of(context).platform == TargetPlatform.iOS?0.8:1
+                  textScaleFactor: Theme.of(context).platform == TargetPlatform.iOS?1:1
               ),
               child: child!,
             );

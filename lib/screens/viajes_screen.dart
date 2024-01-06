@@ -1,4 +1,4 @@
-import 'package:cargocontrol/common_widgets/viajes_card.dart';
+import 'package:cargocontrol/common_widgets/old_viajes_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
@@ -41,8 +41,8 @@ class ViajesList extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10),
       child: ListView(
         children: const [
-          ViajesCard(),
-          ViajesCard(),
+          OldViajesCard(),
+          OldViajesCard(),
         ],
       ),
     );

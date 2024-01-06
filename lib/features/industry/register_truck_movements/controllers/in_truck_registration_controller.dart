@@ -24,12 +24,13 @@ final inTruckRegistrationControllerProvider = StateNotifierProvider<TruckRegistr
 
 
 
-final getIndustriaIndustry = StreamProvider.family((ref, String realIndustryId) {
-  final truckProvider = ref.watch(inTruckRegistrationControllerProvider.notifier);
-  return truckProvider.getIndustriaIndustry(realIndustryId: realIndustryId);
-  }
-);
 
+
+final getChoferModelByNationalId= StreamProvider.family((ref, String nationalId) {
+  final truckProvider = ref.watch(inTruckRegistrationControllerProvider.notifier);
+  return truckProvider.getChoferModelByNationalId(nationalId: nationalId);
+}
+);
 
 class TruckRegistrationController extends StateNotifier<bool> {
   final TruckRegistrationApisImplements _datasource;
@@ -81,30 +82,31 @@ class TruckRegistrationController extends StateNotifier<bool> {
     required ViajesModel viajesModel,
     required IndustrySubModel industrySubModel,
     required ChoferesModel choferesModel,
+    required VesselModel vesselModel,
     required WidgetRef ref,
     required BuildContext context,
   }) async {
     state = true;
 
-    // TODO Usman: Need to check calculations
     DateTime unloadingTimeInIndustry= DateTime.now();
     ViajesModel model = viajesModel.copyWith(
-      cargoDeficitWeight: viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight,
-      cargoUnloadWeight: cargoUnloadWeight,
+      cargoDeficitWeight: viajesModel.cargoDeficitWeight +viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight,
+      cargoUnloadWeight: viajesModel.cargoUnloadWeight + cargoUnloadWeight,
       unloadingTimeInIndustry: unloadingTimeInIndustry,
       viajesTypeEnum: ViajesTypeEnum.completed,
       viajesStatusEnum: ViajesStatusEnum.industryUnloaded
     );
 
     IndustrySubModel industry = industrySubModel.copyWith(
-      cargoUnloaded: (viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ) - cargoUnloadWeight,
+      deficit: industrySubModel.deficit + (viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight),
+      cargoUnloaded:industrySubModel.cargoUnloaded + cargoUnloadWeight - viajesModel.entryTimeTruckWeightToPort,
       selectedVesselCargo: industrySubModel.selectedVesselCargo.copyWith(
-            pesoUnloaded: (viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ) - cargoUnloadWeight,
+            pesoUnloaded: industrySubModel.selectedVesselCargo.pesoUnloaded + cargoUnloadWeight- viajesModel.entryTimeTruckWeightToPort,
           ),
     );
-
+    double updatedChoferesDeficit=((choferesModel.averageCargoDeficit*(choferesModel.numberOfTrips-1) + (viajesModel.exitTimeTruckWeightToPort- cargoUnloadWeight))/choferesModel.numberOfTrips).ceilToDouble();
     ChoferesModel chofere  = choferesModel.copyWith(
-      averageCargoDeficit: choferesModel.averageCargoDeficit + ((viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort ) - cargoUnloadWeight) /choferesModel.numberOfTrips +1,
+      averageCargoDeficit: updatedChoferesDeficit,
       choferesStatusEnum: ChoferesStatusEnum.available
     );
 
@@ -130,12 +132,12 @@ class TruckRegistrationController extends StateNotifier<bool> {
 
 
 
-  // For Industria Section
-  Stream<IndustrySubModel> getIndustriaIndustry({required String realIndustryId}) {
-    return _datasource.getIndustriaIndustry(realIndustryId: realIndustryId).
+  Stream<ChoferesModel> getChoferModelByNationalId({required String nationalId}) {
+    return _datasource.getChoferModelByNationalId(nationalId: nationalId).
     map((event) {
-      return IndustrySubModel.fromMap(event.docs.first.data());
+      return ChoferesModel.fromMap(event.docs.first.data());
     });
   }
+
 
 }

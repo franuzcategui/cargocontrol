@@ -1,4 +1,5 @@
 import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
+import 'package:cargocontrol/core/enums/viajes_type.dart';
 import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
@@ -8,6 +9,7 @@ import '../../../../../commons/common_imports/apis_commons.dart';
 import '../../../../../commons/common_providers/global_providers.dart';
 import '../../../../../core/constants/firebase_constants.dart';
 import '../../../../../models/industry_models/industry_sub_model.dart';
+import '../../../../../models/misc_models/industry_vessel_ids_model.dart';
 
 
 final truckRegistrationApisProvider = Provider<TruckRegistrationApisImplements>((ref){
@@ -32,14 +34,19 @@ abstract class TruckRegistrationApisImplements {
   });
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getLAllViajesModels();
-  Stream<QuerySnapshot<Map<String, dynamic>>> getPortEnteringViajesList();
-  Stream<QuerySnapshot<Map<String, dynamic>>> getPortLeavingViajesList();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPortEnteringViajesList({required String vesselId});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPortLeavingViajesList({required String vesselId});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPortAllInProgressViajesList({required String industryId});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllCurrentVesselInProgressViajesList({required String vesselId});
   Stream<QuerySnapshot<Map<String, dynamic>>> getIndustryEnteringViajesList();
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesList();
-  Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required String realIndustryId});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesList({required String vesselId});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesForIndustryList({required IndustryAndVesselIdsModel industryAndVesselIdsModel});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required IndustryAndVesselIdsModel industryAndVesselIdsModel});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustryByIndustryId({required String industryId});
+  Stream<QuerySnapshot<Map<String, dynamic>>> getChoferModelByNationalId({required String nationalId});
 
   FutureEither<List<IndustrySubModel>> getAllIndustries();
-  FutureEither<ViajesModel> getMatchedViajes({required String plateNumber});
+  FutureEither<ViajesModel> getMatchedViajes({required String plateNumber,required String vesselId});
   FutureEither<ViajesModel> getMatchedViajesLinkedWithIndustry({
     required String plateNumber,
     required String industryId,
@@ -177,15 +184,30 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
   }
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getPortEnteringViajesList(){
-    return _firestore.collection(FirebaseConstants.viajesCollection).
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPortEnteringViajesList({required String vesselId}){
+    return _firestore.collection(FirebaseConstants.viajesCollection).where('vesselId',isEqualTo: vesselId).
     where('viajesStatusEnum', isEqualTo: ViajesStatusEnum.portEntered.type).
     snapshots();
   }
 
+  // no need to use vessel ID here as this industry id is fectedhed based on vessel ID
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getPortLeavingViajesList(){
-    return _firestore.collection(FirebaseConstants.viajesCollection).
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPortAllInProgressViajesList({required String industryId}){
+    return _firestore.collection(FirebaseConstants.viajesCollection).where("industryId",isEqualTo: industryId).
+    where('viajesTypeEnum', isEqualTo: ViajesTypeEnum.inProgress.type).
+    snapshots();
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllCurrentVesselInProgressViajesList({required String vesselId}){
+    return _firestore.collection(FirebaseConstants.viajesCollection).where("vesselId",isEqualTo: vesselId).
+    where('viajesTypeEnum', isEqualTo: ViajesTypeEnum.inProgress.type).
+    snapshots();
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPortLeavingViajesList({required String vesselId}){
+    return _firestore.collection(FirebaseConstants.viajesCollection).where('vesselId',isEqualTo: vesselId).
     where('viajesStatusEnum', isEqualTo: ViajesStatusEnum.portLeft.type).
     snapshots();
   }
@@ -198,15 +220,37 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
   }
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesList(){
-    return _firestore.collection(FirebaseConstants.viajesCollection).
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesList({required String vesselId}){
+    return _firestore.collection(FirebaseConstants.viajesCollection).where('vesselId',isEqualTo: vesselId).
+    snapshots();
+  }
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllViajesForIndustryList({required IndustryAndVesselIdsModel industryAndVesselIdsModel}){
+    return _firestore.collection(FirebaseConstants.viajesCollection).where('vesselId',isEqualTo: industryAndVesselIdsModel.vesselId).where('industryId',isEqualTo: industryAndVesselIdsModel.industryId).where('viajesTypeEnum', isEqualTo: ViajesTypeEnum.completed.type).
+    snapshots();
+  }
+
+
+
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required IndustryAndVesselIdsModel industryAndVesselIdsModel}){
+    return _firestore.collection(FirebaseConstants.industryGuideCollection).
+    where('realIndustryId', isEqualTo: industryAndVesselIdsModel.industryId).where('vesselId',isEqualTo: industryAndVesselIdsModel.vesselId).
     snapshots();
   }
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustry({required String realIndustryId}){
+  Stream<QuerySnapshot<Map<String, dynamic>>> getChoferModelByNationalId({required String nationalId}){
+    return _firestore.collection(FirebaseConstants.choferesCollection).
+    where('choferNationalId', isEqualTo:nationalId).
+    snapshots();
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getIndustriaIndustryByIndustryId({required String industryId}){
     return _firestore.collection(FirebaseConstants.industryGuideCollection).
-    where('realIndustryId', isEqualTo: realIndustryId).
+    where('industryId', isEqualTo: industryId).
     snapshots();
   }
 
@@ -232,9 +276,9 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
 
 
   @override
-  FutureEither<ViajesModel> getMatchedViajes({required String plateNumber})async {
+  FutureEither<ViajesModel> getMatchedViajes({required String plateNumber,required String vesselId})async {
     try{
-      final querySnapshot = await _firestore.collection(FirebaseConstants.viajesCollection).
+      final querySnapshot = await _firestore.collection(FirebaseConstants.viajesCollection).where("vesselId",isEqualTo: vesselId).
       where('licensePlate', isEqualTo: plateNumber).
       get();
       if(querySnapshot.docs.length!=0){
