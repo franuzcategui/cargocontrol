@@ -25,7 +25,7 @@ class CoPreliminarInfoWidget extends StatelessWidget {
         SizedBox(height: 28.h,),
         CustomTile(
             title: "Número de guía",
-            subText: "$guideNumber"
+            subText: guideNumber.toStringAsFixed(0),
         ),
         CustomTile(
             title: "Nombre de buque",

@@ -36,13 +36,13 @@ class CoRegistrationSuccessFullScreen extends StatelessWidget {
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return CustomButton(
                   onPressed: ()async{
-                    ref.read(truckRegistrationNotiControllerProvider).setIndustryMatchedStatus(false);
-                    ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(null);
-                    await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
-                    await ref.read(truckRegistrationNotiControllerProvider).setMatchedViajes(null);
-                    ref.read(truckRegistrationNotiControllerProvider).setSelectedIndustry(null);
-
+                    // await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
+                    // ref.read(truckRegistrationNotiControllerProvider).setIndustryMatchedStatus(false);
+                    // ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(null);
+                    // ref.read(truckRegistrationNotiControllerProvider).setMatchedViajes(null);
+                    // ref.read(truckRegistrationNotiControllerProvider).setSelectedIndustry(null);
                     Navigator.pushNamedAndRemoveUntil(context, AppRoutes.coMainMenuScreen, (route) => false);
+
                   },
                   buttonText: "CONTINUAR",
                 );

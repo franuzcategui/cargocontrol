@@ -28,6 +28,10 @@ class CoDashboardScreen extends ConsumerWidget {
   const CoDashboardScreen({super.key});
   initiallize(WidgetRef ref)async{
     await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
+    ref.read(truckRegistrationNotiControllerProvider).setIndustryMatchedStatus(false);
+    ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(null);
+    ref.read(truckRegistrationNotiControllerProvider).setMatchedViajes(null);
+    ref.read(truckRegistrationNotiControllerProvider).setSelectedIndustry(null);
   }
   @override
   Widget build(BuildContext context, WidgetRef ref) {

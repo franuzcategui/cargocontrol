@@ -5,6 +5,7 @@ import 'package:cargocontrol/features/coordinator/register_truck_movement/contro
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../commons/common_functions/find_bodega_id_by_cargo_hold_id.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../controllers/truck_registration_noti_controller.dart';
@@ -68,7 +69,7 @@ class _CoTruckLeavingBriefScreenState extends ConsumerState<CoTruckLeavingBriefS
                         truckWeight: truckCtr.matchedViajes!.entryTimeTruckWeightToPort.toString(),
                         chofereName: truckCtr.matchedViajes!.chofereName,
                         plateNumber: truckCtr.matchedViajes!.licensePlate,
-                        bogedaId: truckCtr.matchedViajes!.cargoId,
+                        bogedaId: findCargoIndexById(truckCtr.vesselModel!.cargoModels,truckCtr.matchedViajes!.cargoId).toString(),
                         totalWeight: widget.fullTruckWeight.toString(),
                       ),
                       SizedBox(height: 20.h,),
