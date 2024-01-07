@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../commons/common_widgets/CustomTextFields.dart';
 import '../../../../models/choferes_models/choferes_model.dart';
 import '../../../../utils/constants/assets_manager.dart';
+import 'confirm_delete_dialog.dart';
 
 @override
 class AdChoferesList extends ConsumerStatefulWidget {
@@ -54,6 +55,15 @@ class _AdChoferesListState extends ConsumerState<AdChoferesList> {
     super.dispose();
   }
 
+  Future<void> confirmDialog(BuildContext context,ChoferesModel model) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return ConfirmDeleteDialog(choferesModel: model);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,12 +107,7 @@ class _AdChoferesListState extends ConsumerState<AdChoferesList> {
                           key: UniqueKey(),
                           direction: DismissDirection.endToStart,
                           confirmDismiss: (direction)async {
-                            await ref.read(choferesControllerProvider.notifier).
-                            deleteChofere(
-                                choferNationalId: model.choferNationalId,
-                                ref: ref,
-                                context: context,
-                            );
+                            confirmDialog(context, model);
                             return false;
                           },
                           background: Container(
