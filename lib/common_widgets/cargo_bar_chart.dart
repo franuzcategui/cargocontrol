@@ -28,7 +28,7 @@ class CargoBarChart extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     VesselCargoModel model =  vesselModel.cargoModels[index];
                   return VerticalPercentageBar(percentage:
-                    (model.pesoUnloaded/ model.pesoTotal),index: index+1,);
+                  (1.0-(model.pesoUnloaded/ model.pesoTotal)),index: index+1,);
 
                   },
                 );
@@ -91,7 +91,7 @@ class VerticalPercentageBar extends StatelessWidget {
           Center(
             child: Text(
               "${(percentage*100).toStringAsFixed(0)}%",
-              style: getBoldStyle(color:percentage<0.3? context.mainColor:Colors.black, fontSize: MyFonts.size14),
+              style: getBoldStyle(color:percentage<0.3? context.mainColor:context.textFieldColor, fontSize: MyFonts.size14),
             ),
           ),),
           Positioned(

@@ -78,7 +78,7 @@ class AdProgressIndicatorCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${barPercentage*100}%',
+                  '${(barPercentage*100).toStringAsFixed(2)}%',
                   style: getRegularStyle(color: context.textColor, fontSize: MyFonts.size12),
                 ),
                 Text(

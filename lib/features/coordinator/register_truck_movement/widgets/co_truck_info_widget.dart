@@ -27,7 +27,7 @@ class CoTruckInfoWidget extends StatelessWidget {
         ),
         CustomTile(
             title: 'Marchamo',
-            subText: "$marchamo"
+            subText:marchamo.toStringAsFixed(0)
         ),
         CustomTile(
             title: 'Nombre de chofer',
@@ -35,7 +35,7 @@ class CoTruckInfoWidget extends StatelessWidget {
         ),
         CustomTile(
             title: 'Peso tara',
-            subText: '$emptyTruckWeight'
+            subText:emptyTruckWeight.toStringAsFixed(0)
         ),
       ],
     );

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../commons/common_widgets/CustomTextFields.dart';
 import '../../../../models/choferes_models/choferes_model.dart';
+import '../../../../routes/route_manager.dart';
 import '../../../../utils/constants/assets_manager.dart';
 import '../../../../utils/loading.dart';
 import '../../../admin/choferes/controllers/choferes_noti_controller.dart';
@@ -88,12 +89,19 @@ class _InChoferesListState extends ConsumerState<InChoferesList> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       ChoferesModel model = choferesNotiCtr.choferesModels[index];
-                      return CargoCard(
-                          topLeftText: "ID ${model.choferNationalId}",
-                          topRightText: "Viajes ${model.numberOfTrips}",
-                          titleText: "${model.firstName} ${model.lastName}",
-                          bottomLeftText: "Deficit ${model.averageCargoDeficit}",
-                          bottomRightText: "Retraso Promedio : 2:00H");
+                      return GestureDetector(
+                        onTap: (){
+                        Navigator.pushNamed(context, AppRoutes.choferesDetailsScreen,arguments: {
+                          "choferesModel":model,
+                        });
+                      },
+                        child: CargoCard(
+                            topLeftText: "ID ${model.choferNationalId}",
+                            topRightText: "Viajes ${model.numberOfTrips}",
+                            titleText: "${model.firstName} ${model.lastName}",
+                            bottomLeftText: "Deficit ${model.averageCargoDeficit}",
+                            bottomRightText: "Retraso Promedio : 2:00H"),
+                      );
 
                     }),
               ),

@@ -1,6 +1,7 @@
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
@@ -23,6 +24,8 @@ class CustomTextField extends StatefulWidget {
   final bool? readOnly;
   final String label;
   final bool showLabel;
+  final bool onlyNumber;
+  final int? maxLength;
 
   const CustomTextField({
     Key? key,
@@ -39,7 +42,7 @@ class CustomTextField extends StatefulWidget {
     this.leadingIconPath,
     this.texfieldHeight,
     required this.label,
-    this.showLabel = true, this.onTap, this.readOnly,
+    this.showLabel = true, this.onTap, this.readOnly, this.onlyNumber=false, this.maxLength,
   }) : super(key: key);
 
   @override
@@ -80,7 +83,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
             validator: widget.validatorFn,
             obscureText: widget.obscure,
             controller: widget.controller,
+            maxLength: widget.maxLength,
             keyboardType: widget.inputType,
+            inputFormatters: widget.onlyNumber? [FilteringTextInputFormatter.digitsOnly]:null,
             style: getMediumStyle(fontSize: MyFonts.size12, color: context.textColor),
             decoration: InputDecoration(
               label: Text(widget.label, style: getRegularStyle(color: _focusNode.hasFocus?
