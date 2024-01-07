@@ -177,10 +177,6 @@ class CargaWidget extends StatelessWidget {
             },
           ),
         ]
-
-
-
-
       ],
     );
   }

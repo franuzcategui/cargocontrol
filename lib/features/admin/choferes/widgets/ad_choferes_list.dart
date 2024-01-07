@@ -4,6 +4,7 @@ import 'package:cargocontrol/common_widgets/cargo_card.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/choferes/controllers/choferes_controller.dart';
 import 'package:cargocontrol/features/admin/choferes/controllers/choferes_noti_controller.dart';
+import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -126,12 +127,19 @@ class _AdChoferesListState extends ConsumerState<AdChoferesList> {
                               ],
                             ),
                           ),
-                          child: CargoCard(
-                              topLeftText: "ID ${model.choferNationalId}",
-                              topRightText: "Viajes ${model.numberOfTrips}",
-                              titleText: "${model.firstName} ${model.lastName}",
-                              bottomLeftText: "Deficit ${model.averageCargoDeficit}",
-                              bottomRightText: "Retraso Promedio : 2:00H"),
+                          child: GestureDetector(
+                            onTap: (){
+                              Navigator.pushNamed(context, AppRoutes.choferesDetailsScreen,arguments: {
+                                "choferesModel":model,
+                              });
+                            },
+                            child: CargoCard(
+                                topLeftText: "ID ${model.choferNationalId}",
+                                topRightText: "Viajes ${model.numberOfTrips}",
+                                titleText: "${model.firstName} ${model.lastName}",
+                                bottomLeftText: "Deficit ${model.averageCargoDeficit}",
+                                bottomRightText: "Retraso Promedio : 2:00H"),
+                          ),
                         );
 
                       }),

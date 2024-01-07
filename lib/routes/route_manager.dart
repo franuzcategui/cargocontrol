@@ -16,6 +16,7 @@ import 'package:cargocontrol/features/coordinator/register_truck_movement/views/
 import 'package:cargocontrol/features/coordinator/register_truck_movement/views/register_truck_entering_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../features/admin/choferes/views/ad_choferes_details_screen.dart';
 import '../features/admin/create_industry/widgets/industries_for_all_data.dart';
 import '../features/admin/create_vessel/views/create_vessle_bodega_info_screen.dart';
 import '../features/admin/dashboard/views/ad_all_recenties_screen.dart';
@@ -94,6 +95,9 @@ class AppRoutes {
       '/inRegistrationSuccessFullScreen';
   static const String inViajesDetailsScreen = '/inViajesDetailsScreen';
   static const String inAllReportsScreen = '/inAllReportsScreen';
+  static const String choferesDetailsScreen = '/choferesDetailsScreen';
+
+
 
   static const String loginScreen = '/loginScreen';
   static const String dashboardScreen = '/dashboardScreen';
@@ -232,6 +236,12 @@ class AppRoutes {
         return _buildRoute(InViajesDetailsScreen(
           viajesModel: args['viajesModel'],
         ));
+      case choferesDetailsScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(ChoferesDetailsScreen(
+          choferesModel: args['choferesModel'],
+        ));
+
       case inAllReportsScreen:
         return _buildRoute(const InAllReportsScreen());
 
