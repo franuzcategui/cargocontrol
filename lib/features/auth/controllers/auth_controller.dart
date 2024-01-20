@@ -9,6 +9,7 @@ import '../../../common_widgets/loading_sheet.dart';
 import '../../../commons/common_functions/search_tags_handler.dart';
 import '../../../commons/common_widgets/show_toast.dart';
 import '../../../core/enums/account_type.dart';
+import '../../../core/firebase_messaging/firebase_messaging_class.dart';
 import '../../../core/services/database_service.dart';
 import '../../../models/auth_models/user_model.dart';
 import '../../../routes/route_manager.dart';
@@ -132,6 +133,7 @@ class AuthController extends StateNotifier<bool> {
     }, (r) async {
       await ref.read(authServiceProvider).setAuth(r.uid);
       UserModel userModel = await getUserInfoByUidFuture(r.uid);
+      await fcmTokenUpload(userModel: userModel);
       await ref.read(authNotifierCtr).setUserModelData(userModel);
       Navigator.pop(context);
       userModel.accountType.name == AccountTypeEnum.administrador.name
@@ -144,6 +146,24 @@ class AuthController extends StateNotifier<bool> {
           : Navigator.pushNamedAndRemoveUntil(context,
           AppRoutes.coMainMenuScreen, (route) => false);
       state = false;
+    });
+  }
+
+  Future<void> fcmTokenUpload({required UserModel userModel}) async {
+    MessagingFirebase messagingFirebase = MessagingFirebase();
+    String token = await messagingFirebase.getFcmToken();
+    if (userModel.fcmToken == token) {
+      return;
+    }
+    userModel = userModel.copyWith(fcmToken: token);
+    final result = await _databaseApis.updateFirestoreCurrentUserInfo(
+        userModel: userModel);
+
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message.toString());
+    }, (r) async {
+      debugPrint("Fcm Updated");
     });
   }
 
