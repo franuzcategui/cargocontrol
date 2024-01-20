@@ -188,7 +188,7 @@ class AdDashboardScreen extends ConsumerWidget {
                                                     ViajesStatusEnum.portLeft.type
                                                     ? true
                                                     : false,
-                                                guideNumber: model.guideNumber.toString(),
+                                                guideNumber: model.guideNumber.toStringAsFixed(0),
                                                 driverName: model.chofereName,
                                                 portEntryTime: model.entryTimeToPort,
                                               ),

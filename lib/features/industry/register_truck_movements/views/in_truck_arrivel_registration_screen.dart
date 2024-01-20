@@ -49,103 +49,98 @@ class _InRegisterTruckArrivalScreenState extends State<InRegisterTruckArrivalScr
     return
       Scaffold(
         appBar: CustomAppBar(),
-        body: SingleChildScrollView(
-          child: SizedBox(
-            height: 812.h,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const CommonHeader(
-                  title: "Número de ",
-                  subtitle: "placa" ,
-                  description: "Indique el número de placa del camión saliente",
-                ),
-                const SizedBox(
-                  height: 70,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 45.w),
-                  child: TextField(
-                    maxLength: 6,
-                    maxLengthEnforcement:
-                    MaxLengthEnforcement.truncateAfterCompositionEnds,
-                    style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size24),
-                    autocorrect: false,
-                    textAlign: TextAlign.center,
-                    enableSuggestions: false,
-                    readOnly: true,
-                    controller: keyPadTextFieldController,
-                    decoration: InputDecoration(
-                      prefixText: 'C - ',
-                      suffixIcon: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () async {
-                              final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const TextDetectorScreen()),
-                              );
-                              setState(() {
-                                keyPadTextFieldController.text = result;
-                              });
-                            },
-                            icon: Image.asset(AppAssets.scanIcon, scale: 2.2.sp),
-                          )
-                        ],
-                      ),
-                    ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const CommonHeader(
+              title: "Número de ",
+              subtitle: "placa" ,
+              description: "Indique el número de placa del camión saliente",
+            ),
+            Spacer(flex: 1,),
 
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 45.w),
+              child: TextField(
+                maxLength: 6,
+                maxLengthEnforcement:
+                MaxLengthEnforcement.truncateAfterCompositionEnds,
+                style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size24),
+                autocorrect: false,
+                textAlign: TextAlign.center,
+                enableSuggestions: false,
+                readOnly: true,
+                controller: keyPadTextFieldController,
+                decoration: InputDecoration(
+                  prefixText: 'C - ',
+                  suffixIcon: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                const TextDetectorScreen()),
+                          );
+                          setState(() {
+                            keyPadTextFieldController.text = result;
+                          });
+                        },
+                        icon: Image.asset(AppAssets.scanIcon, scale: 2.2.sp),
+                      )
+                    ],
                   ),
                 ),
-                SizedBox(height: 80.h,),
-                NumericKeyboard(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  onKeyboardTap: (string) {
-                    setState(() {
-                      keyPadTextFieldController.text += string;
-                    });
-                  },
-                  rightIcon: const Icon(FontAwesomeIcons.deleteLeft),
-                  rightButtonFn: () {
-                    keyPadTextFieldController.text = '';
-                  },
-                ),
-                Consumer(
-                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                    final industryNotiCtr= ref.watch(inTruckRegistrationNotiControllerProvider);
-                    return CustomButton(
-                      buttonText:  'CONTINUAR',
-                      onPressed: ()async{
-                        await industryNotiCtr.getCurrentIndustry(
-                          realIndustryId: ref.read(authNotifierCtr).userModel?.industryId?? '',
-                          ref: ref,
-                          context: context
-                        );
-                        if(ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel!= null){
-                          await industryNotiCtr.
-                          getMatchedViajesLinkedWithIndustry(
-                              plateNumber: keyPadTextFieldController.text,
-                              viajesStatusEnum: ViajesStatusEnum.portLeft,
-                              pageName: AppRoutes.inTruckArrivalInfoScreen,
-                              context: context,
-                              ref: ref,
-                              industryId: ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel?.industryId ?? ''
-                          );
-                        }
-                      },
-                    );
-                  },
 
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).padding.bottom,
-                ),
-              ],
+              ),
             ),
-          ),
+            Spacer(flex: 1,),
+            Expanded(
+              flex: 8,
+              child: NumericKeyboard(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                onKeyboardTap: (string) {
+                  setState(() {
+                    keyPadTextFieldController.text += string;
+                  });
+                },
+                rightIcon: const Icon(FontAwesomeIcons.deleteLeft),
+                rightButtonFn: () {
+                  keyPadTextFieldController.text = '';
+                },
+              ),
+            ),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                final industryNotiCtr= ref.watch(inTruckRegistrationNotiControllerProvider);
+                return CustomButton(
+                  buttonText:  'CONTINUAR',
+                  onPressed: ()async{
+                    await industryNotiCtr.getCurrentIndustry(
+                      realIndustryId: ref.read(authNotifierCtr).userModel?.industryId?? '',
+                      ref: ref,
+                      context: context
+                    );
+                    if(ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel!= null){
+                      await industryNotiCtr.
+                      getMatchedViajesLinkedWithIndustry(
+                          plateNumber: keyPadTextFieldController.text,
+                          viajesStatusEnum: ViajesStatusEnum.portLeft,
+                          pageName: AppRoutes.inTruckArrivalInfoScreen,
+                          context: context,
+                          ref: ref,
+                          industryId: ref.read(inTruckRegistrationNotiControllerProvider).currentIndustryModel?.industryId ?? ''
+                      );
+                    }
+                  },
+                );
+              },
+
+            ),
+            SizedBox(height: 20.h,),
+          ],
         ),
       );
   }

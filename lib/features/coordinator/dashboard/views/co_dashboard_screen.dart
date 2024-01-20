@@ -212,7 +212,7 @@ class CoDashboardScreen extends ConsumerWidget {
                                               child: CoRecentRecordCard(
                                                 isEntered: model.viajesStatusEnum.type == ViajesStatusEnum.portEntered.type ? true : false,
                                                 isLeaving:  model.viajesStatusEnum.type == ViajesStatusEnum.portLeft.type ? true : false,
-                                                guideNumber: model.guideNumber.toString(),
+                                                guideNumber: model.guideNumber.toStringAsFixed(0),
                                                 driverName: model.chofereName,
                                                 portEntryTime: model.entryTimeToPort,
                                               ),
