@@ -1,6 +1,3 @@
-import 'package:cargocontrol/core/enums/account_type.dart';
-import 'package:cargocontrol/features/admin/main_menu/views/ad_main_menu_screen.dart';
-import 'package:cargocontrol/features/auth/controllers/auth_notifier_controller.dart';
 import 'package:cargocontrol/features/coordinator/main_menu/views/co_main_menu_screen.dart';
 import 'package:cargocontrol/firebase_options.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
@@ -14,10 +11,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'commons/common_imports/common_libs.dart';
+import 'core/enums/account_type.dart';
 import 'core/firebase_messaging/firebase_messaging_class.dart';
 import 'core/firebase_messaging/service/notification_service.dart';
 import 'core/services/database_service.dart';
+import 'features/admin/main_menu/views/ad_main_menu_screen.dart';
 import 'features/auth/controllers/auth_controller.dart';
+import 'features/auth/controllers/auth_notifier_controller.dart';
 import 'features/industry/main_menu/views/in_main_menu_screen.dart';
 
 
