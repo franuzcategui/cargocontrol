@@ -2,6 +2,7 @@ import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/core/enums/choferes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_type.dart';
+import 'package:cargocontrol/core/firebase_messaging/models/notification_model.dart';
 import 'package:cargocontrol/features/coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
 import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../commons/common_widgets/show_toast.dart';
+import '../../../../core/firebase_messaging/firebase_messaging_class.dart';
 import '../../../../models/misc_models/industry_vessel_ids_model.dart';
 import '../../../../models/vessel_models/vessel_cargo_model.dart';
 import '../data/apis/truck_registration_apis.dart';
@@ -53,9 +55,11 @@ final getAllViajesList = StreamProvider.family((ref, String vesselId) {
   return truckProvider.getAllViajesList(vesselId: vesselId);
 });
 
-final getAllViajesForIndustryList = StreamProvider.family((ref, IndustryAndVesselIdsModel industryAndVesselIdsModel) {
+final getAllViajesForIndustryList = StreamProvider.family(
+    (ref, IndustryAndVesselIdsModel industryAndVesselIdsModel) {
   final truckProvider = ref.watch(truckRegistrationControllerProvider.notifier);
-  return truckProvider.getAllViajesForIndustryList(industryAndVesselIdsModel: industryAndVesselIdsModel);
+  return truckProvider.getAllViajesForIndustryList(
+      industryAndVesselIdsModel: industryAndVesselIdsModel);
 });
 
 // Industria Section
@@ -210,11 +214,121 @@ class TruckRegistrationController extends StateNotifier<bool> {
       debugPrintStack(stackTrace: l.stackTrace);
       debugPrint(l.message);
     }, (r) async {
+      await sendIndustryNotification(
+          viajesModel: model, ref: ref, context: context);
+      await sendAdminUnLoadingNotification(viajesModel: model, ref: ref, context: context);
       Navigator.pushNamed(context, AppRoutes.coRegistrationSuccessFullScreen);
       state = false;
       showSnackBar(context: context, content: 'Viajes Registered!');
     });
     state = false;
+  }
+
+  Future<void> sendIndustryNotification(
+      {required ViajesModel viajesModel,
+      required WidgetRef ref,
+      required BuildContext context}) async {
+    MessagingFirebase messagingFirebase = MessagingFirebase();
+    List<String> industryFCMTokens = [];
+    final result = await _datasource.getAllRealIndustraUser(
+        industryId: viajesModel.industryId);
+
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+      return;
+    }, (realIndustriaAccount) async {
+      realIndustriaAccount.forEach((user) {
+        industryFCMTokens.add(user.fcmToken);
+      });
+    });
+
+    print(industryFCMTokens.toString());
+
+    if (industryFCMTokens.isEmpty) {
+      return; // No registered devices, no need to send notifications.
+    }
+
+    final int batchSize = 1000;
+    final int totalDevices = industryFCMTokens.length;
+
+    for (int i = 0; i < totalDevices; i += batchSize) {
+      final int endIndex =
+          (i + batchSize <= totalDevices) ? (i + batchSize) : totalDevices;
+      final List<String> batchIds = industryFCMTokens.sublist(i, endIndex);
+
+      NotificationModel notificationModel = NotificationModel(
+          title: "Camión salió del puerto",
+          notificationId: "",
+          description:
+              "El camión No de Guia ${viajesModel.guideNumber.toStringAsFixed(0)} ha salido del puerto con una carga de ${viajesModel.exitTimeTruckWeightToPort}",
+          createdAt: AppConstants.constantDateTime,
+          screenName: "");
+
+      bool status = await messagingFirebase.pushNotificationsGroupDevice(
+        model: notificationModel,
+        registerIds: batchIds,
+        ref: ref,
+        context: context,
+      );
+
+      if (!status) {
+        debugPrint("Error in industry push notification");
+      }
+    }
+  }
+
+
+  Future<void> sendAdminUnLoadingNotification(
+      {required ViajesModel viajesModel,
+        required WidgetRef ref,
+        required BuildContext context}) async {
+    MessagingFirebase messagingFirebase = MessagingFirebase();
+    List<String> adminsFCMTokens = [];
+    final result = await _datasource.getAllAdmins();
+
+    result.fold((l) {
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+      return;
+    }, (allAdmins) async {
+      allAdmins.forEach((user) {
+        adminsFCMTokens.add(user.fcmToken);
+      });
+    });
+
+    print(adminsFCMTokens.toString());
+
+    if (adminsFCMTokens.isEmpty) {
+      return; // No registered devices, no need to send notifications.
+    }
+
+    final int batchSize = 1000;
+    final int totalDevices = adminsFCMTokens.length;
+
+    for (int i = 0; i < totalDevices; i += batchSize) {
+      final int endIndex =
+      (i + batchSize <= totalDevices) ? (i + batchSize) : totalDevices;
+      final List<String> batchIds = adminsFCMTokens.sublist(i, endIndex);
+
+      NotificationModel notificationModel = NotificationModel(
+          title: "Camión salió del puerto",
+          notificationId: "",
+          description: "El camión No de Guia ${viajesModel.guideNumber} ha salido del puerto con una carga de ${viajesModel.exitTimeTruckWeightToPort}",
+          createdAt: AppConstants.constantDateTime,
+          screenName: "");
+
+      bool status = await messagingFirebase.pushNotificationsGroupDevice(
+        model: notificationModel,
+        registerIds: batchIds,
+        ref: ref,
+        context: context,
+      );
+
+      if (!status) {
+        debugPrint("Error in admin  push notification");
+      }
+    }
   }
 
   Stream<List<ViajesModel>> getPortEnteringViajesList(
@@ -278,8 +392,13 @@ class TruckRegistrationController extends StateNotifier<bool> {
       return models;
     });
   }
-  Stream<List<ViajesModel>> getAllViajesForIndustryList({required IndustryAndVesselIdsModel industryAndVesselIdsModel}) {
-    return _datasource.getAllViajesForIndustryList(industryAndVesselIdsModel: industryAndVesselIdsModel).map((event) {
+
+  Stream<List<ViajesModel>> getAllViajesForIndustryList(
+      {required IndustryAndVesselIdsModel industryAndVesselIdsModel}) {
+    return _datasource
+        .getAllViajesForIndustryList(
+            industryAndVesselIdsModel: industryAndVesselIdsModel)
+        .map((event) {
       List<ViajesModel> models = [];
       event.docs.forEach((element) {
         models.add(ViajesModel.fromMap(element.data()));
@@ -287,9 +406,6 @@ class TruckRegistrationController extends StateNotifier<bool> {
       return models;
     });
   }
-
-
-
 
   Stream<List<ViajesModel>> getIndustryEnteringViajesList() {
     return _datasource.getIndustryEnteringViajesList().map((event) {

@@ -1,5 +1,7 @@
+import 'package:cargocontrol/core/enums/account_type.dart';
 import 'package:cargocontrol/core/enums/viajes_status_enum.dart';
 import 'package:cargocontrol/core/enums/viajes_type.dart';
+import 'package:cargocontrol/models/auth_models/user_model.dart';
 import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
@@ -53,6 +55,8 @@ abstract class TruckRegistrationApisImplements {
     required ViajesStatusEnum viajesStatusEnum,
   });
   FutureEither<IndustrySubModel> getIndustriaIndustrywithFuture({required String realIndustryId});
+  FutureEither<List<UserModel>> getAllAdmins();
+  FutureEither<List<UserModel>> getAllRealIndustraUser({required String industryId});
   FutureEither<VesselModel> getVesselCargoModel({required String vesselId});
   FutureEither<ChoferesModel> getChoferesForViajes({required String nationalId});
 }
@@ -340,6 +344,55 @@ class TruckRegistrationApis implements TruckRegistrationApisImplements{
       return Left(Failure(e.toString(), stackTrace));
     }
   }
+  @override
+  FutureEither<List<UserModel>> getAllAdmins()async{
+    try{
+      List<UserModel> userList=[];
+      final querySnapshot = await _firestore.collection(FirebaseConstants.userCollection).
+      where('accountType', isEqualTo: AccountTypeEnum.administrador.type).
+      get();
+      for (var doc in querySnapshot.docs) {
+        userList.add(UserModel.fromMap(
+            doc.data()));
+      }
+      return Right(userList);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+  @override
+  FutureEither<List<UserModel>> getAllRealIndustraUser({required String industryId})async{
+    try{
+      final querySnapshot = await _firestore.collection(FirebaseConstants.industryGuideCollection).
+      where('industryId', isEqualTo: industryId).
+      get();
+      if(querySnapshot.docs.length!=0){
+        IndustrySubModel model = IndustrySubModel.fromMap(querySnapshot.docs.first.data());
+        List<UserModel> userList=await getUserModelsFromRealIndustryId(realIndustryId: model.realIndustryId);
+        return Right(userList);
+      }else{
+        return Left(Failure('No Industry Found!', StackTrace.fromString('getIndustriaIndustrywithFuture')));
+      }
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+  Future<List<UserModel>> getUserModelsFromRealIndustryId({required String realIndustryId})async{
+      List<UserModel> userList=[];
+      final querySnapshot = await _firestore.collection(FirebaseConstants.userCollection).
+      where('industryId', isEqualTo: realIndustryId).
+      get();
+      for (var doc in querySnapshot.docs) {
+        userList.add(UserModel.fromMap(
+            doc.data()));
+      }
+      return userList;
+  }
+
 
 
   @override

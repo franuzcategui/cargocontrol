@@ -152,7 +152,7 @@ class MessagingFirebase {
           '}'
           '}';
 
-
+print("sending notification");
       var response = await http.post(
         Uri.parse(Constants.BASE_URL),
         headers: <String, String>{
@@ -163,6 +163,7 @@ class MessagingFirebase {
         body: dataNotifications,
       );
       if(response.body.toString() == '"registration_ids" field cannot be empty'){
+        print(response);
         return false;
       }else{
         return true;
