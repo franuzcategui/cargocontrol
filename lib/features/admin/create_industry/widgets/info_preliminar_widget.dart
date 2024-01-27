@@ -30,7 +30,7 @@ class InfoPreliminarIndustryWidget extends StatelessWidget {
             ),
              CustomTile(
                 title: "Procedencia",
-                subText: adVesselNotiCtr.vesselModel?.exitPort ?? "M.V. Patient Lake"
+                subText: adVesselNotiCtr.vesselModel?.entryPort ?? "M.V. Patient Lake"
             ),
              CustomTile(
                 title: "Shipper",
@@ -38,7 +38,7 @@ class InfoPreliminarIndustryWidget extends StatelessWidget {
             ),
              CustomTile(
                 title: "Fecha en puerto",
-                subText: formatDate(adVesselNotiCtr.vesselModel?.exitDate)
+                subText: formatDate(adVesselNotiCtr.vesselModel?.entryDate)
             ),
              CustomTile(
                 title: "UN/Locode",

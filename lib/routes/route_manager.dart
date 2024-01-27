@@ -152,7 +152,7 @@ class AppRoutes {
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(
           CreateIndustryCompleteDataScreen(
-            industrySubModels: args['industrySubModels'],
+            industrySubModels: args['industrySubModels'], cargoHoldWeights: args['cargoHoldWeights'],
           ),
         );
 
