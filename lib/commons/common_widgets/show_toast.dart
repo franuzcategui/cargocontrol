@@ -29,7 +29,7 @@ void showToast(
   Fluttertoast.showToast(
     msg: msg,
     toastLength: long ? Toast.LENGTH_LONG : Toast.LENGTH_LONG,
-    gravity: isTop ? ToastGravity.TOP: ToastGravity.SNACKBAR,
+    gravity: isTop ? ToastGravity.CENTER: ToastGravity.SNACKBAR,
     timeInSecForIosWeb: 1,
     backgroundColor: backgroundColor ?? Colors.white,
     textColor: textColor ?? Colors.black,

@@ -1,23 +1,23 @@
-import 'package:cargocontrol/authentication/controller/authentication_controller.dart';
-import 'package:cargocontrol/authentication/controller/authentication_state.dart';
-import 'package:cargocontrol/common_widgets/loading_sheet.dart';
-import 'package:cargocontrol/core/enums/account_type.dart';
-import 'package:cargocontrol/features/admin/main_menu/views/ad_main_menu_screen.dart';
-import 'package:cargocontrol/features/auth/controllers/auth_notifier_controller.dart';
 import 'package:cargocontrol/features/coordinator/main_menu/views/co_main_menu_screen.dart';
 import 'package:cargocontrol/firebase_options.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/app_constants.dart';
-import 'package:cargocontrol/utils/loading.dart';
 import 'package:cargocontrol/utils/thems/loading_screen.dart';
 import 'package:cargocontrol/utils/thems/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'commons/common_imports/common_libs.dart';
+import 'core/enums/account_type.dart';
+import 'core/firebase_messaging/firebase_messaging_class.dart';
+import 'core/firebase_messaging/service/notification_service.dart';
 import 'core/services/database_service.dart';
+import 'features/admin/main_menu/views/ad_main_menu_screen.dart';
 import 'features/auth/controllers/auth_controller.dart';
+import 'features/auth/controllers/auth_notifier_controller.dart';
 import 'features/industry/main_menu/views/in_main_menu_screen.dart';
 
 
@@ -27,25 +27,53 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  LocalNotificationService.requestPermission(Permission.notification);
+  LocalNotificationService.initialize();
   runApp(const ProviderScope(child: MyApp()));
 }
 
 
 Future<void> initAuth() async {
   await Hive.initFlutter();
+  // Done remove this line below
   final authService = AuthService();
-
-
 }
 
 
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget{
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    initiateFirebaseMessaging();
+  }
+
+
+  initiateFirebaseMessaging() async {
+    MessagingFirebase messagingFirebase = MessagingFirebase();
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((message) {
+      LocalNotificationService.display(message: message, context: context, navigatorKey: navigatorKey);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      LocalNotificationService.displayBackgroundNotifications(message: message, context: context, navigatorKey: navigatorKey);
+
+    });
+    messagingFirebase.uploadFcmToken();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final authenticationState = ref.watch(authServiceProvider);
 
     Widget getHome(){

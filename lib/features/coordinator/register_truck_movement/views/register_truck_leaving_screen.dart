@@ -45,100 +45,94 @@ class _RegisterTruckLeavingScreenState extends State<RegisterTruckLeavingScreen>
     return
       Scaffold(
         appBar: CustomAppBar(),
-        body: SingleChildScrollView(
-          child: SizedBox(
-            height: 812.h,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const CommonHeader(
-                  title: "Número de",
-                  subtitle: "guía" ,
-                  description: "Indique el número de guía del camión entrante",
-                ),
-                const SizedBox(
-                  height: 70,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 45.w),
-                  child: TextField(
-                    maxLength: 6,
-                    maxLengthEnforcement:
-                    MaxLengthEnforcement.truncateAfterCompositionEnds,
-                    style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size24),
-                    autocorrect: false,
-                    textAlign: TextAlign.center,
-                    enableSuggestions: false,
-                    readOnly: true,
-                    controller: keyPadTextFieldController,
-                    decoration: InputDecoration(
-                      prefixText: 'C - ',
-                      suffixIcon: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () async {
-                              final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const TextDetectorScreen()),
-                              );
-                              setState(() {
-                                keyPadTextFieldController.text = result;
-                              });
-                            },
-                            icon: Image.asset(AppAssets.scanIcon, scale: 2.2.sp),
-                          )
-                        ],
-                      ),
-                    ),
-
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const CommonHeader(
+              title: "Número de ",
+              subtitle: "placa" ,
+              description: "Indique el número de placa del camión saliente",
+            ),
+            Spacer(flex: 1,),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 45.w),
+              child: TextField(
+                maxLength: 6,
+                maxLengthEnforcement:
+                MaxLengthEnforcement.truncateAfterCompositionEnds,
+                style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size24),
+                autocorrect: false,
+                textAlign: TextAlign.center,
+                enableSuggestions: false,
+                readOnly: true,
+                controller: keyPadTextFieldController,
+                decoration: InputDecoration(
+                  prefixText: 'C - ',
+                  suffixIcon: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                const TextDetectorScreen()),
+                          );
+                          setState(() {
+                            keyPadTextFieldController.text = result;
+                          });
+                        },
+                        icon: Image.asset(AppAssets.scanIcon, scale: 2.2.sp),
+                      )
+                    ],
                   ),
                 ),
-                SizedBox(height: 80.h,),
-                NumericKeyboard(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  onKeyboardTap: (string) {
-                    setState(() {
-                      keyPadTextFieldController.text += string;
-                    });
-                  },
-                  rightIcon: const Icon(FontAwesomeIcons.deleteLeft),
-                  rightButtonFn: () {
-                    keyPadTextFieldController.text = '';
-                  },
-                ),
-                Consumer(
-                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                    return CustomButton(
-                      buttonText:  'CONTINUAR',
-                      isLoading: ref.watch(truckRegistrationNotiControllerProvider).isLoading,
-                      onPressed: ()async{
-                        if(keyPadTextFieldController.text.isNotEmpty){
-                          await ref.read(truckRegistrationNotiControllerProvider).getCurrentVessel(ref: ref);
-                          await ref.read(truckRegistrationNotiControllerProvider).
-                          getMatchedViajes(
-                            plateNumber: keyPadTextFieldController.text,
-                            vesselId: ref.read(truckRegistrationNotiControllerProvider).vesselModel?.vesselId??"",
-                            context: context,
-                            ref: ref,
-                          );
-                          await ref.read(truckRegistrationNotiControllerProvider).getCurrentVessel(ref: ref);
-                        }else{
-                          showSnackBar(context: context, content: 'Enter Plate Number!');
-                        }
-                      },
-                    );
-                  },
 
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).padding.bottom,
-                ),
-              ],
+              ),
             ),
-          ),
+            Spacer(flex: 1,),
+            Expanded(
+              flex: 8,
+              child: NumericKeyboard(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                onKeyboardTap: (string) {
+                  setState(() {
+                    keyPadTextFieldController.text += string;
+                  });
+                },
+                rightIcon: const Icon(FontAwesomeIcons.deleteLeft),
+                rightButtonFn: () {
+                  keyPadTextFieldController.text = '';
+                },
+              ),
+            ),
+
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return CustomButton(
+                  buttonText:  'CONTINUAR',
+                  isLoading: ref.watch(truckRegistrationNotiControllerProvider).isLoading,
+                  onPressed: ()async{
+                    if(keyPadTextFieldController.text.isNotEmpty){
+                      await ref.read(truckRegistrationNotiControllerProvider).getCurrentVessel(ref: ref);
+                      await ref.read(truckRegistrationNotiControllerProvider).
+                      getMatchedViajes(
+                        plateNumber: keyPadTextFieldController.text,
+                        vesselId: ref.read(truckRegistrationNotiControllerProvider).vesselModel?.vesselId??"",
+                        context: context,
+                        ref: ref,
+                      );
+                    }else{
+                      showSnackBar(context: context, content: 'Enter Plate Number!');
+                    }
+                  },
+                );
+              },
+
+            ),
+            SizedBox(height: 20.h,),
+          ],
         ),
       );
   }

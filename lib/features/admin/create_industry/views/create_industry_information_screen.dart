@@ -2,11 +2,13 @@ import 'package:cargocontrol/commons/common_imports/apis_commons.dart';
 import 'package:cargocontrol/commons/common_widgets/CustomTextFields.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/admin/create_industry/widgets/confirm_industry_dialog.dart';
 import 'package:cargocontrol/features/admin/create_vessel/controllers/ad_vessel_noti_controller.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
+import 'package:cargocontrol/utils/thems/my_colors.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../commons/common_widgets/common_header.dart';
@@ -14,6 +16,7 @@ import '../../../../commons/common_widgets/custom_appbar.dart';
 import '../../../../commons/common_widgets/custom_dropdown.dart';
 import '../../../../commons/common_widgets/show_toast.dart';
 import '../../../../models/vessel_models/vessel_cargo_model.dart';
+import '../../create_vessel/controllers/ad_vessel_controller.dart';
 import '../controllers/ad_industry_noti_controller.dart';
 import '../widgets/industry_section_widget.dart';
 
@@ -35,7 +38,15 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
 
   bool allGood = false;
 
-
+  int findCargoModelIndex(List<VesselCargoModel> cargoList, VesselCargoModel cargoModel) {
+    for (int i = 0; i < cargoList.length; i++) {
+      if (cargoList[i].cargoId == cargoModel.cargoId) {
+        return i;
+      }
+    }
+    // If no match is found, return -1 to indicate that the cargoModel is not in the list.
+    return -1;
+  }
   createIndustrySection() {
     final section = _IndustryControllers();
     final product =  CustomDropDown(ctr: section.nameCtr, list: names, labelText: 'Nombre',);
@@ -128,6 +139,10 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
     "Veggie"
   ];
 
+  List<double> cargoHoldWeights=[
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+  ];
+
   double totalCargoLoad = 0.0;
   double totalIndustryLoads = 0.0;
 
@@ -135,6 +150,16 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
   void initState() {
     super.initState();
     createIndustrySection();
+  }
+
+  Future<void> confirmDialog({required BuildContext context,required double differenceWeight,   required Function() onConfirm}) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return ConfirmIndustryDialog(differenceWeight: differenceWeight, onTap: onConfirm,);
+      },
+    );
   }
 
   @override
@@ -162,14 +187,71 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            'Peso total en bodegas: ${totalCargoLoad}',
-                            style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size14),
+
+                          Consumer(
+                            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                              return ref.watch(fetchCurrentVesselsProvider).when(
+                                  data: (vesselModel) {
+                                    return Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        ListView.builder(
+                                          itemCount: vesselModel.cargoModels.length,
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (BuildContext context, int index) {
+                                            VesselCargoModel cargoModel =  vesselModel.cargoModels[index];
+                                            return Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${cargoModel.productName}, ${cargoModel.variety}, ${cargoModel.cosecha}, ${cargoModel.tipo}: ',
+                                                  style: getBoldStyle(color:context.textColor, fontSize: MyFonts.size14),
+                                                ),
+                                                Text(
+                                                  '${cargoModel.pesoTotal}/${cargoHoldWeights[index]}',
+                                                  style: getBoldStyle(color:(cargoModel.pesoTotal<cargoHoldWeights[index])?context.errorColor:MyColors.kBrandColor, fontSize: MyFonts.size14),
+                                                ),
+                                              ],
+                                            );
+
+                                          },
+                                        ),
+
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Peso total :',
+                                              style: getBoldStyle(color:context.textColor, fontSize: MyFonts.size14),
+                                            ),
+                                            Text(
+                                              ' ${vesselModel.totalCargoWeight}/${totalIndustryLoads}',
+                                              style: getBoldStyle(color:(vesselModel.totalCargoWeight<totalIndustryLoads)?context.errorColor:MyColors.kBrandColor, fontSize: MyFonts.size14),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  }, error: (error, st) {
+                                //debugPrintStack(stackTrace: st);
+                                //debugPrint(error.toString());
+                                return const SizedBox();
+                              }, loading: () {
+                                return const SizedBox();
+                              });
+                            },
                           ),
-                          Text(
-                            'Peso total : ${totalIndustryLoads}',
-                            style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size14),
-                          ),
+                          //
+                          // Text(
+                          //   'Peso total en bodegas: ${totalCargoLoad}',
+                          //   style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size14),
+                          // ),
+                          // Text(
+                          //   'Peso total : ${totalIndustryLoads}',
+                          //   style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size14),
+                          // ),
                         ],
                       );
                     },
@@ -181,6 +263,9 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                         Map<VesselCargoModel, List<_IndustryControllers>> cargoSectionsMap = {};
                         totalCargoLoad = 0;
                         totalIndustryLoads = 0;
+                        cargoHoldWeights=[
+                          0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+                        ];
                         for (var section in _industryControllers) {
                           VesselCargoModel? cargo;
                           ref.read(adVesselNotiController).vesselModel!.cargoModels.forEach((model) {
@@ -198,9 +283,18 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                           }
                         }
 
+
                         cargoSectionsMap.forEach((cargo, sections) {
                           double totalLoad = sections.fold(0, (sum, section) => sum + double.parse(section.loadCtr.text));
                           double cargoWeight = cargo.pesoTotal;
+
+                          if(ref.read(adVesselNotiController).vesselModel!=null){
+                            int index= findCargoModelIndex(ref.read(adVesselNotiController).vesselModel!.cargoModels,cargo);
+                            if (index != -1) {
+                              cargoHoldWeights[index]=cargoHoldWeights[index]+totalLoad;
+                            }
+                          }
+
 
                           totalCargoLoad = totalCargoLoad + cargoWeight;
                           totalIndustryLoads = totalIndustryLoads + totalLoad;
@@ -290,6 +384,9 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                           if (allGood) {
                             totalCargoLoad = 0;
                             totalIndustryLoads = 0;
+                            cargoHoldWeights=[
+                              0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+                            ];
                             Map<VesselCargoModel, List<_IndustryControllers>> cargoSectionsMap = {};
 
                             for (var section in _industryControllers) {
@@ -309,9 +406,19 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                               }
                             }
 
+
+
                             cargoSectionsMap.forEach((cargo, sections) {
                               double totalLoad = sections.fold(0, (sum, section) => sum + double.parse(section.loadCtr.text));
                               double cargoWeight = cargo.pesoTotal;
+
+
+                              if(ref.read(adVesselNotiController).vesselModel!=null){
+                                int index= findCargoModelIndex(ref.read(adVesselNotiController).vesselModel!.cargoModels,cargo);
+                                if (index != -1) {
+                                  cargoHoldWeights[index]=cargoHoldWeights[index]+totalLoad;
+                                }
+                              }
 
                               totalCargoLoad = totalCargoLoad + cargoWeight;
                               totalIndustryLoads = totalIndustryLoads + totalLoad;
@@ -364,13 +471,26 @@ class _CreateIndustryInformationScreenState extends ConsumerState<CreateIndustry
                               industrySubModels.add(model);
 
                             }
-                            Navigator.pushNamed(
-                                context,
-                                AppRoutes.adminCreateIndustryCompleteDataScreen,
-                                arguments: {
-                                  'industrySubModels' : industrySubModels,
-                                }
-                            );
+
+                            if(ref.read(adVesselNotiController).vesselModel!.totalCargoWeight>totalIndustryLoads){
+                              confirmDialog(context:context, differenceWeight:ref.read(adVesselNotiController).vesselModel!.totalCargoWeight-totalIndustryLoads, onConfirm: () {        Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.adminCreateIndustryCompleteDataScreen,
+                                  arguments: {
+                                    'industrySubModels' : industrySubModels,
+                                    'cargoHoldWeights':cargoHoldWeights,
+                                  }
+                              );},);
+                            }else{
+                              Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.adminCreateIndustryCompleteDataScreen,
+                                  arguments: {
+                                    'industrySubModels' : industrySubModels,
+                                    'cargoHoldWeights':cargoHoldWeights,
+                                  }
+                              );
+                            }
                           }
                         },
                         buttonText: "CONTINUAR"

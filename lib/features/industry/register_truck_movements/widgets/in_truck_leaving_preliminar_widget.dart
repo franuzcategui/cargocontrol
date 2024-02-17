@@ -25,7 +25,7 @@ class InTruckLeavingPreliminarInfoWidget extends StatelessWidget {
             SizedBox(height: 28.h,),
             CustomTile(
                 title: "Número de guía",
-                subText: model.guideNumber.toString()
+                subText: model.guideNumber.toStringAsFixed(0)
             ),
             CustomTile(
                 title: "Nombre de buque",

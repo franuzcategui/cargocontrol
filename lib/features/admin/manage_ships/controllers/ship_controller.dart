@@ -47,6 +47,7 @@ class ShipController extends StateNotifier<bool> {
       debugPrint(l.message);
       showSnackBar(context: context, content: l.message);
     }, (r) async{
+      await _datasource.makeAllChoferesAvailable();
       await ref.read(shipNotiController).firstTime();
       state = false;
       showToast(msg: "Buque terminado de descargar!");

@@ -21,7 +21,13 @@ import '../widgets/in_progress_dashboard_card.dart';
 
 class InDashboardScreen extends ConsumerWidget {
   const InDashboardScreen({super.key});
-
+  initialize(WidgetRef ref)async{
+    await ref.read(inTruckRegistrationNotiControllerProvider).setMatchedViajes(null);
+    await ref.read(inTruckRegistrationNotiControllerProvider).setCurrentIndustry(null);
+    await ref.read(inTruckRegistrationNotiControllerProvider).setViajesCargoModel(null);
+    await ref.read(inTruckRegistrationNotiControllerProvider).setViajesChoferesModel(null);
+    await ref.read(inTruckRegistrationNotiControllerProvider).setCurrentVessel(null);
+  }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -186,7 +192,8 @@ class InDashboardScreen extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          await initialize(ref);
           showModalBottomSheet(
               backgroundColor: Colors.transparent,
               elevation: 0,

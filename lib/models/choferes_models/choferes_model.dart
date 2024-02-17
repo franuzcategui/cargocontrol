@@ -12,6 +12,8 @@ class ChoferesModel{
   final String lastName;
   final String rankingColor;
   final Map<String, dynamic> searchTags;
+  //Todo usman: update fields
+  //final DateTime createdAt;
 
 //<editor-fold desc="Data Methods">
   const ChoferesModel({

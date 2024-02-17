@@ -35,11 +35,11 @@ class InRegistrationSuccessFullScreen extends StatelessWidget {
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 return CustomButton(
                   onPressed: ()async{
-                    await ref.read(inTruckRegistrationNotiControllerProvider).setMatchedViajes(null);
-                    await ref.read(inTruckRegistrationNotiControllerProvider).setCurrentIndustry(null);
-                    await ref.read(inTruckRegistrationNotiControllerProvider).setViajesCargoModel(null);
-                    await ref.read(inTruckRegistrationNotiControllerProvider).setViajesChoferesModel(null);
-                    await ref.read(inTruckRegistrationNotiControllerProvider).setCurrentVessel(null);
+                    // await ref.read(inTruckRegistrationNotiControllerProvider).setMatchedViajes(null);
+                    // await ref.read(inTruckRegistrationNotiControllerProvider).setCurrentIndustry(null);
+                    // await ref.read(inTruckRegistrationNotiControllerProvider).setViajesCargoModel(null);
+                    // await ref.read(inTruckRegistrationNotiControllerProvider).setViajesChoferesModel(null);
+                    // await ref.read(inTruckRegistrationNotiControllerProvider).setCurrentVessel(null);
 
                     Navigator.pushNamedAndRemoveUntil(context, AppRoutes.inMainMenuScreen, (route) => false);
                   },

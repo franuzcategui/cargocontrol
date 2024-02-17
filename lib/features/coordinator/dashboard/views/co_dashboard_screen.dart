@@ -28,6 +28,10 @@ class CoDashboardScreen extends ConsumerWidget {
   const CoDashboardScreen({super.key});
   initiallize(WidgetRef ref)async{
     await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
+    ref.read(truckRegistrationNotiControllerProvider).setIndustryMatchedStatus(false);
+    ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(null);
+    ref.read(truckRegistrationNotiControllerProvider).setMatchedViajes(null);
+    ref.read(truckRegistrationNotiControllerProvider).setSelectedIndustry(null);
   }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -208,7 +212,7 @@ class CoDashboardScreen extends ConsumerWidget {
                                               child: CoRecentRecordCard(
                                                 isEntered: model.viajesStatusEnum.type == ViajesStatusEnum.portEntered.type ? true : false,
                                                 isLeaving:  model.viajesStatusEnum.type == ViajesStatusEnum.portLeft.type ? true : false,
-                                                guideNumber: model.guideNumber.toString(),
+                                                guideNumber: model.guideNumber.toStringAsFixed(0),
                                                 driverName: model.chofereName,
                                                 portEntryTime: model.entryTimeToPort,
                                               ),

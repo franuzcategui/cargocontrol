@@ -54,7 +54,7 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const CommonHeader(
-                title: "Información del",
+                title: "Información del ",
                 subtitle: "camión" ,
                 description: "Indique la información del camión para su registro en la romana",
               ),
@@ -77,7 +77,7 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                           ),
                           CustomTile(
                               title: 'Número de guía',
-                              subText: '${widget.guideNumber}'
+                              subText: widget.guideNumber.toStringAsFixed(0)
                           ),
                           CustomTile(
                               title: 'Nombre de buque',
@@ -104,7 +104,9 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                             onFieldSubmitted: (val){},
                             obscure: false,
                             label: 'Placa',
+                            maxLength: 6,
                             inputType: TextInputType.number,
+                            onlyNumber: true,
                             validatorFn: sectionValidator,
                             tailingIcon: InkWell(
                                 onTap: ()async{
@@ -169,6 +171,7 @@ class _CoTruckInfoScreenState extends State<CoTruckInfoScreen> {
                               onFieldSubmitted: (val){},
                               obscure: false,
                               inputType: TextInputType.number,
+                              onlyNumber: true,
                               validatorFn: sectionValidator,
                               label: 'Peso tara'
                           ),
