@@ -12,17 +12,20 @@ import 'package:uuid/uuid.dart';
 import '../../../../commons/common_widgets/show_toast.dart';
 import '../data/apis/choferes_apis.dart';
 
-final choferesControllerProvider = StateNotifierProvider<ChoferesController, bool>((ref) {
+final choferesControllerProvider =
+    StateNotifierProvider<ChoferesController, bool>((ref) {
   final api = ref.watch(choferesApisProvider);
-  return ChoferesController(datasource:  api, );
+  return ChoferesController(
+    datasource: api,
+  );
 });
-
 
 class ChoferesController extends StateNotifier<bool> {
   final ChoferesApisImplements _datasource;
 
-  ChoferesController({required ChoferesApisImplements datasource,})
-      : _datasource = datasource,
+  ChoferesController({
+    required ChoferesApisImplements datasource,
+  })  : _datasource = datasource,
         super(false);
 
   Future<void> registerChofere({
@@ -39,16 +42,20 @@ class ChoferesController extends StateNotifier<bool> {
         choferesStatusEnum: ChoferesStatusEnum.available,
         choferNationalId: choferNationalId,
         averageCargoDeficit: 0.0,
-        averageTimeDeficit: DateTime.now(),
+        averageTimeDeficit: Duration(),
         rating: 5,
         numberOfTrips: 0,
-        firstName: firstName,
-        lastName: hasSecondName? firstName.split(' ').sublist(1).join(): '',
+        firstName: hasSecondName ? firstName.split(' ').sublist(0,1).join() :firstName,
+        lastName: hasSecondName ? firstName.split(' ').sublist(1).join() : '',
         rankingColor: 'Green',
-      searchTags: choferesSearchTagsHandler(name: firstName, choferNationalId: choferNationalId)
-    );
+        searchTags: choferesSearchTagsHandler(
+            name: firstName, choferNationalId: choferNationalId),
+        worstCargoDeficit: 0.0,
+        createdAt: DateTime.now(),
+        worstTimeDeficit: Duration(), averageCargoDeficitPercentage: 0.0, worstCargoDeficitPercentage: 0.0);
 
-    final result = await _datasource.registerChofere(choferesModel: choferesModel);
+    final result =
+        await _datasource.registerChofere(choferesModel: choferesModel);
 
     result.fold((l) {
       state = false;
@@ -60,7 +67,6 @@ class ChoferesController extends StateNotifier<bool> {
     });
     state = false;
   }
-
 
   Future<void> deleteChofere({
     required String choferNationalId,
@@ -75,7 +81,7 @@ class ChoferesController extends StateNotifier<bool> {
       debugPrintStack(stackTrace: l.stackTrace);
       debugPrint(l.message);
       showSnackBar(context: context, content: l.message);
-    }, (r) async{
+    }, (r) async {
       await ref.read(choferesNotiController).firstTime();
       state = false;
       showSnackBar(context: context, content: 'Choferes Deleted!');
@@ -83,22 +89,22 @@ class ChoferesController extends StateNotifier<bool> {
     state = false;
   }
 
-
   bool hasLastName(String fullName) {
     int num = fullName.split(' ').length;
     return num > 1 ? true : false;
   }
 
   DocumentSnapshot? _lastSnapshot;
-  DocumentSnapshot? get lastSnapshot=> _lastSnapshot;
-
+  DocumentSnapshot? get lastSnapshot => _lastSnapshot;
 
   Future<List<ChoferesModel>> getAllChoferes({int limit = 10}) async {
-    QuerySnapshot querySnapshot = await _datasource.getAllChoferes(limit: limit, snapshot: _lastSnapshot);
+    QuerySnapshot querySnapshot =
+        await _datasource.getAllChoferes(limit: limit, snapshot: _lastSnapshot);
 
     List<ChoferesModel> models = [];
     for (var document in querySnapshot.docs) {
-      var model = ChoferesModel.fromMap(document.data() as Map<String, dynamic>);
+      var model =
+          ChoferesModel.fromMap(document.data() as Map<String, dynamic>);
       models.add(model);
     }
 
@@ -109,7 +115,4 @@ class ChoferesController extends StateNotifier<bool> {
     print('Length: ${querySnapshot.docs.length}');
     return models;
   }
-
-
-
 }

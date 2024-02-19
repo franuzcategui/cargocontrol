@@ -12,7 +12,8 @@ import '../features/coordinator/register_truck_movement/controllers/truck_regist
 import '../models/choferes_models/choferes_model.dart';
 
 class ChoferesWeightTiempoWidget extends StatelessWidget {
-  const ChoferesWeightTiempoWidget({Key? key, required this.choferesModel}) : super(key: key);
+  const ChoferesWeightTiempoWidget({Key? key, required this.choferesModel})
+      : super(key: key);
   final ChoferesModel choferesModel;
 
   String formatDuration(Duration duration) {
@@ -28,26 +29,29 @@ class ChoferesWeightTiempoWidget extends StatelessWidget {
     }
     Duration totalArrivalTime = Duration();
     for (ViajesModel viajes in viajesList) {
-      totalArrivalTime += viajes.timeToIndustry
-          .difference(viajes.exitTimeToPort);
+      totalArrivalTime +=
+          viajes.timeToIndustry.difference(viajes.exitTimeToPort);
     }
     // double avgArrivalTime = totalArrivalTime.inMinutes / viajesList.length;
     // return avgArrivalTime;
 
     // Calculate average arrival time
-    Duration avgArrivalTime = Duration(seconds: totalArrivalTime.inSeconds ~/ viajesList.length);
+    Duration avgArrivalTime =
+        Duration(seconds: totalArrivalTime.inSeconds ~/ viajesList.length);
     return avgArrivalTime;
   }
+
   Duration calculateAvgUnloadingTime(List<ViajesModel> viajesList) {
     if (viajesList.isEmpty) {
       return const Duration(); // Handle the case when the list is empty
     }
     Duration totalArrivalTime = Duration();
     for (ViajesModel viajes in viajesList) {
-      totalArrivalTime += viajes.unloadingTimeInIndustry
-          .difference(viajes.timeToIndustry);
+      totalArrivalTime +=
+          viajes.unloadingTimeInIndustry.difference(viajes.timeToIndustry);
     }
-    Duration avgArrivalTime = Duration(seconds: totalArrivalTime.inSeconds ~/ viajesList.length);
+    Duration avgArrivalTime =
+        Duration(seconds: totalArrivalTime.inSeconds ~/ viajesList.length);
     return avgArrivalTime;
   }
 
@@ -67,32 +71,27 @@ class ChoferesWeightTiempoWidget extends StatelessWidget {
           height: 28.h,
         ),
         CustomTile(
-            title: "Viajes realizados",
-            subText:choferesModel.numberOfTrips.toStringAsFixed(0),),
+          title: "Viajes realizados",
+          subText: choferesModel.numberOfTrips.toStringAsFixed(0),
+        ),
         CustomTile(
             title: "Tiempo promedio de retraso",
-            subText: ""),
+            subText: formatDuration(choferesModel.averageTimeDeficit)),
         CustomTile(
             title: "Perdida de carga promedio (%)",
-            subText:""),// DateFormat('HH:mm:ss').format(choferesModel.unloadingTimeInIndustry)
+            subText: choferesModel.averageCargoDeficitPercentage.toString()),
 
-        CustomTile(
-          title: "Percentil de tiempo de retraso",
-          subText:""
-        ),
+        CustomTile(title: "Percentil de tiempo de retraso", subText: ""),
 
-        CustomTile(
-          title: "Percentil de perdida de carga",
-          subText: ""),
+        CustomTile(title: "Percentil de perdida de carga", subText: ""),
         //formatDuration(choferesModel.unloadingTimeInIndustry.difference(choferesModel.timeToIndustry)
         CustomTile(
             title: "Mayor tiempo de retraso",
-            subText:""),
+            subText: formatDuration(choferesModel.worstTimeDeficit)),
 
         CustomTile(
-            title: "Mayor pérdida de carga (%)",
-            subText:""),
-
+            title: "Mayor pérdida de carga(%)",
+            subText: choferesModel.worstCargoDeficitPercentage.toString()),
       ],
     );
   }

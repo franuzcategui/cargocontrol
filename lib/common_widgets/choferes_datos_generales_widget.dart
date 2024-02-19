@@ -1,6 +1,7 @@
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/features/admin/create_vessel/widgets/preliminatr_tile.dart';
 import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../models/viajes_models/viajes_model.dart';
@@ -36,7 +37,7 @@ class ChoferesDatosGeneralesWidget extends StatelessWidget {
         ),
        CustomTile(
             title: "Registro inicial",
-            subText: ""
+            subText: DateFormat('MM/dd/yy').format(choferesModel.createdAt)
         ),
        CustomTile(
             title: "Puntuación",
