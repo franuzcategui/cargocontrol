@@ -126,7 +126,7 @@ class _CoSelectChoferScreenState extends ConsumerState<CoSelectChoferScreen> {
                               child: CargoCard(
                                   topLeftText: "ID ${model.choferNationalId}",
                                   topRightText: "Viajes ${model.numberOfTrips}",
-                                  titleText: "${model.firstName}",
+                                  titleText: "${model.firstName} ${model.lastName}",
                                   bottomLeftText: "Deficit ${model.averageCargoDeficit}",
                                   bottomRightText: "Retraso Promedio : 2:00H",
 

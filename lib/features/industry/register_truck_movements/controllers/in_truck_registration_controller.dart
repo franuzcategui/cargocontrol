@@ -109,14 +109,47 @@ class TruckRegistrationController extends StateNotifier<bool> {
             viajesModel.entryTimeTruckWeightToPort,
       ),
     );
-    double updatedChoferesDeficit = ((choferesModel.averageCargoDeficit *
+    double updatedAverageCargoDeficit = ((choferesModel.averageCargoDeficit *
                     (choferesModel.numberOfTrips - 1) +
                 (viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight)) /
             choferesModel.numberOfTrips)
         .ceilToDouble();
+    double tripCargoDeficitPercentage = ((viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight)/(viajesModel.exitTimeTruckWeightToPort - viajesModel.entryTimeTruckWeightToPort));
+    double updatedAverageCargoDeficitPercentage = ((choferesModel.averageCargoDeficitPercentage *
+        (choferesModel.numberOfTrips - 1) +
+        tripCargoDeficitPercentage) /
+        choferesModel.numberOfTrips)
+        .ceilToDouble();
+    double updatedWorstCargoDeficitPercentage= choferesModel.worstCargoDeficitPercentage<tripCargoDeficitPercentage?tripCargoDeficitPercentage:choferesModel.worstCargoDeficitPercentage;
+    //
+    // //Todo usman : get all the viajes where chofer id same and viajes is completed; then get avg time duration + this trip time
+    // Duration avgTrip
+    // Duration tripTime=(viajesModel.timeToIndustry.difference(viajesModel.exitTimeToPort));
+    //
+    // Duration updatedAverageTimeDeficit = ((choferesModel.averageTimeDeficit *
+    //     (choferesModel.numberOfTrips - 1) +
+    //     tripTimeDeficit) *
+    //     (1/choferesModel.numberOfTrips));
+    // Duration tripTimeDeficit = tripTime - updatedAverageTimeDeficit;
+    // Duration worstTimeDeficit = choferesModel.worstTimeDeficit < tripTimeDeficit ? tripTimeDeficit : choferesModel.worstTimeDeficit;
+    //
+    // ChoferesModel chofere = choferesModel.copyWith(
+    //     averageCargoDeficit: updatedAverageCargoDeficit,
+    //     averageCargoDeficitPercentage: updatedAverageCargoDeficitPercentage,
+    //     worstCargoDeficitPercentage: updatedWorstCargoDeficitPercentage,
+    //     averageTimeDeficit: updatedAverageTimeDeficit,
+    //     worstTimeDeficit: worstTimeDeficit,
+    //     choferesStatusEnum: ChoferesStatusEnum.available);
+
     ChoferesModel chofere = choferesModel.copyWith(
-        averageCargoDeficit: updatedChoferesDeficit,
+        averageCargoDeficit: updatedAverageCargoDeficit,
+        averageCargoDeficitPercentage: updatedAverageCargoDeficitPercentage,
+        worstCargoDeficitPercentage: updatedWorstCargoDeficitPercentage,
+        // averageTimeDeficit: updatedAverageTimeDeficit,
+        // worstTimeDeficit: worstTimeDeficit,
         choferesStatusEnum: ChoferesStatusEnum.available);
+
+
 
     final result = await _datasource.registerTruckUnloadingInIndustry(
         viajesModel: model, industrySubModel: industry, choferesModel: chofere);
