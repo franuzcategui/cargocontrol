@@ -16,6 +16,7 @@ class ViajesModel{
   final double guideNumber;
   final String industryId;
   final String industryName;
+  final String realIndustryId;
   final String vesselId;
   final String vesselName;
   final String chofereId;
@@ -43,6 +44,7 @@ class ViajesModel{
     required this.guideNumber,
     required this.industryId,
     required this.industryName,
+    required this.realIndustryId,
     required this.vesselId,
     required this.vesselName,
     required this.chofereId,
@@ -74,6 +76,7 @@ class ViajesModel{
           guideNumber == other.guideNumber &&
           industryId == other.industryId &&
           industryName == other.industryName &&
+          realIndustryId == other.realIndustryId &&
           vesselId == other.vesselId &&
           vesselName == other.vesselName &&
           chofereId == other.chofereId &&
@@ -101,6 +104,7 @@ class ViajesModel{
       guideNumber.hashCode ^
       industryId.hashCode ^
       industryName.hashCode ^
+      realIndustryId.hashCode ^
       vesselId.hashCode ^
       vesselName.hashCode ^
       chofereId.hashCode ^
@@ -129,6 +133,7 @@ class ViajesModel{
         ' guideNumber: $guideNumber,' +
         ' industryId: $industryId,' +
         ' industryName: $industryName,' +
+        ' realIndustryId: $realIndustryId,' +
         ' vesselId: $vesselId,' +
         ' vesselName: $vesselName,' +
         ' chofereId: $chofereId,' +
@@ -157,6 +162,7 @@ class ViajesModel{
     double? guideNumber,
     String? industryId,
     String? industryName,
+    String? realIndustryId,
     String? vesselId,
     String? vesselName,
     String? chofereId,
@@ -186,6 +192,7 @@ class ViajesModel{
       guideNumber: guideNumber ?? this.guideNumber,
       industryId: industryId ?? this.industryId,
       industryName: industryName ?? this.industryName,
+      realIndustryId: realIndustryId ?? this.realIndustryId,
       vesselId: vesselId ?? this.vesselId,
       vesselName: vesselName ?? this.vesselName,
       chofereId: chofereId ?? this.chofereId,
@@ -198,6 +205,74 @@ class ViajesModel{
       viajesStatusEnum: viajesStatusEnum ?? this.viajesStatusEnum,
     );
   }
+
+
+  Map<String, dynamic> toMap() {
+    return {
+      'viajesId': this.viajesId,
+      'entryTimeToPort': this.entryTimeToPort.millisecondsSinceEpoch,
+      'entryTimeTruckWeightToPort': this.entryTimeTruckWeightToPort,
+      'exitTimeToPort': this.exitTimeToPort.millisecondsSinceEpoch,
+      'exitTimeTruckWeightToPort': this.exitTimeTruckWeightToPort,
+      'uploadingTime': this.uploadingTime.millisecondsSinceEpoch,
+      'pureCargoWeight': this.pureCargoWeight,
+      'cargoUnloadWeight': this.cargoUnloadWeight,
+      'cargoDeficitWeight': this.cargoDeficitWeight,
+      'timeToIndustry': this.timeToIndustry.millisecondsSinceEpoch,
+      'unloadingTimeInIndustry': this.unloadingTimeInIndustry.millisecondsSinceEpoch,
+      'guideNumber': this.guideNumber,
+      'industryId': this.industryId,
+      'industryName': this.industryName,
+      'realIndustryId': this.realIndustryId,
+      'vesselId': this.vesselId,
+      'vesselName': this.vesselName,
+      'chofereId': this.chofereId,
+      'cargoHoldCount': this.cargoHoldCount,
+      'chofereName': this.chofereName,
+      'productName': this.productName,
+      'licensePlate': this.licensePlate,
+      'cargoId': this.cargoId,
+      'viajesTypeEnum': this.viajesTypeEnum.type,
+      'viajesStatusEnum': this.viajesStatusEnum.type,
+    };
+  }
+
+  factory ViajesModel.fromMap(Map<String, dynamic> map) {
+    return ViajesModel(
+      entryTimeToPort: DateTime.fromMillisecondsSinceEpoch(map['entryTimeToPort']),
+      exitTimeToPort: DateTime.fromMillisecondsSinceEpoch(map['exitTimeToPort']),
+      timeToIndustry: DateTime.fromMillisecondsSinceEpoch(map['timeToIndustry']),
+      unloadingTimeInIndustry: DateTime.fromMillisecondsSinceEpoch(map['unloadingTimeInIndustry']),
+      uploadingTime: DateTime.fromMillisecondsSinceEpoch(map['uploadingTime']),
+      pureCargoWeight: map['pureCargoWeight'] as double,
+      cargoUnloadWeight: map['cargoUnloadWeight'] as double,
+      cargoDeficitWeight: map['cargoDeficitWeight'] as double,
+      guideNumber: map['guideNumber'] as double,
+      industryId: map['industryId'] as String,
+      industryName: map['industryName'] as String,
+      realIndustryId: map['realIndustryId'] as String,
+      vesselId: map['vesselId'] as String,
+      vesselName: map['vesselName'] as String,
+      chofereId: map['chofereId'] as String,
+      cargoHoldCount: map['cargoHoldCount'] as int,
+      chofereName: map['chofereName'] as String,
+      productName: map['productName'] as String,
+      licensePlate: map['licensePlate'] as String,
+      cargoId: map['cargoId'] as String,
+      viajesTypeEnum: (map['viajesTypeEnum'] as String).toViajesTypeEnum(),
+      viajesStatusEnum: (map['viajesStatusEnum'] as String).toViajesStatusEnum(),
+      viajesId: map['viajesId'] as String,
+      entryTimeTruckWeightToPort: map['entryTimeTruckWeightToPort'] as double,
+      exitTimeTruckWeightToPort: map['exitTimeTruckWeightToPort'] as double,
+    );
+  }
+
+
+
+//</editor-fold>
+}
+
+/*
 
   Map<String, dynamic> toMap() {
     return {
@@ -256,60 +331,5 @@ class ViajesModel{
       exitTimeTruckWeightToPort: map['exitTimeTruckWeightToPort'] as double,
     );
   }
-
-//</editor-fold>
-}
-
-/*
-
-Map<String, dynamic> toMap() {
-  return {
-    'entryTimeToPort': this.entryTimeToPort.millisecondsSinceEpoch,
-    'exitTimeToPort': this.exitTimeToPort.millisecondsSinceEpoch,
-    'uploadingTime': this.uploadingTime.millisecondsSinceEpoch,
-    'timeToIndustry': this.timeToIndustry.millisecondsSinceEpoch,
-    'unloadingTimeInIndustry': this.unloadingTimeInIndustry.millisecondsSinceEpoch,
-    'pureCargoWeight': this.pureCargoWeight,
-    'cargoUnloadWeight': this.cargoUnloadWeight,
-    'productName': this.productName,
-    'exitTimeTruckWeightToPort': this.exitTimeTruckWeightToPort,
-    'entryTimeTruckWeightToPort': this.entryTimeTruckWeightToPort,
-    'cargoDeficitWeight': this.cargoDeficitWeight,
-    'guideNumber': this.guideNumber,
-    'industryId': this.industryId,
-    'chofereId': this.chofereId,
-    'chofereName': this.chofereName,
-    'licensePlate': this.licensePlate,
-    'cargoId': this.cargoId,
-    'viajesId': this.viajesId,
-    'viajesStatusEnum': this.viajesStatusEnum.type,
-    'viajesTypeEnum': this.viajesTypeEnum.type,
-  };
-}
-
-factory ViajesModel.fromMap(Map<String, dynamic> map) {
-return ViajesModel(
-entryTimeToPort: DateTime.fromMillisecondsSinceEpoch(map['entryTimeToPort']),
-exitTimeToPort: DateTime.fromMillisecondsSinceEpoch(map['exitTimeToPort']),
-timeToIndustry: DateTime.fromMillisecondsSinceEpoch(map['timeToIndustry']),
-unloadingTimeInIndustry: DateTime.fromMillisecondsSinceEpoch(map['unloadingTimeInIndustry']),
-uploadingTime: DateTime.fromMillisecondsSinceEpoch(map['uploadingTime']),
-entryTimeTruckWeightToPort: map['entryTimeTruckWeightToPort'] as double,
-exitTimeTruckWeightToPort: map['exitTimeTruckWeightToPort'] as double,
-pureCargoWeight: map['pureCargoWeight'] as double,
-cargoUnloadWeight: map['cargoUnloadWeight'] as double,
-cargoDeficitWeight: map['cargoDeficitWeight'] as double,
-guideNumber: map['guideNumber'] as double,
-industryId: map['industryId'] as String,
-chofereName: map['chofereName'] as String,
-productName: map['productName'] as String,
-chofereId: map['chofereId'] as String,
-licensePlate: map['licensePlate'] as String,
-cargoId: map['cargoId'] as String,
-viajesId: map['viajesId'] as String,
-viajesTypeEnum: (map['viajesTypeEnum'] as String).toViajesTypeEnum(),
-viajesStatusEnum: (map['viajesStatusEnum'] as String).toViajesStatusEnum(),
-);
-}
 
 */

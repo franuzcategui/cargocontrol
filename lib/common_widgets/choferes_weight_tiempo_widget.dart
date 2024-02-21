@@ -74,24 +74,40 @@ class ChoferesWeightTiempoWidget extends StatelessWidget {
           title: "Viajes realizados",
           subText: choferesModel.numberOfTrips.toStringAsFixed(0),
         ),
+        // Step 1: get all vaijes that are completed
+        // step 2 : make group based on real industry id
+        // step 3 : get a average of trip time for each industry
+        // step 4: get this chofer vaijes for each inustry and  iterrateb throgh it to time deficit
+        // step 5: get the sum of time deficit / number of vaijes
+        // step 6: return the list max limit 4.(Conatining industry name, industry id, duaration)
         CustomTile(
             title: "Tiempo promedio de retraso",
             subText: formatDuration(choferesModel.averageTimeDeficit)),
+
         CustomTile(
             title: "Perdida de carga promedio (%)",
-            subText: choferesModel.averageCargoDeficitPercentage.toString()),
+            subText: (choferesModel.averageCargoDeficitPercentage*100).toStringAsFixed(2),),
 
-        CustomTile(title: "Percentil de tiempo de retraso", subText: ""),
-
+        // Step 1: get all the choferes
+        // step 2 : arrange them on the bases of avg cargo deficit
+        // step 3 : get the current choferes index in list
+        // step 4 : index of choferes /  total number of chofers * 100
+        // step 5 : shoe the percentile
         CustomTile(title: "Percentil de perdida de carga", subText: ""),
         //formatDuration(choferesModel.unloadingTimeInIndustry.difference(choferesModel.timeToIndustry)
+        // Step 1: get all vaijes that are completed
+        // step 2 : make group based on real industry id
+        // step 3 : get a average of trip time for each industry
+        // step 4: get this chofer vaijes for each inustry and  iterrateb throgh it to get time deficit and maintain list
+        // step 5: for each industry deficit list get the max out
+        // step 6: return the list max limit 4. (Conatining industry name, industry id, duaration)
         CustomTile(
             title: "Mayor tiempo de retraso",
             subText: formatDuration(choferesModel.worstTimeDeficit)),
 
         CustomTile(
             title: "Mayor pérdida de carga(%)",
-            subText: choferesModel.worstCargoDeficitPercentage.toString()),
+            subText: (choferesModel.worstCargoDeficitPercentage*100).toStringAsFixed(2),)
       ],
     );
   }
