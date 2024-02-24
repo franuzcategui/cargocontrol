@@ -28,6 +28,13 @@ class ViajesModel{
   final ViajesTypeEnum viajesTypeEnum;
   final ViajesStatusEnum viajesStatusEnum;
 
+  Duration get tripTime {
+    if (exitTimeToPort != null && timeToIndustry != null) {
+      return timeToIndustry.difference(exitTimeToPort);
+    }
+    return Duration.zero;
+  }
+
 //<editor-fold desc="Data Methods">
   const ViajesModel({
     required this.viajesId,

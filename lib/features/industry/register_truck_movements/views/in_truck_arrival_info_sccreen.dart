@@ -53,7 +53,6 @@ class _InTruckArrivalInfoScreenState extends State<InTruckArrivalInfoScreen> {
                                 ref: ref,
                                 context: context
                             );
-                            Navigator.pushNamed(context, AppRoutes.inRegistrationSuccessFullScreen);
                           },
                           buttonText: "REGISTRAR LLEGADA"
                       );

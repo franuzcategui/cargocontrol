@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../utils/constants/font_manager.dart';
+import '../features/admin/choferes/controllers/choferes_controller.dart';
 import '../features/coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
 import '../models/choferes_models/choferes_model.dart';
 
@@ -17,9 +18,10 @@ class ChoferesWeightTiempoWidget extends StatelessWidget {
   final ChoferesModel choferesModel;
 
   String formatDuration(Duration duration) {
-    DateTime referenceTime = DateTime(2000, 1, 1, 0, 0, 0);
+    DateTime referenceTime = DateTime(2000, 1, 0, 0, 0, 0);
     DateTime formattedTime = referenceTime.add(duration);
-    DateFormat formatter = DateFormat('H:mm:ss');
+    String formatPattern = formattedTime.day > 0 &&  formattedTime.day<31? 'dd:H:mm:ss' : 'H:mm:ss';
+    DateFormat formatter = DateFormat(formatPattern);
     return formatter.format(formattedTime);
   }
 
@@ -74,26 +76,118 @@ class ChoferesWeightTiempoWidget extends StatelessWidget {
           title: "Viajes realizados",
           subText: choferesModel.numberOfTrips.toStringAsFixed(0),
         ),
-        // Step 1: get all vaijes that are completed
+
+        CustomTile(
+          title: "Perdida de carga promedio (%)",
+          subText: (choferesModel.averageCargoDeficitPercentage * 100)
+              .toStringAsFixed(2),
+        ),
+
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            return ref
+                .watch(getChoferesCargoDeficitPercentile(choferesModel))
+                .when(data: (value) {
+              return CustomTile(
+                  title: "Percentil de perdida de carga",
+                  subText: value.toStringAsFixed(2));
+            }, error: (error, st) {
+              //debugPrintStack(stackTrace: st);
+              //debugPrint(error.toString());
+              return const SizedBox();
+            }, loading: () {
+              return const SizedBox();
+            });
+          },
+        ),
+        CustomTile(
+          title: "Mayor pérdida de carga(%)",
+          subText: (choferesModel.worstCargoDeficitPercentage * 100)
+              .toStringAsFixed(2),
+        ),
+
+        //
+
+// Step 1: get all vaijes that are completed
         // step 2 : make group based on real industry id
         // step 3 : get a average of trip time for each industry
         // step 4: get this chofer vaijes for each inustry and  iterrateb throgh it to time deficit
         // step 5: get the sum of time deficit / number of vaijes
         // step 6: return the list max limit 4.(Conatining industry name, industry id, duaration)
-        CustomTile(
-            title: "Tiempo promedio de retraso",
-            subText: formatDuration(choferesModel.averageTimeDeficit)),
 
-        CustomTile(
-            title: "Perdida de carga promedio (%)",
-            subText: (choferesModel.averageCargoDeficitPercentage*100).toStringAsFixed(2),),
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            return ref.watch(getChoferesTimeDeficitModel(choferesModel)).when(
+                data: (choferesTimeDeficitModels) {
+              print(choferesTimeDeficitModels.length);
+              if (choferesTimeDeficitModels.isEmpty) {
+                return SizedBox();
+              }
+              return Column(
+                children: [
+                  const CustomTile(
+                      title: "Tiempo promedio de retraso", subText: ""),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0.w),
+                    child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: choferesTimeDeficitModels.length,
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return CustomTile(
+                            title:
+                                choferesTimeDeficitModels[index].industryName,
+                            subText: formatDuration(
+                                choferesTimeDeficitModels[index]
+                                    .avgTimeDeficit
+                                    .abs()),
+                            hasWarning: choferesTimeDeficitModels[index]
+                                .avgTimeDeficit
+                                .isNegative,
+                            isGoodSign: !choferesTimeDeficitModels[index]
+                                .avgTimeDeficit
+                                .isNegative,
+                          );
+                        }),
+                  ),
+                  const CustomTile(
+                      title: "Mayor tiempo de retraso", subText: ""),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0.w),
+                    child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: choferesTimeDeficitModels.length,
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return CustomTile(
+                            title:
+                                choferesTimeDeficitModels[index].industryName,
+                            subText: formatDuration(
+                                choferesTimeDeficitModels[index]
+                                    .worstTimeDeficit.abs()),
+                            hasWarning: choferesTimeDeficitModels[index]
+                                .worstTimeDeficit
+                                .isNegative,
+                            isGoodSign: !choferesTimeDeficitModels[index]
+                                .worstTimeDeficit
+                                .isNegative,
+                          );
+                        }),
+                  )
+                ],
+              );
+            }, error: (error, st) {
+              //debugPrintStack(stackTrace: st);
+              //debugPrint(error.toString());
+              return const SizedBox();
+            }, loading: () {
+              return const SizedBox();
+            });
+          },
+        ),
 
-        // Step 1: get all the choferes
-        // step 2 : arrange them on the bases of avg cargo deficit
-        // step 3 : get the current choferes index in list
-        // step 4 : index of choferes /  total number of chofers * 100
-        // step 5 : shoe the percentile
-        CustomTile(title: "Percentil de perdida de carga", subText: ""),
         //formatDuration(choferesModel.unloadingTimeInIndustry.difference(choferesModel.timeToIndustry)
         // Step 1: get all vaijes that are completed
         // step 2 : make group based on real industry id
@@ -101,13 +195,6 @@ class ChoferesWeightTiempoWidget extends StatelessWidget {
         // step 4: get this chofer vaijes for each inustry and  iterrateb throgh it to get time deficit and maintain list
         // step 5: for each industry deficit list get the max out
         // step 6: return the list max limit 4. (Conatining industry name, industry id, duaration)
-        CustomTile(
-            title: "Mayor tiempo de retraso",
-            subText: formatDuration(choferesModel.worstTimeDeficit)),
-
-        CustomTile(
-            title: "Mayor pérdida de carga(%)",
-            subText: (choferesModel.worstCargoDeficitPercentage*100).toStringAsFixed(2),)
       ],
     );
   }

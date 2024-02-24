@@ -9,7 +9,7 @@ class CustomTile extends StatelessWidget {
   final String subText;
   final bool hasWarning;
   final bool isGoodSign;
-  const CustomTile({Key? key, required this.title, required this.subText, this.hasWarning = false, this.isGoodSign= false}) : super(key: key);
+  const   CustomTile({Key? key, required this.title, required this.subText, this.hasWarning = false, this.isGoodSign= false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +21,15 @@ class CustomTile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: getRegularStyle(
-            color: context.textColor,
-            fontSize: MyFonts.size12,
-          ),),
+          Expanded(
+            child: Text(title, style: getRegularStyle(
+              color: context.textColor,
+              fontSize: MyFonts.size12,
+            ),),
+          ),
           Container(
             constraints: BoxConstraints(
-              maxWidth: 150.w
+              maxWidth: 150.w,minWidth: 65.w
             ),
             child: Text(subText, style: getRegularStyle(
               color:
