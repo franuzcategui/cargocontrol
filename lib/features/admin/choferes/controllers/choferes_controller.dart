@@ -172,6 +172,12 @@ class ChoferesController extends StateNotifier<bool> {
 
   Future<List<ChoferesTimeDeficitModel>> choferesTimeDeficitModel(
       {required ChoferesModel choferesModel}) async {
+    // Step 1: get all vaijes that are completed
+    // step 2 : make group based on real industry id
+    // step 3 : get a average of trip time for each industry
+    // step 4: get this chofer vaijes for each inustry and  iterrateb throgh it to time deficit
+    // step 5: get the sum of time deficit / number of vaijes
+    // step 6: return the list max limit 4.(Conatining industry name, industry id, duaration)
     List<IndustriesModel> realIndustries = [];
     List<ChoferesTimeDeficitModel> choferesTimeDeficitModels = [];
     try {

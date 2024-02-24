@@ -9,52 +9,27 @@ import 'package:intl/intl.dart';
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../utils/constants/font_manager.dart';
 import '../features/admin/choferes/controllers/choferes_controller.dart';
+import '../features/admin/choferes/data/models/choferes_time_deficit_model.dart';
 import '../features/coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
 import '../models/choferes_models/choferes_model.dart';
 
 class ChoferesWeightTiempoWidget extends StatelessWidget {
-  const ChoferesWeightTiempoWidget({Key? key, required this.choferesModel})
-      : super(key: key);
+  const ChoferesWeightTiempoWidget({
+    Key? key,
+    required this.choferesModel,
+    this.realIndustryIdOfCurrentUser = "",
+  }) : super(key: key);
   final ChoferesModel choferesModel;
+  final String realIndustryIdOfCurrentUser;
 
   String formatDuration(Duration duration) {
     DateTime referenceTime = DateTime(2000, 1, 0, 0, 0, 0);
     DateTime formattedTime = referenceTime.add(duration);
-    String formatPattern = formattedTime.day > 0 &&  formattedTime.day<31? 'dd:H:mm:ss' : 'H:mm:ss';
+    String formatPattern = formattedTime.day > 0 && formattedTime.day < 31
+        ? 'dd:H:mm:ss'
+        : 'H:mm:ss';
     DateFormat formatter = DateFormat(formatPattern);
     return formatter.format(formattedTime);
-  }
-
-  Duration calculateAvgArrivalTime(List<ViajesModel> viajesList) {
-    if (viajesList.isEmpty) {
-      return const Duration(); // Handle the case when the list is empty
-    }
-    Duration totalArrivalTime = Duration();
-    for (ViajesModel viajes in viajesList) {
-      totalArrivalTime +=
-          viajes.timeToIndustry.difference(viajes.exitTimeToPort);
-    }
-    // double avgArrivalTime = totalArrivalTime.inMinutes / viajesList.length;
-    // return avgArrivalTime;
-
-    // Calculate average arrival time
-    Duration avgArrivalTime =
-        Duration(seconds: totalArrivalTime.inSeconds ~/ viajesList.length);
-    return avgArrivalTime;
-  }
-
-  Duration calculateAvgUnloadingTime(List<ViajesModel> viajesList) {
-    if (viajesList.isEmpty) {
-      return const Duration(); // Handle the case when the list is empty
-    }
-    Duration totalArrivalTime = Duration();
-    for (ViajesModel viajes in viajesList) {
-      totalArrivalTime +=
-          viajes.unloadingTimeInIndustry.difference(viajes.timeToIndustry);
-    }
-    Duration avgArrivalTime =
-        Duration(seconds: totalArrivalTime.inSeconds ~/ viajesList.length);
-    return avgArrivalTime;
   }
 
   @override
@@ -108,18 +83,23 @@ class ChoferesWeightTiempoWidget extends StatelessWidget {
 
         //
 
-// Step 1: get all vaijes that are completed
-        // step 2 : make group based on real industry id
-        // step 3 : get a average of trip time for each industry
-        // step 4: get this chofer vaijes for each inustry and  iterrateb throgh it to time deficit
-        // step 5: get the sum of time deficit / number of vaijes
-        // step 6: return the list max limit 4.(Conatining industry name, industry id, duaration)
-
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             return ref.watch(getChoferesTimeDeficitModel(choferesModel)).when(
-                data: (choferesTimeDeficitModels) {
-              print(choferesTimeDeficitModels.length);
+                data: (choferesTimeDefModels) {
+                  List<ChoferesTimeDeficitModel> choferesTimeDeficitModels=[];
+                  if(realIndustryIdOfCurrentUser.isEmpty){
+                    choferesTimeDeficitModels=choferesTimeDefModels;
+                    print("here worng");
+                  }else{
+                    print("here");
+                    choferesTimeDefModels.forEach((model) {
+                      if(model.realIndustryId==realIndustryIdOfCurrentUser){
+                        choferesTimeDeficitModels.add(model);
+                      }
+                    });
+                  }
+
               if (choferesTimeDeficitModels.isEmpty) {
                 return SizedBox();
               }
@@ -166,7 +146,8 @@ class ChoferesWeightTiempoWidget extends StatelessWidget {
                                 choferesTimeDeficitModels[index].industryName,
                             subText: formatDuration(
                                 choferesTimeDeficitModels[index]
-                                    .worstTimeDeficit.abs()),
+                                    .worstTimeDeficit
+                                    .abs()),
                             hasWarning: choferesTimeDeficitModels[index]
                                 .worstTimeDeficit
                                 .isNegative,
@@ -187,14 +168,6 @@ class ChoferesWeightTiempoWidget extends StatelessWidget {
             });
           },
         ),
-
-        //formatDuration(choferesModel.unloadingTimeInIndustry.difference(choferesModel.timeToIndustry)
-        // Step 1: get all vaijes that are completed
-        // step 2 : make group based on real industry id
-        // step 3 : get a average of trip time for each industry
-        // step 4: get this chofer vaijes for each inustry and  iterrateb throgh it to get time deficit and maintain list
-        // step 5: for each industry deficit list get the max out
-        // step 6: return the list max limit 4. (Conatining industry name, industry id, duaration)
       ],
     );
   }

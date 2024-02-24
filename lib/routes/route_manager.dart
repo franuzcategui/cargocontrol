@@ -27,6 +27,7 @@ import '../features/coordinator/register_truck_movement/views/co_registration_su
 import '../features/coordinator/register_truck_movement/views/co_truck_leaving_information_screen.dart';
 import '../features/coordinator/register_truck_movement/views/register_truck_leaving_screen.dart';
 import '../features/dashboard/components/dashboard_screen.dart';
+import '../features/industry/choferes/views/in_choferes_details_screen.dart';
 import '../features/industry/dashboard/views/in_dashboard_screen.dart';
 import '../features/industry/main_menu/views/in_main_menu_screen.dart';
 import '../features/industry/manage_report/views/in_all_reports_screen.dart';
@@ -96,7 +97,7 @@ class AppRoutes {
   static const String inViajesDetailsScreen = '/inViajesDetailsScreen';
   static const String inAllReportsScreen = '/inAllReportsScreen';
   static const String choferesDetailsScreen = '/choferesDetailsScreen';
-
+  static const String inChoferesDetailsScreen = '/inChoferesDetailsScreen';
 
 
   static const String loginScreen = '/loginScreen';
@@ -239,6 +240,12 @@ class AppRoutes {
       case choferesDetailsScreen:
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(ChoferesDetailsScreen(
+          choferesModel: args['choferesModel'],
+        ));
+
+      case inChoferesDetailsScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(InChoferesDetailsScreen(
           choferesModel: args['choferesModel'],
         ));
 
