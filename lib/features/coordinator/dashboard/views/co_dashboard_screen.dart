@@ -27,6 +27,7 @@ import '../widgets/co_recent_record_card.dart';
 class CoDashboardScreen extends ConsumerWidget {
   const CoDashboardScreen({super.key});
   initiallize(WidgetRef ref)async{
+    await ref.read(truckRegistrationNotiControllerProvider).getCurrentVessel(ref: ref);
     await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
     ref.read(truckRegistrationNotiControllerProvider).setIndustryMatchedStatus(false);
     ref.read(truckRegistrationNotiControllerProvider).setSelectedChofere(null);

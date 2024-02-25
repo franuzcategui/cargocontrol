@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../commons/common_imports/apis_commons.dart';
 import '../../../../../commons/common_providers/global_providers.dart';
 import '../../../../../core/constants/firebase_constants.dart';
+import '../../../../../models/industry_models/industry_sub_model.dart';
 
 
 final viajesApisProvider = Provider<ViajesApisImplements>((ref){
@@ -18,6 +19,8 @@ abstract class ViajesApisImplements {
   Future<QuerySnapshot> getAllViajes({int limit = 10, DocumentSnapshot? snapshot,required String vesselId});
   Future<QuerySnapshot> getCompletedViajes({int limit = 10, DocumentSnapshot? snapshot,required String vesselId});
   Future<QuerySnapshot> getInprogressViajes({int limit = 10, DocumentSnapshot? snapshot,required String vesselId});
+  FutureEither<List<IndustrySubModel>> getAllIndustries({required String vesselId});
+  FutureEither<IndustrySubModel> getIndustryGuideModel({required String industryId});
 
 }
 
@@ -67,5 +70,44 @@ class ViajesApis implements ViajesApisImplements{
     return await query.get();
   }
 
+
+  @override
+  FutureEither<List<IndustrySubModel>> getAllIndustries({required String vesselId}) async {
+    try {
+      var querySnapshot = await _firestore.collection(FirebaseConstants.industryGuideCollection).where("vesselId",isEqualTo: vesselId).get();
+
+      List<IndustrySubModel> models = [];
+      for (var document in querySnapshot.docs) {
+        var model = IndustrySubModel.fromMap(document.data());
+        models.add(model);
+      }
+
+      return Right(models);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    } catch (e, stackTrace) {
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+
+  @override
+  FutureEither<IndustrySubModel> getIndustryGuideModel({required String industryId}) async{
+    try{
+      final querySnapshot = await _firestore.collection(FirebaseConstants.industryGuideCollection).
+      where('industryId', isEqualTo: industryId).
+      get();
+      if(querySnapshot.docs.length!=0){
+        IndustrySubModel model = IndustrySubModel.fromMap(querySnapshot.docs.first.data());
+        return Right(model);
+      }else{
+        return Left(Failure('No Industry Found!', StackTrace.fromString('getIndustriaIndustrywithFuture')));
+      }
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
 
 }
