@@ -14,6 +14,7 @@ import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/assets_manager.dart';
 import '../../../../utils/constants/font_manager.dart';
 import '../../../coordinator/register_truck_movement/controllers/truck_registration_noti_controller.dart';
+import '../controllers/viajes_controller.dart';
 import '../controllers/viajes_update_noti_controller.dart';
 
 class GuideNumberUpdateDialog extends StatefulWidget {
@@ -47,7 +48,7 @@ class _GuideNumberUpdateDialogState extends State<GuideNumberUpdateDialog> {
     try {
       ViajesModel currentViajesModel = widget.viajesModel;
 
-      // Step 1: Get Industry model iuf the guide model is valid else return.
+      // Step 1: Get Industry model if the guide model is valid else return.
       IndustrySubModel? updatedIndustryModel = await getIndustryModel(ref: ref);
       if (updatedIndustryModel == null) {
         /// No Industry Found / Guide no. is used!
@@ -68,14 +69,61 @@ class _GuideNumberUpdateDialogState extends State<GuideNumberUpdateDialog> {
       print(currentIndustrySubModel.industryName);
       print(updatedIndustryModel.industryName);
 
-
       //Step 4:  from current industry model  --remove guide no,--remove viajes id, -- minus unloading cargo, -- minus defit, -- minus selected vessel cargo peso unloaded
-      //Step 5:  from updated industry model  --add guide no,--add viajes id, -- add unloading cargo, -- add  defit, -- add  selected vessel cargo peso unloaded ///if it exceeds the quantity then show error,
-      //Step 6:  from cargohold id related to current industry model cargo hold -- minus the peso unloaded,
-      //Step 7:  from cargohold id related to updated industry model cargo hold -- add the peso unloaded,
-      //Step 8 : in Viajes model update --guide number,cargo hold, industry id, real industry id, industry name
-      // Step 9: update all four models.
+      currentIndustrySubModel = ref
+          .read(viajesUpdateNotiControllerProvider)
+          .updateCurrentInustrySubModel(
+              currentIndustrySubModel, widget.viajesModel);
 
+
+      //Step 5:  from updated industry model  --add guide no,--add viajes id, -- add unloading cargo, -- add  defit, -- add  selected vessel cargo peso unloaded ///if it exceeds the quantity then show error,
+      updatedIndustryModel = ref
+          .read(viajesUpdateNotiControllerProvider)
+          .updateOtherInustrySubModel(updatedIndustryModel, widget.viajesModel);
+      if(currentIndustrySubModel.industryId==updatedIndustryModel.industryId ) {
+       updatedIndustryModel = updatedIndustryModel.copyWith(
+         cargoUnloaded:  updatedIndustryModel.cargoUnloaded - (currentViajesModel.exitTimeTruckWeightToPort -
+             currentViajesModel.entryTimeTruckWeightToPort)
+       );
+      }
+      if(updatedIndustryModel.cargoUnloaded > updatedIndustryModel.cargoAssigned){
+        showToast(msg: "Cargo Exceed the assigned limit of Industry",textColor: MyColors.red);
+        return ;
+      }
+      //Step 6:  from cargohold id related to current industry model cargo hold -- minus the peso unloaded,
+      currentVesselModel = ref
+          .read(viajesUpdateNotiControllerProvider)
+          .removeWeightInVesselCargo(
+              originalModel: currentVesselModel,
+              updatedCargoModel: currentIndustrySubModel.selectedVesselCargo,
+              cargoWeight: currentViajesModel.exitTimeTruckWeightToPort -
+                  currentViajesModel.entryTimeTruckWeightToPort);
+      //Step 7:  from cargohold id related to updated industry model cargo hold -- add the peso unloaded,
+      currentVesselModel = ref
+          .read(viajesUpdateNotiControllerProvider)
+          .addWeightInVesselCargo(
+              originalModel: currentVesselModel,
+              updatedCargoModel: updatedIndustryModel.selectedVesselCargo,
+              cargoWeight: currentViajesModel.exitTimeTruckWeightToPort -
+                  currentViajesModel.entryTimeTruckWeightToPort);
+      //Step 8 : in Viajes model update --guide number,cargo hold, industry id, real industry id, industry name
+      currentViajesModel = currentViajesModel.copyWith(
+          guideNumber: double.parse(guideNumberCtr.text),
+          industryId: updatedIndustryModel.industryId,
+          realIndustryId: updatedIndustryModel.realIndustryId,
+          industryName: updatedIndustryModel.industryName,
+          cargoId: updatedIndustryModel.cargoHoldId,
+          cargoHoldCount: currentVesselModel.cargoModels.indexWhere(
+              (cargoModel) =>
+                  cargoModel.cargoId == updatedIndustryModel!.cargoHoldId) +1,);
+      // Step 9: update all four models.
+      ref.read(viajesControllerProvider.notifier).updateVaijesModels(
+          viajesModel: currentViajesModel,
+          vesselModel: currentVesselModel,
+          currentIndustryModel: currentIndustrySubModel,
+          updatedIndustryModel: updatedIndustryModel,
+          ref: ref,
+          context: context);
     } catch (ex) {
       print(ex);
       return;
@@ -177,7 +225,7 @@ class _GuideNumberUpdateDialogState extends State<GuideNumberUpdateDialog> {
                       width: 12.w,
                     ),
                     CustomButton(
-                      isLoading: ref.watch(shipControllerProvider),
+                      isLoading: ref.watch(viajesControllerProvider),
                       buttonWidth: 112.w,
                       buttonHeight: 42.h,
                       onPressed: () async {

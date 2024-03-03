@@ -6,6 +6,8 @@ import '../../../../../commons/common_imports/apis_commons.dart';
 import '../../../../../commons/common_providers/global_providers.dart';
 import '../../../../../core/constants/firebase_constants.dart';
 import '../../../../../models/industry_models/industry_sub_model.dart';
+import '../../../../../models/vessel_models/vessel_model.dart';
+import '../../../../../models/viajes_models/viajes_model.dart';
 
 
 final viajesApisProvider = Provider<ViajesApisImplements>((ref){
@@ -21,6 +23,8 @@ abstract class ViajesApisImplements {
   Future<QuerySnapshot> getInprogressViajes({int limit = 10, DocumentSnapshot? snapshot,required String vesselId});
   FutureEither<List<IndustrySubModel>> getAllIndustries({required String vesselId});
   FutureEither<IndustrySubModel> getIndustryGuideModel({required String industryId});
+  FutureEitherVoid updateViajesModels({required ViajesModel viajesModel, required VesselModel vesselModel,
+    required IndustrySubModel currentIndustryModel, required IndustrySubModel updatedIndustryModel});
 
 }
 
@@ -103,6 +107,41 @@ class ViajesApis implements ViajesApisImplements{
       }else{
         return Left(Failure('No Industry Found!', StackTrace.fromString('getIndustriaIndustrywithFuture')));
       }
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+
+  @override
+  FutureEitherVoid updateViajesModels({required ViajesModel viajesModel, required VesselModel vesselModel,
+    required IndustrySubModel currentIndustryModel, required IndustrySubModel updatedIndustryModel}) async {
+    try{
+      await _firestore.runTransaction((Transaction transaction) async {
+        transaction.update(
+          _firestore.collection(FirebaseConstants.viajesCollection).
+          doc(viajesModel.viajesId),
+          viajesModel.toMap(),
+        );
+        transaction.update(
+          _firestore.collection(FirebaseConstants.vesselCollection).
+          doc(vesselModel.vesselId),
+          vesselModel.toMap(),
+        );
+        transaction.update(
+          _firestore.collection(FirebaseConstants.industryGuideCollection).
+          doc(currentIndustryModel.industryId),
+          currentIndustryModel.toMap(),
+        );
+        transaction.update(
+          _firestore.collection(FirebaseConstants.industryGuideCollection).
+          doc(updatedIndustryModel.industryId),
+          updatedIndustryModel.toMap(),
+        );
+      });
+      return Right(null);
     }on FirebaseException catch(e, stackTrace){
       return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
     }catch (e, stackTrace){
