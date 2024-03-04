@@ -8,6 +8,7 @@ import 'package:cargocontrol/features/admin/viajes/controllers/viajes_inprogess_
 import 'package:cargocontrol/features/admin/viajes/controllers/viajes_noti_controller.dart';
 import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
 import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
+import 'package:cargocontrol/utils/thems/my_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +24,10 @@ final viajesControllerProvider = StateNotifierProvider<ViajesController, bool>((
   return ViajesController(datasource:  api, );
 });
 
+final getViajesModelFromViajesIdProvider = StreamProvider.family((ref,String viajesId) {
+  final ctr = ref.watch(viajesControllerProvider .notifier);
+  return ctr.getViajesModelFromViajesId(viajesId: viajesId);
+});
 
 class ViajesController extends StateNotifier<bool> {
   final ViajesApisImplements _datasource;
@@ -44,17 +49,18 @@ class ViajesController extends StateNotifier<bool> {
 
     result.fold((l) {
       state = false;
-      showSnackBar(context: context, content: l.message);
+      showToast(msg:  l.message,textColor: MyColors.red);
       debugPrintStack(stackTrace: l.stackTrace);
       debugPrint(l.message);
     }, (r) async {
-      // await ref.read(viajesNotiController).firstTime(ref: ref);
-      // await ref.read(viajesInprogessNotiController).firstTime(ref: ref);
-      // await ref.read(viajesCompletedNotiController).firstTime(ref: ref);
       state = false;
-      showSnackBar(context: context, content: 'Viajes Updated!');
+      showToast(msg: 'Viajes Updated!');
     });
     state = false;
+  }
+
+  Stream<ViajesModel> getViajesModelFromViajesId({required String viajesId}) {
+    return _datasource.getViajesModelFromViajesId(viajesId: viajesId);
   }
 
 

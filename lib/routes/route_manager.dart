@@ -8,6 +8,7 @@ import 'package:cargocontrol/features/admin/main_menu/views/ad_main_menu_screen.
 import 'package:cargocontrol/features/admin/register_user/views/register_user_screen.dart';
 import 'package:cargocontrol/features/admin/viajes/views/ad_viages_edit_screen.dart';
 import 'package:cargocontrol/features/admin/viajes/views/ad_viajes_details_screen.dart';
+import 'package:cargocontrol/features/admin/viajes/views/ad_viajes_time_edit_screen.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
 import 'package:cargocontrol/features/coordinator/dashboard/views/co_all_recenties_screen.dart';
 import 'package:cargocontrol/features/coordinator/main_menu/views/co_main_menu_screen.dart';
@@ -98,7 +99,7 @@ class AppRoutes {
   static const String inAllReportsScreen = '/inAllReportsScreen';
   static const String choferesDetailsScreen = '/choferesDetailsScreen';
   static const String inChoferesDetailsScreen = '/inChoferesDetailsScreen';
-
+  static const String adViajesTimeEditScreen = '/adViajesTimeEditScreen';
 
   static const String loginScreen = '/loginScreen';
   static const String dashboardScreen = '/dashboardScreen';
@@ -237,6 +238,12 @@ class AppRoutes {
         return _buildRoute(InViajesDetailsScreen(
           viajesModel: args['viajesModel'],
         ));
+      case adViajesTimeEditScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(AdViajesTimeEditScreen(
+          viajesModel: args['viajesModel'],
+        ));
+
       case choferesDetailsScreen:
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(ChoferesDetailsScreen(

@@ -41,7 +41,7 @@ class InViajesDetailsScreen extends StatelessWidget {
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),
-                  TiempoWidget(viajesModel: viajesModel,),
+                  TiempoWidget(viajesModel: viajesModel,onEdit: (){},),
                   SizedBox(height: 20.h,),
                   Divider(height: 1.h,color: context.textFieldColor,),
                   SizedBox(height: 28.h,),

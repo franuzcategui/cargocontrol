@@ -25,6 +25,8 @@ abstract class ViajesApisImplements {
   FutureEither<IndustrySubModel> getIndustryGuideModel({required String industryId});
   FutureEitherVoid updateViajesModels({required ViajesModel viajesModel, required VesselModel vesselModel,
     required IndustrySubModel currentIndustryModel, required IndustrySubModel updatedIndustryModel});
+  Stream<ViajesModel> getViajesModelFromViajesId({required String viajesId});
+
 
 }
 
@@ -43,6 +45,7 @@ class ViajesApis implements ViajesApisImplements{
     if (snapshot != null) {
       query = query.limit(limit).startAfterDocument(snapshot);
     } else {
+      print("here");
       query = query.limit(limit);
     }
 
@@ -147,6 +150,20 @@ class ViajesApis implements ViajesApisImplements{
     }catch (e, stackTrace){
       return Left(Failure(e.toString(), stackTrace));
     }
+  }
+
+  Stream<ViajesModel> getViajesModelFromViajesId({required String viajesId}) {
+    return _firestore.collection(FirebaseConstants.viajesCollection).
+    where('viajesId', isEqualTo:viajesId).
+    snapshots().map((event) {
+      var model = ViajesModel.fromMap(event.docs.first.data());
+      return model;
+      // if(event.docs.isNotEmpty){
+      //   var model = VesselModel.fromMap(event.docs.first.data());
+      //   return model;
+      // }
+      // return VesselModel.empty();
+    });
   }
 
 }

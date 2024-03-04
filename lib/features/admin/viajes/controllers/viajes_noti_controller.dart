@@ -110,4 +110,5 @@ class ViajesNotiController extends ChangeNotifier {
     notifyListeners();
 
   }
+
 }
