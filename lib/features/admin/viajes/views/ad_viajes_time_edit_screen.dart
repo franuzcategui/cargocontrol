@@ -31,9 +31,11 @@ class AdViajesTimeEditScreen extends StatefulWidget {
 }
 
 class _AdViajesTimeEditScreenState extends State<AdViajesTimeEditScreen> {
+  DateTime portInTime = AppConstants.constantDateTime;
   DateTime portOutTime = AppConstants.constantDateTime;
   DateTime industryInTime = AppConstants.constantDateTime;
   DateTime industryUnloadingTime = AppConstants.constantDateTime;
+  TextEditingController portInTimeText = TextEditingController();
   TextEditingController portOutTimeText = TextEditingController();
   TextEditingController industryInTimeText = TextEditingController();
   TextEditingController industryUnloadingTimeText = TextEditingController();
@@ -41,9 +43,11 @@ class _AdViajesTimeEditScreenState extends State<AdViajesTimeEditScreen> {
   @override
   initState() {
     super.initState();
+    portInTime = widget.viajesModel.entryTimeToPort;
     portOutTime = widget.viajesModel.exitTimeToPort;
     industryInTime = widget.viajesModel.timeToIndustry;
     industryUnloadingTime = widget.viajesModel.unloadingTimeInIndustry;
+    portInTimeText.text = formatDate(portInTime);
     portOutTimeText.text = formatDate(portOutTime);
     industryInTimeText.text = formatDate(industryInTime);
     industryUnloadingTimeText.text = formatDate(industryUnloadingTime);
@@ -58,6 +62,17 @@ class _AdViajesTimeEditScreenState extends State<AdViajesTimeEditScreen> {
 
   String formatDate(DateTime dateTime) {
     return DateFormat('hh:mm a dd MMM yyyy').format(dateTime);
+  }
+
+  updateTimes(
+      {required WidgetRef ref, required ViajesModel viajesModel}) async {
+    await ref.read(viajesControllerProvider.notifier).updateVaijestimings(
+        viajesModel: viajesModel,
+        portInTime: portInTime,
+        portOutTime: portOutTime,
+        timeToIndustry: industryInTime,
+        unloadingTime: industryUnloadingTime,
+        ref: ref);
   }
 
   @override
@@ -128,13 +143,30 @@ class _AdViajesTimeEditScreenState extends State<AdViajesTimeEditScreen> {
                           height: 20.h,
                         ),
                         CustomTimeField(
+                          controller: portInTimeText,
+                          hintText: "",
+                          label: "hora de llegada al puerto",
+                          dateTime: portInTime,
+                          onTimeTap: () async {
+                            DateTime? selectedDate =
+                                await showPlatformDatePicker(
+                                    context: context, selctedDate: portInTime);
+                            if (selectedDate != null) {
+                              portInTime = selectedDate;
+                              portInTimeText.text = formatDate(selectedDate);
+                              setState(() {});
+                            }
+                          },
+                        ),
+                        CustomTimeField(
                           controller: portOutTimeText,
                           hintText: "",
                           label: "Hora de salida",
                           dateTime: portOutTime,
                           onTimeTap: () async {
                             DateTime? selectedDate =
-                                await showPlatformDatePicker(context: context,selctedDate: portOutTime);
+                                await showPlatformDatePicker(
+                                    context: context, selctedDate: portOutTime);
                             if (selectedDate != null) {
                               portOutTime = selectedDate;
                               portOutTimeText.text = formatDate(selectedDate);
@@ -149,7 +181,9 @@ class _AdViajesTimeEditScreenState extends State<AdViajesTimeEditScreen> {
                           dateTime: industryInTime,
                           onTimeTap: () async {
                             DateTime? selectedDate =
-                                await showPlatformDatePicker(context: context,selctedDate: industryInTime);
+                                await showPlatformDatePicker(
+                                    context: context,
+                                    selctedDate: industryInTime);
                             if (selectedDate != null) {
                               industryInTime = selectedDate;
                               industryInTimeText.text =
@@ -165,7 +199,9 @@ class _AdViajesTimeEditScreenState extends State<AdViajesTimeEditScreen> {
                           dateTime: industryUnloadingTime,
                           onTimeTap: () async {
                             DateTime? selectedDate =
-                                await showPlatformDatePicker(context: context,selctedDate: industryUnloadingTime);
+                                await showPlatformDatePicker(
+                                    context: context,
+                                    selctedDate: industryUnloadingTime);
                             if (selectedDate != null) {
                               industryUnloadingTime = selectedDate;
                               industryUnloadingTimeText.text =
@@ -175,8 +211,11 @@ class _AdViajesTimeEditScreenState extends State<AdViajesTimeEditScreen> {
                           },
                         ),
                         CustomButton(
+                            isLoading: ref.watch(viajesControllerProvider),
                             padding: 0.h,
-                            onPressed: () {},
+                            onPressed: () {
+                              updateTimes(ref: ref, viajesModel: viajesModel);
+                            },
                             backColor: context.mainColor,
                             buttonText: "GUARDAR"),
                         CustomButton(

@@ -63,6 +63,56 @@ class ViajesController extends StateNotifier<bool> {
     return _datasource.getViajesModelFromViajesId(viajesId: viajesId);
   }
 
+  Future<void> updateVaijestimings({
+    required ViajesModel viajesModel,
+    required DateTime portInTime,
+    required DateTime portOutTime,
+    required DateTime timeToIndustry,
+    required DateTime unloadingTime,
+    required WidgetRef ref,
+  }) async {
+    state = true;
+    if(portInTime.isAfter(timeToIndustry) || portInTime.isAfter(unloadingTime) || portInTime.isAfter(portInTime)){
+      state = false;
+      showToast(msg: "La hora de llegada al puerto debe ser anterior a todos los horarios.",textColor: MyColors.red,long: true);
+      return;
+    }
+    if(portOutTime.isAfter(timeToIndustry) || portOutTime.isAfter(unloadingTime) || portOutTime.isBefore(portInTime)){
+      state = false;
+      showToast(msg: "La hora de salida del puerto debe ser anterior a la hora de llegada y descarga de la industria",textColor: MyColors.red,long: true);
+      return;
+    }
+    if(timeToIndustry.isBefore(portOutTime) || timeToIndustry.isAfter(unloadingTime) || timeToIndustry.isBefore(portInTime)){
+      state = false;
+      showToast(msg: "La hora de llegada de la industria debe ser posterior a la hora de salida del puerto y antes de la hora de descarga.",textColor: MyColors.red,long: true);
+      return;
+    }
+    if(unloadingTime.isBefore(portOutTime) || unloadingTime.isBefore(timeToIndustry) || unloadingTime.isBefore(portInTime)){
+      state = false;
+      showToast(msg: "El tiempo de descarga debe ser posterior a la hora de salida del puerto y a la hora de llegada a la industria.",textColor: MyColors.red,long: true);
+      return;
+    }
+    viajesModel= viajesModel.copyWith(
+      timeToIndustry: timeToIndustry,
+      unloadingTimeInIndustry: unloadingTime,
+      entryTimeToPort: portInTime,
+      exitTimeToPort: portOutTime,
+    );
+    final result = await _datasource.updateViajesModel(viajesModel: viajesModel);
+    result.fold((l) {
+      state = false;
+      showToast(msg:  l.message,textColor: MyColors.red);
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+    }, (r) async {
+      state = false;
+      showToast(msg: 'Viajes Updated!');
+    });
+    state = false;
+  }
+
+
+
 
 
 }

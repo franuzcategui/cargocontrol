@@ -26,6 +26,7 @@ abstract class ViajesApisImplements {
   FutureEitherVoid updateViajesModels({required ViajesModel viajesModel, required VesselModel vesselModel,
     required IndustrySubModel currentIndustryModel, required IndustrySubModel updatedIndustryModel});
   Stream<ViajesModel> getViajesModelFromViajesId({required String viajesId});
+  FutureEitherVoid updateViajesModel({required ViajesModel viajesModel, });
 
 
 }
@@ -144,6 +145,18 @@ class ViajesApis implements ViajesApisImplements{
           updatedIndustryModel.toMap(),
         );
       });
+      return Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  FutureEitherVoid updateViajesModel({required ViajesModel viajesModel, }) async {
+    try{
+     await _firestore.collection(FirebaseConstants.viajesCollection).
+      doc(viajesModel.viajesId).update(viajesModel.toMap());
       return Right(null);
     }on FirebaseException catch(e, stackTrace){
       return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
