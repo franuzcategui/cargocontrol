@@ -1,6 +1,7 @@
 import 'package:cargocontrol/common_widgets/title_header.dart';
 import 'package:cargocontrol/commons/common_widgets/custom_button.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
+import 'package:cargocontrol/features/admin/viajes/views/empty_truck_weight_update_dialog.dart';
 import 'package:cargocontrol/features/admin/viajes/views/guide_number_update_dialog.dart';
 import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
@@ -16,6 +17,8 @@ import '../controllers/viajes_completed_noti_controller.dart';
 import '../controllers/viajes_controller.dart';
 import '../controllers/viajes_inprogess_noti_controller.dart';
 import '../controllers/viajes_noti_controller.dart';
+import 'exit_port_weight_update_dialog.dart';
+import 'industry_unloading_weight_update_dialog.dart';
 
 class AdViajesDetailsScreen extends StatefulWidget {
   final ViajesModel viajesModel;
@@ -34,6 +37,44 @@ class _AdViajesDetailsScreenState extends State<AdViajesDetailsScreen> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return GuideNumberUpdateDialog(viajesModel: viajesModel);
+      },
+    ).then((value) async {
+      await reloadAllViajes(ref);
+    });
+  }
+
+  Future<void> emptyTruckWeightDialog(
+      BuildContext context, ViajesModel viajesModel, WidgetRef ref) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return EmptyTruckWeightWeightUpdateDialog(viajesModel: viajesModel);
+      },
+    ).then((value) async {
+      await reloadAllViajes(ref);
+    });
+  }
+  Future<void> exitPortWeightEditDialog(
+      BuildContext context, ViajesModel viajesModel, WidgetRef ref) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return ExitPortWeightUpdateDialog(viajesModel: viajesModel);
+      },
+    ).then((value) async {
+      await reloadAllViajes(ref);
+    });
+  }
+
+  Future<void> industryUnloadingWeightEditDialog(
+      BuildContext context, ViajesModel viajesModel, WidgetRef ref) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return IndustryUnloadingWeightUpdateDialog(viajesModel: viajesModel);
       },
     ).then((value) async {
       await reloadAllViajes(ref);
@@ -107,10 +148,10 @@ class _AdViajesDetailsScreenState extends State<AdViajesDetailsScreen> {
                         ),
                         TiempoWidget(
                           viajesModel: viajesModel,
-                          onEdit: (){
-                            Navigator.pushNamed(context, AppRoutes.adViajesTimeEditScreen,arguments: {
-                              'viajesModel':viajesModel
-                            });
+                          onEdit: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.adViajesTimeEditScreen,
+                                arguments: {'viajesModel': viajesModel});
                           },
                           isEditable: true,
                         ),
@@ -124,7 +165,19 @@ class _AdViajesDetailsScreenState extends State<AdViajesDetailsScreen> {
                         SizedBox(
                           height: 28.h,
                         ),
-                        CargaWidget(viajesModel: viajesModel),
+                        CargaWidget(
+                          viajesModel: viajesModel,
+                          isEditable: true,
+                          onExitPortWeightEdit: () {
+                            exitPortWeightEditDialog(context,viajesModel,ref);
+                          },
+                          onIndustryUnloadingWeightEdit: () {
+                            industryUnloadingWeightEditDialog(context,viajesModel,ref);
+                          },
+                          onTruckWeightEdit: () {
+                            emptyTruckWeightDialog(context,viajesModel,ref);
+                          },
+                        ),
                         SizedBox(
                           height: 26.h,
                         ),

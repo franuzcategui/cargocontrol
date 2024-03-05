@@ -59,6 +59,28 @@ class ViajesController extends StateNotifier<bool> {
     state = false;
   }
 
+  Future<void> updateVaijesModelsForWeightUpdate({
+    required ViajesModel viajesModel,
+    required VesselModel vesselModel,
+    required IndustrySubModel currentIndustryModel,
+    required WidgetRef ref,
+    required BuildContext context,
+  }) async {
+    state = true;
+    final result = await _datasource.updateViajesModelsForWeight(viajesModel: viajesModel, vesselModel: vesselModel, currentIndustryModel: currentIndustryModel,);
+
+    result.fold((l) {
+      state = false;
+      showToast(msg:  l.message,textColor: MyColors.red);
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+    }, (r) async {
+      state = false;
+      showToast(msg: 'Viajes Updated!');
+    });
+    state = false;
+  }
+
   Stream<ViajesModel> getViajesModelFromViajesId({required String viajesId}) {
     return _datasource.getViajesModelFromViajesId(viajesId: viajesId);
   }
@@ -98,6 +120,24 @@ class ViajesController extends StateNotifier<bool> {
       entryTimeToPort: portInTime,
       exitTimeToPort: portOutTime,
     );
+    final result = await _datasource.updateViajesModel(viajesModel: viajesModel);
+    result.fold((l) {
+      state = false;
+      showToast(msg:  l.message,textColor: MyColors.red);
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+    }, (r) async {
+      state = false;
+      showToast(msg: 'Viajes Updated!');
+    });
+    state = false;
+  }
+
+  Future<void> updateVaijesModel({
+    required ViajesModel viajesModel,
+    required WidgetRef ref,
+  }) async {
+    state = true;
     final result = await _datasource.updateViajesModel(viajesModel: viajesModel);
     result.fold((l) {
       state = false;

@@ -25,6 +25,8 @@ abstract class ViajesApisImplements {
   FutureEither<IndustrySubModel> getIndustryGuideModel({required String industryId});
   FutureEitherVoid updateViajesModels({required ViajesModel viajesModel, required VesselModel vesselModel,
     required IndustrySubModel currentIndustryModel, required IndustrySubModel updatedIndustryModel});
+  FutureEitherVoid updateViajesModelsForWeight({required ViajesModel viajesModel, required VesselModel vesselModel,
+    required IndustrySubModel currentIndustryModel});
   Stream<ViajesModel> getViajesModelFromViajesId({required String viajesId});
   FutureEitherVoid updateViajesModel({required ViajesModel viajesModel, });
 
@@ -144,6 +146,36 @@ class ViajesApis implements ViajesApisImplements{
           doc(updatedIndustryModel.industryId),
           updatedIndustryModel.toMap(),
         );
+      });
+      return Right(null);
+    }on FirebaseException catch(e, stackTrace){
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    }catch (e, stackTrace){
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEitherVoid updateViajesModelsForWeight({required ViajesModel viajesModel, required VesselModel vesselModel,
+    required IndustrySubModel currentIndustryModel}) async {
+    try{
+      await _firestore.runTransaction((Transaction transaction) async {
+        transaction.update(
+          _firestore.collection(FirebaseConstants.viajesCollection).
+          doc(viajesModel.viajesId),
+          viajesModel.toMap(),
+        );
+        transaction.update(
+          _firestore.collection(FirebaseConstants.vesselCollection).
+          doc(vesselModel.vesselId),
+          vesselModel.toMap(),
+        );
+        transaction.update(
+          _firestore.collection(FirebaseConstants.industryGuideCollection).
+          doc(currentIndustryModel.industryId),
+          currentIndustryModel.toMap(),
+        );
+
       });
       return Right(null);
     }on FirebaseException catch(e, stackTrace){
