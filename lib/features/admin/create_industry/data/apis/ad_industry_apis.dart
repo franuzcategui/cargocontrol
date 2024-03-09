@@ -4,6 +4,7 @@ import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/vessel_models/origin_model.dart';
 import 'package:cargocontrol/models/vessel_models/product_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
+import 'package:cargocontrol/models/viajes_models/viajes_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../../commons/common_imports/apis_commons.dart';
@@ -145,6 +146,8 @@ class AdIndustryApis implements AdIndustryApisImplements{
       return Left(Failure(e.toString(), stackTrace));
     }
   }
+
+
 
   
 }

@@ -1,4 +1,5 @@
 import 'package:cargocontrol/models/choferes_models/choferes_model.dart';
+import 'package:cargocontrol/models/industry_models/industry_sub_model.dart';
 import 'package:cargocontrol/models/vessel_models/vessel_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -6,6 +7,8 @@ import '../../../../../commons/common_imports/apis_commons.dart';
 import '../../../../../commons/common_providers/global_providers.dart';
 import '../../../../../core/constants/firebase_constants.dart';
 import '../../../../../core/enums/choferes_status_enum.dart';
+import '../../../../../models/industry_models/industries_model.dart';
+import '../../../../../models/viajes_models/viajes_model.dart';
 
 final shipsApisProvider = Provider<ShipsApisImplements>((ref) {
   final firestoreProvider = ref.watch(firebaseDatabaseProvider);
@@ -18,6 +21,8 @@ abstract class ShipsApisImplements {
 
   Future<QuerySnapshot> getAllShips(
       {int limit = 10, DocumentSnapshot? snapshot});
+  FutureEither<List<ViajesModel>> getAllViajes({required String vesselId});
+  FutureEither<List<IndustrySubModel>> getAllIndustrySubModels({required String vesselId});
 }
 
 class ShipApis implements ShipsApisImplements {
@@ -76,5 +81,46 @@ class ShipApis implements ShipsApisImplements {
     }
 
     return await query.get();
+  }
+
+
+  @override
+  FutureEither<List<IndustrySubModel>> getAllIndustrySubModels({required String vesselId}) async {
+    try {
+      var querySnapshot =
+          await _firestore.collection(FirebaseConstants.industryGuideCollection).where("vesselId",isEqualTo: vesselId).get();
+
+      List<IndustrySubModel> models = [];
+      for (var document in querySnapshot.docs) {
+        var model = IndustrySubModel.fromMap(document.data());
+        models.add(model);
+      }
+
+      return Right(models);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    } catch (e, stackTrace) {
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEither<List<ViajesModel>> getAllViajes({required String vesselId}) async {
+    try {
+      var querySnapshot =
+      await _firestore.collection(FirebaseConstants.viajesCollection).where("vesselId",isEqualTo: vesselId).get();
+
+      List<ViajesModel> models = [];
+      for (var document in querySnapshot.docs) {
+        var model = ViajesModel.fromMap(document.data());
+        models.add(model);
+      }
+
+      return Right(models);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    } catch (e, stackTrace) {
+      return Left(Failure(e.toString(), stackTrace));
+    }
   }
 }

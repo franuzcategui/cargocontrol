@@ -5,6 +5,7 @@ import 'package:cargocontrol/features/admin/create_vessel/views/create_vessel_co
 import 'package:cargocontrol/features/admin/create_vessel/views/create_vessel_screen.dart';
 import 'package:cargocontrol/features/admin/create_vessel/views/registration_successfull_screen.dart';
 import 'package:cargocontrol/features/admin/main_menu/views/ad_main_menu_screen.dart';
+import 'package:cargocontrol/features/admin/manage_ships/views/Reports_screen.dart';
 import 'package:cargocontrol/features/admin/register_user/views/register_user_screen.dart';
 import 'package:cargocontrol/features/admin/viajes/views/ad_viages_edit_screen.dart';
 import 'package:cargocontrol/features/admin/viajes/views/ad_viajes_details_screen.dart';
@@ -103,6 +104,8 @@ class AppRoutes {
 
   static const String loginScreen = '/loginScreen';
   static const String dashboardScreen = '/dashboardScreen';
+  static const String reportScreen = '/reportScreen';
+
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -242,6 +245,11 @@ class AppRoutes {
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(AdViajesTimeEditScreen(
           viajesModel: args['viajesModel'],
+        ));
+      case reportScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(ReportScreen(
+          vesselModel: args['vesselModel'], allIndustriesModels: args['allIndustriesModels'], allViajesModel: args['allViajesModel'],
         ));
 
       case choferesDetailsScreen:
