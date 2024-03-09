@@ -103,4 +103,50 @@ class ShipController extends StateNotifier<bool> {
       showSnackBar(context: context, content: 'Unable to genearte report now!');
     }
   }
+
+  Future<void> createReportsForIndustry({
+    required VesselModel vesselModel,
+    required WidgetRef ref,
+    required BuildContext context,
+    required String realIndustryId,
+  }) async {
+    state = true;
+    List<IndustrySubModel> allIndustryGuideModels = [];
+    List<ViajesModel> allViajesModels = [];
+    final getIndustrieesSubModels = await _datasource.getAllIndustrySubModelsforIndustry(
+        vesselId: vesselModel.vesselId, realIndustryId: realIndustryId);
+
+    getIndustrieesSubModels.fold((l) {
+      state = false;
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+      showSnackBar(context: context, content: l.message);
+      return;
+    }, (r) async {
+      allIndustryGuideModels = r;
+    });
+
+    final getAllViajeses =
+    await _datasource.getAllViajesForIndustry(vesselId: vesselModel.vesselId, realIndustryId: realIndustryId);
+
+    getAllViajeses.fold((l) {
+      state = false;
+      debugPrintStack(stackTrace: l.stackTrace);
+      debugPrint(l.message);
+      showSnackBar(context: context, content: l.message);
+      return;
+    }, (r) async {
+      allViajesModels = r;
+    });
+    state = false;
+    if (allViajesModels.isNotEmpty && allIndustryGuideModels.isNotEmpty) {
+      Navigator.pushNamed(context, AppRoutes.reportScreen, arguments: {
+        'vesselModel': vesselModel,
+        'allIndustriesModels': allIndustryGuideModels,
+        'allViajesModel': allViajesModels
+      });
+    } else {
+      showSnackBar(context: context, content: 'Unable to genearte report now!');
+    }
+  }
 }

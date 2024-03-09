@@ -22,7 +22,10 @@ abstract class ShipsApisImplements {
   Future<QuerySnapshot> getAllShips(
       {int limit = 10, DocumentSnapshot? snapshot});
   FutureEither<List<ViajesModel>> getAllViajes({required String vesselId});
+  FutureEither<List<ViajesModel>> getAllViajesForIndustry({required String vesselId,required String realIndustryId});
   FutureEither<List<IndustrySubModel>> getAllIndustrySubModels({required String vesselId});
+  FutureEither<List<IndustrySubModel>> getAllIndustrySubModelsforIndustry({required String vesselId,required String realIndustryId});
+
 }
 
 class ShipApis implements ShipsApisImplements {
@@ -123,4 +126,48 @@ class ShipApis implements ShipsApisImplements {
       return Left(Failure(e.toString(), stackTrace));
     }
   }
+
+
+
+
+  @override
+  FutureEither<List<IndustrySubModel>> getAllIndustrySubModelsforIndustry({required String vesselId,required String realIndustryId}) async {
+    try {
+      var querySnapshot =
+      await _firestore.collection(FirebaseConstants.industryGuideCollection).where("vesselId",isEqualTo: vesselId).where("realIndustryId",isEqualTo: realIndustryId).get();
+
+      List<IndustrySubModel> models = [];
+      for (var document in querySnapshot.docs) {
+        var model = IndustrySubModel.fromMap(document.data());
+        models.add(model);
+      }
+
+      return Right(models);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    } catch (e, stackTrace) {
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEither<List<ViajesModel>> getAllViajesForIndustry({required String vesselId,required String realIndustryId}) async {
+    try {
+      var querySnapshot =
+      await _firestore.collection(FirebaseConstants.viajesCollection).where("vesselId",isEqualTo: vesselId).where("realIndustryId",isEqualTo: realIndustryId).get();
+
+      List<ViajesModel> models = [];
+      for (var document in querySnapshot.docs) {
+        var model = ViajesModel.fromMap(document.data());
+        models.add(model);
+      }
+
+      return Right(models);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      return Left(Failure(e.message ?? 'Firebase Error Occurred', stackTrace));
+    } catch (e, stackTrace) {
+      return Left(Failure(e.toString(), stackTrace));
+    }
+  }
 }
+
