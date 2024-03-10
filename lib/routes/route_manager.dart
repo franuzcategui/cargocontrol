@@ -5,9 +5,11 @@ import 'package:cargocontrol/features/admin/create_vessel/views/create_vessel_co
 import 'package:cargocontrol/features/admin/create_vessel/views/create_vessel_screen.dart';
 import 'package:cargocontrol/features/admin/create_vessel/views/registration_successfull_screen.dart';
 import 'package:cargocontrol/features/admin/main_menu/views/ad_main_menu_screen.dart';
+import 'package:cargocontrol/features/admin/manage_ships/views/Reports_screen.dart';
 import 'package:cargocontrol/features/admin/register_user/views/register_user_screen.dart';
 import 'package:cargocontrol/features/admin/viajes/views/ad_viages_edit_screen.dart';
 import 'package:cargocontrol/features/admin/viajes/views/ad_viajes_details_screen.dart';
+import 'package:cargocontrol/features/admin/viajes/views/ad_viajes_time_edit_screen.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
 import 'package:cargocontrol/features/coordinator/dashboard/views/co_all_recenties_screen.dart';
 import 'package:cargocontrol/features/coordinator/main_menu/views/co_main_menu_screen.dart';
@@ -27,6 +29,7 @@ import '../features/coordinator/register_truck_movement/views/co_registration_su
 import '../features/coordinator/register_truck_movement/views/co_truck_leaving_information_screen.dart';
 import '../features/coordinator/register_truck_movement/views/register_truck_leaving_screen.dart';
 import '../features/dashboard/components/dashboard_screen.dart';
+import '../features/industry/choferes/views/in_choferes_details_screen.dart';
 import '../features/industry/dashboard/views/in_dashboard_screen.dart';
 import '../features/industry/main_menu/views/in_main_menu_screen.dart';
 import '../features/industry/manage_report/views/in_all_reports_screen.dart';
@@ -96,11 +99,13 @@ class AppRoutes {
   static const String inViajesDetailsScreen = '/inViajesDetailsScreen';
   static const String inAllReportsScreen = '/inAllReportsScreen';
   static const String choferesDetailsScreen = '/choferesDetailsScreen';
-
-
+  static const String inChoferesDetailsScreen = '/inChoferesDetailsScreen';
+  static const String adViajesTimeEditScreen = '/adViajesTimeEditScreen';
 
   static const String loginScreen = '/loginScreen';
   static const String dashboardScreen = '/dashboardScreen';
+  static const String reportScreen = '/reportScreen';
+
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -236,9 +241,26 @@ class AppRoutes {
         return _buildRoute(InViajesDetailsScreen(
           viajesModel: args['viajesModel'],
         ));
+      case adViajesTimeEditScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(AdViajesTimeEditScreen(
+          viajesModel: args['viajesModel'],
+        ));
+      case reportScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(ReportScreen(
+          vesselModel: args['vesselModel'], allIndustriesModels: args['allIndustriesModels'], allViajesModel: args['allViajesModel'],
+        ));
+
       case choferesDetailsScreen:
         final args = settings.arguments as Map<String, dynamic>;
         return _buildRoute(ChoferesDetailsScreen(
+          choferesModel: args['choferesModel'],
+        ));
+
+      case inChoferesDetailsScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return _buildRoute(InChoferesDetailsScreen(
           choferesModel: args['choferesModel'],
         ));
 

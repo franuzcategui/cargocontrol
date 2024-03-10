@@ -91,7 +91,7 @@ class _InChoferesListState extends ConsumerState<InChoferesList> {
                       ChoferesModel model = choferesNotiCtr.choferesModels[index];
                       return GestureDetector(
                         onTap: (){
-                        Navigator.pushNamed(context, AppRoutes.choferesDetailsScreen,arguments: {
+                        Navigator.pushNamed(context, AppRoutes.inChoferesDetailsScreen,arguments: {
                           "choferesModel":model,
                         });
                       },

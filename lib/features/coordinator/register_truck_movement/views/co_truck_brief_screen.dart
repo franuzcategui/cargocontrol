@@ -74,6 +74,8 @@ class _CoTruckBriefScreenState extends ConsumerState<CoTruckBriefScreen> {
                                 isLoading: ref.watch(truckRegistrationControllerProvider),
                                 onPressed: ()async{
                                   if(truckNotiCtr.selectedChofere!= null){
+                                    String choferesName =truckNotiCtr.selectedChofere?.firstName?? '';
+                                    choferesName = choferesName + " " + (truckNotiCtr.selectedChofere?.lastName?? '');
                                     await ref.watch(truckRegistrationControllerProvider.notifier).registerTruckEnteringToPort(
                                         choferesModel: truckNotiCtr.selectedChofere!,
                                         guideNumber: widget.guideNumber,
@@ -86,7 +88,7 @@ class _CoTruckBriefScreenState extends ConsumerState<CoTruckBriefScreen> {
                                         industryName: truckNotiCtr.selectedIndustry?.industryName ?? '',
                                         industryId: truckNotiCtr.selectedIndustry?.industryId ?? '',
                                         productName: truckNotiCtr.selectedIndustry?.selectedVesselCargo.productName ?? '',
-                                        choferesname: truckNotiCtr.selectedChofere?.firstName?? '',
+                                        choferesname: choferesName,
                                         choferesId: truckNotiCtr.selectedChofere?.choferNationalId?? '',
                                         industrySubModel: truckNotiCtr.selectedIndustry!,
                                         cargoId: truckNotiCtr.selectedIndustry?.selectedVesselCargo.cargoId ?? '',

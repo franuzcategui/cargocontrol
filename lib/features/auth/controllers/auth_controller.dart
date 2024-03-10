@@ -41,7 +41,11 @@ final fetchUserByIdProvider = StreamProvider.family((ref, String uid) {
   final profileController = ref.watch(authControllerProvider.notifier);
   return profileController.getUserInfoByUid(uid);
 });
-
+final currentUserStreamProvider = StreamProvider((ref){
+  final profileController = ref.watch(authControllerProvider.notifier);
+  profileController.getCurrentUserInfo();
+  return profileController.getCurrentUserStream();
+});
 
 
 final currentAuthUserinfoStreamProvider = StreamProvider.family((ref, String uid) {
@@ -170,6 +174,14 @@ class AuthController extends StateNotifier<bool> {
 
   Stream<UserModel> getCurrentUserInfoStream({required String uid}) {
     return _databaseApis.getCurrentUserStream(uid: uid).map((items) {
+      UserModel userModel = UserModel.fromMap(items.data()!);
+      return userModel;
+    });
+  }
+
+  Stream<UserModel> getCurrentUserStream() {
+    final userId = _authApis.getCurrentUser();
+    return _databaseApis.getCurrentUserStream(uid: userId!.uid).map((items) {
       UserModel userModel = UserModel.fromMap(items.data()!);
       return userModel;
     });

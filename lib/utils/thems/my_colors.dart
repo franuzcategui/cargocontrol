@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
 
 class MyColors {
   //common colors
@@ -18,5 +19,7 @@ class MyColors {
   static const kQuaternaryMainColor = Color.fromRGBO(255, 222, 47, 1);
   static const Color kSecondaryTextColor = Color(0xFFA4A4A4);
   static const Color kText3Color = Color(0xFF4C495B);
+
+  static  PdfColor pdfMainColor = PdfColor.fromHex('#1230B3');
 
 }

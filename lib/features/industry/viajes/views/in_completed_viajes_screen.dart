@@ -62,7 +62,9 @@ class _AdCompletedViajesSreenState extends ConsumerState<InCompletedViajesSreen>
               child: const Text("No Viajes!"),
             ):
             Expanded(
-              child: ListView.builder(
+              child:
+
+              ListView.builder(
                   controller: _scrollController,
                   itemCount: viajesNotiCtr.viajesModels.length,
                   physics: const BouncingScrollPhysics(),

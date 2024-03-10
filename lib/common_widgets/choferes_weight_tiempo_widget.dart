@@ -8,47 +8,28 @@ import 'package:intl/intl.dart';
 
 import '../../../../commons/common_imports/common_libs.dart';
 import '../../../../utils/constants/font_manager.dart';
+import '../features/admin/choferes/controllers/choferes_controller.dart';
+import '../features/admin/choferes/data/models/choferes_time_deficit_model.dart';
 import '../features/coordinator/register_truck_movement/controllers/truck_registration_controller.dart';
 import '../models/choferes_models/choferes_model.dart';
 
 class ChoferesWeightTiempoWidget extends StatelessWidget {
-  const ChoferesWeightTiempoWidget({Key? key, required this.choferesModel}) : super(key: key);
+  const ChoferesWeightTiempoWidget({
+    Key? key,
+    required this.choferesModel,
+    this.realIndustryIdOfCurrentUser = "",
+  }) : super(key: key);
   final ChoferesModel choferesModel;
+  final String realIndustryIdOfCurrentUser;
 
   String formatDuration(Duration duration) {
-    DateTime referenceTime = DateTime(2000, 1, 1, 0, 0, 0);
+    DateTime referenceTime = DateTime(2000, 1, 0, 0, 0, 0);
     DateTime formattedTime = referenceTime.add(duration);
-    DateFormat formatter = DateFormat('H:mm:ss');
+    String formatPattern = formattedTime.day > 0 && formattedTime.day < 31
+        ? 'dd:H:mm:ss'
+        : 'H:mm:ss';
+    DateFormat formatter = DateFormat(formatPattern);
     return formatter.format(formattedTime);
-  }
-
-  Duration calculateAvgArrivalTime(List<ViajesModel> viajesList) {
-    if (viajesList.isEmpty) {
-      return const Duration(); // Handle the case when the list is empty
-    }
-    Duration totalArrivalTime = Duration();
-    for (ViajesModel viajes in viajesList) {
-      totalArrivalTime += viajes.timeToIndustry
-          .difference(viajes.exitTimeToPort);
-    }
-    // double avgArrivalTime = totalArrivalTime.inMinutes / viajesList.length;
-    // return avgArrivalTime;
-
-    // Calculate average arrival time
-    Duration avgArrivalTime = Duration(seconds: totalArrivalTime.inSeconds ~/ viajesList.length);
-    return avgArrivalTime;
-  }
-  Duration calculateAvgUnloadingTime(List<ViajesModel> viajesList) {
-    if (viajesList.isEmpty) {
-      return const Duration(); // Handle the case when the list is empty
-    }
-    Duration totalArrivalTime = Duration();
-    for (ViajesModel viajes in viajesList) {
-      totalArrivalTime += viajes.unloadingTimeInIndustry
-          .difference(viajes.timeToIndustry);
-    }
-    Duration avgArrivalTime = Duration(seconds: totalArrivalTime.inSeconds ~/ viajesList.length);
-    return avgArrivalTime;
   }
 
   @override
@@ -67,32 +48,126 @@ class ChoferesWeightTiempoWidget extends StatelessWidget {
           height: 28.h,
         ),
         CustomTile(
-            title: "Viajes realizados",
-            subText:choferesModel.numberOfTrips.toStringAsFixed(0),),
-        CustomTile(
-            title: "Tiempo promedio de retraso",
-            subText: ""),
-        CustomTile(
-            title: "Perdida de carga promedio (%)",
-            subText:""),// DateFormat('HH:mm:ss').format(choferesModel.unloadingTimeInIndustry)
-
-        CustomTile(
-          title: "Percentil de tiempo de retraso",
-          subText:""
+          title: "Viajes realizados",
+          subText: choferesModel.numberOfTrips.toStringAsFixed(0),
         ),
 
         CustomTile(
-          title: "Percentil de perdida de carga",
-          subText: ""),
-        //formatDuration(choferesModel.unloadingTimeInIndustry.difference(choferesModel.timeToIndustry)
-        CustomTile(
-            title: "Mayor tiempo de retraso",
-            subText:""),
+          title: "Perdida de carga promedio (%)",
+          subText: (choferesModel.averageCargoDeficitPercentage * 100)
+              .toStringAsFixed(2),
+        ),
 
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            return ref
+                .watch(getChoferesCargoDeficitPercentile(choferesModel))
+                .when(data: (value) {
+              return CustomTile(
+                  title: "Percentil de perdida de carga",
+                  subText: value.toStringAsFixed(2));
+            }, error: (error, st) {
+              //debugPrintStack(stackTrace: st);
+              //debugPrint(error.toString());
+              return const SizedBox();
+            }, loading: () {
+              return const SizedBox();
+            });
+          },
+        ),
         CustomTile(
-            title: "Mayor pérdida de carga (%)",
-            subText:""),
+          title: "Mayor pérdida de carga(%)",
+          subText: (choferesModel.worstCargoDeficitPercentage * 100)
+              .toStringAsFixed(2),
+        ),
 
+        //
+
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            return ref.watch(getChoferesTimeDeficitModel(choferesModel)).when(
+                data: (choferesTimeDefModels) {
+                  List<ChoferesTimeDeficitModel> choferesTimeDeficitModels=[];
+                  if(realIndustryIdOfCurrentUser.isEmpty){
+                    choferesTimeDeficitModels=choferesTimeDefModels;
+                    print("here worng");
+                  }else{
+                    print("here");
+                    choferesTimeDefModels.forEach((model) {
+                      if(model.realIndustryId==realIndustryIdOfCurrentUser){
+                        choferesTimeDeficitModels.add(model);
+                      }
+                    });
+                  }
+
+              if (choferesTimeDeficitModels.isEmpty) {
+                return SizedBox();
+              }
+              return Column(
+                children: [
+                  const CustomTile(
+                      title: "Tiempo promedio de retraso", subText: ""),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0.w),
+                    child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: choferesTimeDeficitModels.length,
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return CustomTile(
+                            title:
+                                choferesTimeDeficitModels[index].industryName,
+                            subText: formatDuration(
+                                choferesTimeDeficitModels[index]
+                                    .avgTimeDeficit
+                                    .abs()),
+                            hasWarning: choferesTimeDeficitModels[index]
+                                .avgTimeDeficit
+                                .isNegative,
+                            isGoodSign: !choferesTimeDeficitModels[index]
+                                .avgTimeDeficit
+                                .isNegative,
+                          );
+                        }),
+                  ),
+                  const CustomTile(
+                      title: "Mayor tiempo de retraso", subText: ""),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0.w),
+                    child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: choferesTimeDeficitModels.length,
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return CustomTile(
+                            title:
+                                choferesTimeDeficitModels[index].industryName,
+                            subText: formatDuration(
+                                choferesTimeDeficitModels[index]
+                                    .worstTimeDeficit
+                                    .abs()),
+                            hasWarning: choferesTimeDeficitModels[index]
+                                .worstTimeDeficit
+                                .isNegative,
+                            isGoodSign: !choferesTimeDeficitModels[index]
+                                .worstTimeDeficit
+                                .isNegative,
+                          );
+                        }),
+                  )
+                ],
+              );
+            }, error: (error, st) {
+              //debugPrintStack(stackTrace: st);
+              //debugPrint(error.toString());
+              return const SizedBox();
+            }, loading: () {
+              return const SizedBox();
+            });
+          },
+        ),
       ],
     );
   }

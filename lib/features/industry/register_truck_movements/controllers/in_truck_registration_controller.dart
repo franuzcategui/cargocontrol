@@ -109,13 +109,58 @@ class TruckRegistrationController extends StateNotifier<bool> {
             viajesModel.entryTimeTruckWeightToPort,
       ),
     );
-    double updatedChoferesDeficit = ((choferesModel.averageCargoDeficit *
+    double tripCargoDeficit =
+        (viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight);
+    double updatedAverageCargoDeficit = ((choferesModel.averageCargoDeficit *
                     (choferesModel.numberOfTrips - 1) +
-                (viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight)) /
+                tripCargoDeficit) /
             choferesModel.numberOfTrips)
         .ceilToDouble();
+
+    double tripCargoDeficitPercentage =
+        ((viajesModel.exitTimeTruckWeightToPort - cargoUnloadWeight) /
+            (viajesModel.exitTimeTruckWeightToPort -
+                viajesModel.entryTimeTruckWeightToPort));
+    double updatedAverageCargoDeficitPercentage =
+        ((choferesModel.averageCargoDeficitPercentage *
+                    (choferesModel.numberOfTrips - 1) +
+                tripCargoDeficitPercentage) /
+            choferesModel.numberOfTrips);
+    double updatedWorstCargoDeficit =
+        choferesModel.worstCargoDeficit < tripCargoDeficit
+            ? tripCargoDeficit
+            : choferesModel.worstCargoDeficit;
+    double updatedWorstCargoDeficitPercentage =
+        choferesModel.worstCargoDeficitPercentage < tripCargoDeficitPercentage
+            ? tripCargoDeficitPercentage
+            : choferesModel.worstCargoDeficitPercentage;
+    //
+    // //Todo usman : get all the viajes where chofer id same and viajes is completed; then get avg time duration + this trip time
+    // Duration avgTrip
+    // Duration tripTime=(viajesModel.timeToIndustry.difference(viajesModel.exitTimeToPort));
+    //
+    // Duration updatedAverageTimeDeficit = ((choferesModel.averageTimeDeficit *
+    //     (choferesModel.numberOfTrips - 1) +
+    //     tripTimeDeficit) *
+    //     (1/choferesModel.numberOfTrips));
+    // Duration tripTimeDeficit = tripTime - updatedAverageTimeDeficit;
+    // Duration worstTimeDeficit = choferesModel.worstTimeDeficit < tripTimeDeficit ? tripTimeDeficit : choferesModel.worstTimeDeficit;
+    //
+    // ChoferesModel chofere = choferesModel.copyWith(
+    //     averageCargoDeficit: updatedAverageCargoDeficit,
+    //     averageCargoDeficitPercentage: updatedAverageCargoDeficitPercentage,
+    //     worstCargoDeficitPercentage: updatedWorstCargoDeficitPercentage,
+    //     averageTimeDeficit: updatedAverageTimeDeficit,
+    //     worstTimeDeficit: worstTimeDeficit,
+    //     choferesStatusEnum: ChoferesStatusEnum.available);
+
     ChoferesModel chofere = choferesModel.copyWith(
-        averageCargoDeficit: updatedChoferesDeficit,
+        averageCargoDeficit: updatedAverageCargoDeficit,
+        averageCargoDeficitPercentage: updatedAverageCargoDeficitPercentage,
+        worstCargoDeficitPercentage: updatedWorstCargoDeficitPercentage,
+        worstCargoDeficit: updatedWorstCargoDeficit,
+        // averageTimeDeficit: updatedAverageTimeDeficit,
+        // worstTimeDeficit: worstTimeDeficit,
         choferesStatusEnum: ChoferesStatusEnum.available);
 
     final result = await _datasource.registerTruckUnloadingInIndustry(
@@ -132,7 +177,8 @@ class TruckRegistrationController extends StateNotifier<bool> {
       await sendAdminUnLoadingNotification(
           viajesModel: viajesModel, ref: ref, context: context);
       if (industry.cargoUnloaded + industry.deficit == industry.cargoAssigned) {
-            await sendIndustryCompleteUnLoadingNotification(industrySubModel: industry, ref: ref, context: context);
+        await sendIndustryCompleteUnLoadingNotification(
+            industrySubModel: industry, ref: ref, context: context);
       }
       state = false;
       Navigator.pushNamed(context, AppRoutes.inRegistrationSuccessFullScreen);
@@ -143,8 +189,8 @@ class TruckRegistrationController extends StateNotifier<bool> {
 
   Future<void> sendIndustryCompleteUnLoadingNotification(
       {required IndustrySubModel industrySubModel,
-        required WidgetRef ref,
-        required BuildContext context}) async {
+      required WidgetRef ref,
+      required BuildContext context}) async {
     MessagingFirebase messagingFirebase = MessagingFirebase();
     List<String> industryFCMTokens = [];
     final result = await _datasource.getAllRealIndustraUser(
@@ -171,15 +217,16 @@ class TruckRegistrationController extends StateNotifier<bool> {
 
     for (int i = 0; i < totalDevices; i += batchSize) {
       final int endIndex =
-      (i + batchSize <= totalDevices) ? (i + batchSize) : totalDevices;
+          (i + batchSize <= totalDevices) ? (i + batchSize) : totalDevices;
       final List<String> batchIds = industryFCMTokens.sublist(i, endIndex);
       String lossPercent =
-          "${(industrySubModel.deficit/industrySubModel.cargoAssigned).abs().toStringAsFixed(2)}%";
+          "${(industrySubModel.deficit / industrySubModel.cargoAssigned).abs().toStringAsFixed(2)}%";
 
       NotificationModel notificationModel = NotificationModel(
           title: "Carga Total Industria descargada",
           notificationId: "",
-          description: "El total de la carga de ${industrySubModel.cargoAssigned} ha sido transportada con una pérdida de ${lossPercent}",
+          description:
+              "El total de la carga de ${industrySubModel.cargoAssigned} ha sido transportada con una pérdida de ${lossPercent}",
           createdAt: AppConstants.constantDateTime,
           screenName: "");
 
@@ -195,6 +242,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
       }
     }
   }
+
   Future<void> sendIndustryUnLoadingNotification(
       {required ViajesModel viajesModel,
       required WidgetRef ref,

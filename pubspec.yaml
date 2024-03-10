@@ -65,6 +65,17 @@ dependencies:
   async: ^2.11.0
   uuid: ^4.2.1
 
+  syncfusion_flutter_pdfviewer: ^23.2.7
+  syncfusion_flutter_core: ^23.2.7
+  open_file: ^3.3.2
+  path_provider: ^2.1.1
+  shortid: ^0.1.2
+  share_plus: ^7.2.1
+  pdf: ^3.10.7
+  carousel_slider: ^4.2.1
+  csv: ^6.0.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

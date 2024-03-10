@@ -31,8 +31,8 @@ class TruckRegistrationNotiController extends ChangeNotifier {
    notifyListeners();
   }
 
-  Future getAllIndustriesModel()async{
-   final result = await  _datasource.getAllIndustries();
+  Future getAllIndustriesModel() async{
+   final result = await  _datasource.getAllIndustries(vesselId: vesselModel!.vesselId);
    result.fold((l) {
      debugPrintStack(stackTrace: l.stackTrace);
      debugPrint( l.message);

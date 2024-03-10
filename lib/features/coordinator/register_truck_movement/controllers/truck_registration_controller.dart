@@ -121,6 +121,7 @@ class TruckRegistrationController extends StateNotifier<bool> {
       unloadingTimeInIndustry: AppConstants.constantDateTime,
       guideNumber: guideNumber,
       industryId: industryId,
+      realIndustryId: industrySubModel.realIndustryId,
       chofereId: choferesId,
       chofereName: choferesname,
       licensePlate: plateNumber,

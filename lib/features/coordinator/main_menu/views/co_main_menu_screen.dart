@@ -24,6 +24,7 @@ class _CoMainMenuScreenState extends ConsumerState<CoMainMenuScreen> {
   }
 
   initiallize()async{
+    await ref.read(truckRegistrationNotiControllerProvider).getCurrentVessel(ref: ref);
     await ref.read(truckRegistrationNotiControllerProvider).getAllIndustriesModel();
   }
 

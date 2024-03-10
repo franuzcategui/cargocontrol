@@ -26,7 +26,7 @@ class AdViajesScreen extends StatelessWidget {
                   Tab(text: 'Completados'),
                 ]),
           ),
-          body: const TabBarView(
+          body: TabBarView(
             children: [
               AdAllViajesSreen(),
               AdInProgressViajesSreen(),
