@@ -1,6 +1,7 @@
 import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 
@@ -23,7 +24,7 @@ class AdProgressIndicatorCard extends StatelessWidget {
       child: Container(
         decoration: constants.DecorationStyles.shadow2,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-        width: 320.w,
+        width: kIsWeb?120.w:320.w,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -33,18 +34,18 @@ class AdProgressIndicatorCard extends StatelessWidget {
               children: [
                 Container(
                   constraints: BoxConstraints(
-                      maxWidth: 220.w
+                      maxWidth:kIsWeb?80.w:220.w,
                   ),
                   child: Text(
                     title,
                     style: getBoldStyle(color: context.textColor, fontSize: MyFonts.size12),
                   ),
                 ),
-                SizedBox(width: 10.w,),
+                SizedBox(width: 10,),
                 deficit == ''  || deficit == "0" ||  deficit == "0.0"?const SizedBox():
                 Container(
                   constraints: BoxConstraints(
-                      maxWidth: 50.w
+                      maxWidth: 20.w
                   ),
                   child:Text(
                     'Deficit: $deficit',

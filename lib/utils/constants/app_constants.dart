@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AppConstants {
   static const double screenWidget = 375;
   static const double screenHeight = 812;
+  static const double screenWebWidget = 1024;
+  static const double screenWebHeight = 400;
   static double height20 = 20.h;
   static double padding= 20.h;
 
