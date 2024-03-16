@@ -45,7 +45,7 @@ class CustomEditableTile extends StatelessWidget {
                     onTap: onTap,
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15.w,vertical: 0.h),
-                      child: Icon(Icons.edit ,size: 20.w,),
+                      child: Icon(Icons.edit ,size: MyFonts.size20,),
                     )),
               ],
             ),

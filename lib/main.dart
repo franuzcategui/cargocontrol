@@ -3,10 +3,12 @@ import 'package:cargocontrol/firebase_options.dart';
 import 'package:cargocontrol/features/auth/views/login_screen.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/app_constants.dart';
+import 'package:cargocontrol/utils/constants/font_manager.dart';
 import 'package:cargocontrol/utils/thems/loading_screen.dart';
 import 'package:cargocontrol/utils/thems/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -111,6 +113,23 @@ class _MyAppState extends ConsumerState<MyApp> {
       designSize: const Size(AppConstants.screenWidget, AppConstants.screenHeight),
       minTextAdapt: true,
       splitScreenMode: true,
+      //fontSizeResolver: FontSizeResolvers.height,
+      fontSizeResolver: kIsWeb?(num size, ScreenUtil instance) {
+        // Define your custom logic to adjust font size based on screen height
+        // For example, you can increase font size for larger screens
+
+        double width=MediaQuery.of(context).size.width;
+        double scaleFactor = 1.0;
+        if (width < 600) {
+          scaleFactor = 10.0; // Font size for smaller screens
+        } else if (width < 1000) {
+          scaleFactor = 11.1; // Font size for medium screens
+        } else {
+          scaleFactor = 12.2; // Font size for larger screens
+        }
+        return (MediaQuery.of(context).size.width /MediaQuery.of(context).size.height) * scaleFactor;
+      }:FontSizeResolvers.height,
+      rebuildFactor: RebuildFactors.none,
       builder: (context, child) {
         return MaterialApp(
           builder: (BuildContext context,Widget? child){

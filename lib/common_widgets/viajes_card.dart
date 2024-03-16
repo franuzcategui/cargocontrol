@@ -2,6 +2,7 @@ import 'package:cargocontrol/commons/common_imports/common_libs.dart';
 import 'package:cargocontrol/core/extensions/color_extension.dart';
 import 'package:cargocontrol/routes/route_manager.dart';
 import 'package:cargocontrol/utils/constants/font_manager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cargocontrol/utils/constants.dart' as constants;
 import 'package:intl/intl.dart';
@@ -23,7 +24,7 @@ class ViajesCard extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: Container(
           padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          height: 100.h,
+          height: kIsWeb?150.h:100.h,
           decoration: constants.DecorationStyles.shadow2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
